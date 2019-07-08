@@ -1,0 +1,70 @@
+﻿@model Alpid.Models.Proveedores
+
+@{
+    ViewData["Title"] = "Editar proveedor";
+}
+<html>
+<body>
+    <header>
+        <link href="~/css/cssKanze/style.min.css" rel="stylesheet" />
+    </header>
+    <h1>Editar Proveedor</h1>
+
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="ProveedoresId" />
+                <div class="form-group">
+                    <label asp-for="Cuit" class="control-label">Cuit</label>
+                    <input asp-for="Cuit" class="form-control" />
+                    <span asp-validation-for="Cuit" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="RazonSocial" class="control-label">Razón Social</label>
+                    <input asp-for="RazonSocial" class="form-control" />
+                    <span asp-validation-for="RazonSocial" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Domicilio" class="control-label">Domicilio</label>
+                    <input asp-for="Domicilio" class="form-control" />
+                    <span asp-validation-for="Domicilio" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Telefono" class="control-label">Teléfono</label>
+                    <input asp-for="Telefono" class="form-control" />
+                    <span asp-validation-for="Telefono" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Mail" class="control-label">Mail</label>
+                    <input asp-for="Mail" class="form-control" />
+                    <span asp-validation-for="Mail" class="text-danger"></span>
+                </div>
+                <div class="form-group" style="display:none">
+                    <label asp-for="FechaBaja" class="control-label"></label>
+                    <input asp-for="FechaBaja" class="form-control" />
+                    <span asp-validation-for="FechaBaja" class="text-danger"></span>
+                </div>
+                <div class="form-group" style="display:none">
+                    <label asp-for="FechaAlta" class="control-label"></label>
+                    <input asp-for="FechaAlta" class="form-control" />
+                    <span asp-validation-for="FechaAlta" class="text-danger"></span>
+                </div>
+                <div class="form-group" style="display:none">
+                    <label asp-for="MotivoBaja" class="control-label"></label>
+                    <input asp-for="MotivoBaja" class="form-control" />
+                    <span asp-validation-for="MotivoBaja" class="text-danger"></span>
+                </div>
+                <div class="col-md-12">
+                    <input type="submit" value="Editar" class="btn btn-primary" />
+                    <a asp-action="Index" style="float:right;" class="btn btn-info">Regresar sin editar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

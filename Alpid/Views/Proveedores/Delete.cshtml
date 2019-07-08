@@ -1,0 +1,72 @@
+﻿@model Alpid.Models.Proveedores
+
+@{
+    ViewData["Title"] = "Eliminar proveedor";
+}
+<html>
+<body>
+    <header>
+        <link href="~/css/cssKanze/style.min.css" rel="stylesheet" />
+    </header>
+    <h2 style="color:red; padding-bottom:30px">¿Esta seguro que desea eliminar el Proveedor "@Html.DisplayFor(model => model.RazonSocial)"?</h2>
+    <div>
+        <h4>Información del proveedor a Eliminar:</h4>
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                <form asp-action="Delete">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="ProveedoresId" />
+                    <div class="form-group">
+                        <label asp-for="Cuit" class="control-label">Cuit</label>
+                        <input asp-for="Cuit" class="form-control" readonly="readonly" />
+                        <span asp-validation-for="Cuit" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="RazonSocial" class="control-label">Razón Social</label>
+                        <input asp-for="RazonSocial" class="form-control" readonly="readonly" />
+                        <span asp-validation-for="RazonSocial" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Domicilio" class="control-label">Domicilio</label>
+                        <input asp-for="Domicilio" class="form-control" readonly="readonly" />
+                        <span asp-validation-for="Domicilio" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Telefono" class="control-label">Teléfono</label>
+                        <input asp-for="Telefono" class="form-control" readonly="readonly" />
+                        <span asp-validation-for="Telefono" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Mail" class="control-label">Mail</label>
+                        <input asp-for="Mail" class="form-control" readonly="readonly" />
+                        <span asp-validation-for="Mail" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="FechaBaja" class="control-label">Fecha eliminación</label>
+                        <input asp-for="FechaBaja" type="date" id="fechaActual" class="form-control" readonly="readonly" />
+                        <span asp-validation-for="FechaBaja" class="text-danger"></span>
+                    </div>
+                    <div class="form-group" >
+                        <label asp-for="FechaAlta" class="control-label">Fecha ingreso</label>
+                        <input asp-for="FechaAlta" class="form-control" readonly="readonly" />
+                        <span asp-validation-for="FechaAlta" class="text-danger"></span>
+                    </div>
+                    <div class="form-group" >
+                        <label asp-for="MotivoBaja" class="control-label">Motivo eliminación</label>
+                        <textarea asp-for="MotivoBaja" rows="10" cols="30" placeholder="Favor de ingresar un motivo de eliminación" class="form-control"> </textarea>
+                        <span asp-validation-for="MotivoBaja" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-12">
+                        <input type="submit" value="Eliminar" class="btn btn-danger" />
+                        <a asp-action="Index" style="float:right;" class="btn btn-info">Regresar sin Eliminar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

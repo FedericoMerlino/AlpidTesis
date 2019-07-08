@@ -1,0 +1,20 @@
+.FaqBook a {
+    font-weight: 500;
+    font-size: 15px;
+    height: 40px;
+    color: #fff;
+    background: #42BC7F;
+    text-transform: uppercase;
+    display: inline-block;
+    line-height: 40px;
+    padding: 0 30px 0 30px;
+}
+
+.FaqBook {
+    z-index: 99;
+    margin-top: 40px;
+}
+
+.FaqBook a:hover {
+    background: #333;
+}

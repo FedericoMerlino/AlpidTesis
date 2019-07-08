@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Alpid.Models.CuotaPrecio>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Importe)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaDesde)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaHasta)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Importe)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaDesde)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaHasta)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.CuotaPrecioID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.CuotaPrecioID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.CuotaPrecioID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
