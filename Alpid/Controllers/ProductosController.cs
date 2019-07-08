@@ -22,7 +22,8 @@ namespace Alpid.Controllers
         // GET: Productos
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Productos.Include(p => p.Proveedores);
+            var applicationDbContext = _context.Productos.Include(p => p.Proveedores)
+                                                         .Include(p => p.ProductoTipos);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -34,9 +35,9 @@ namespace Alpid.Controllers
                 return NotFound();
             }
 
-            var productos = await _context.Productos
-                .Include(p => p.Proveedores)
-                .FirstOrDefaultAsync(m => m.PoductosID == id);
+            var productos = await _context.Productos.Include(p => p.Proveedores)
+                                                    .Include(p => p.ProductoTipos)
+                                                    .FirstOrDefaultAsync(m => m.PoductosID == id);
             if (productos == null)
             {
                 return NotFound();
@@ -48,7 +49,9 @@ namespace Alpid.Controllers
         // GET: Productos/Create
         public IActionResult Create()
         {
-            ViewData["ProveedoresID"] = new SelectList(_context.Proveedores, "ProveedoresId", "Cuit");
+            ViewData["ProveedoresID"] = new SelectList(_context.Proveedores, "ProveedoresId", "RazonSocial");
+            ViewData["ProductosTipoID"] = new SelectList(_context.ProductoTipos, "ProductosTipoID", "Tipo");
+
             return View();
         }
 
@@ -65,7 +68,9 @@ namespace Alpid.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProveedoresID"] = new SelectList(_context.Proveedores, "ProveedoresId", "Cuit", productos.ProveedoresID);
+            ViewData["ProveedoresID"] = new SelectList(_context.Proveedores, "ProveedoresId", "RazonSocial", productos.ProveedoresID);
+            ViewData["ProductosTipoID"] = new SelectList(_context.ProductoTipos, "ProductosTipoID", "Tipo", productos.ProductosTipoID);
+
             return View(productos);
         }
 
@@ -82,7 +87,8 @@ namespace Alpid.Controllers
             {
                 return NotFound();
             }
-            ViewData["ProveedoresID"] = new SelectList(_context.Proveedores, "ProveedoresId", "Cuit", productos.ProveedoresID);
+            ViewData["ProveedoresID"] = new SelectList(_context.Proveedores, "ProveedoresId", "RazonSocial", productos.ProveedoresID);
+            ViewData["ProductosTipoID"] = new SelectList(_context.ProductoTipos, "ProductosTipoID", "Tipo", productos.ProductosTipoID);
             return View(productos);
         }
 
@@ -118,7 +124,8 @@ namespace Alpid.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProveedoresID"] = new SelectList(_context.Proveedores, "ProveedoresId", "Cuit", productos.ProveedoresID);
+            ViewData["ProveedoresID"] = new SelectList(_context.Proveedores, "ProveedoresId", "RazonSocial", productos.ProveedoresID);
+            ViewData["ProductosTipoID"] = new SelectList(_context.ProductoTipos, "ProductosTipoID", "Tipo", productos.ProductosTipoID);
             return View(productos);
         }
 
@@ -132,6 +139,7 @@ namespace Alpid.Controllers
 
             var productos = await _context.Productos
                 .Include(p => p.Proveedores)
+                .Include(p => p.ProductoTipos)
                 .FirstOrDefaultAsync(m => m.PoductosID == id);
             if (productos == null)
             {

@@ -9,7 +9,7 @@ namespace Alpid.Models
     public class ProductoTipos
     {
         [Key]
-        public int PoductosTipoID { get; set; }
+        public int ProductosTipoID { get; set; }
 
         public string Tipo { get; set; }
 

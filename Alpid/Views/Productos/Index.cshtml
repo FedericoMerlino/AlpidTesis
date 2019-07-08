@@ -1,89 +1,99 @@
 ﻿@model IEnumerable<Alpid.Models.Productos>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Productos";
 }
+<html>
+<body>
+    <header>
+        <link href="~/css/cssKanze/style.min.css" rel="stylesheet" />
+    </header>
+    <h1>Productos Alpid</h1>
+    <p>
+        <a asp-action="Create" class='btn btn-info'>Nuevo Producto</a>
+    </p>
+    Buscar: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+    <input type="submit" value="Buscar" class="btn btn-default" />
+    <div class="input-group-append" style="padding-top:30px">
+        <div class="form-group">
+            <h2 style="initial-letter:inherit; font-family: Homer Simpson, cursive; color:#0932ff;"> Grilla producots </h2>
 
-<h1>Index</h1>
+            <h5 style="initial-letter:inherit; font-family: Homer Simpson, cursive; padding-right:10px">
+                Tipo de productos:
+                <label><input type="checkbox" id="cbox1" onclick="showContentActivos()"> De alquiler </label>
+                <label style="padding-left:10px"><input type="checkbox" id="cbox2" onclick="showContentEliminados()"> Inmoviliarios</label><br>
+            </h5>
+        </div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nombre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Cantidad)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FechaCompra)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PrecioCompra)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FechaBaja)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FechaAlta)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MotivoBaja)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PrecioAlquiler)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductosTipoID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Proveedores)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Cantidad)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaCompra)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PrecioCompra)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaBaja)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaAlta)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MotivoBaja)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PrecioAlquiler)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductosTipoID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Proveedores.Cuit)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.PoductosID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.PoductosID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.PoductosID">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    </div>
+    <div>
+        <i class="fa fa-search fa-2x" style="Float: right; padding-left:10px; padding-top:2px;"></i>
+        <input id="searchTerm" type="text" onkeyup="doSearch()" class="form-control" placeholder="Buscar" style=" width:200px; Float: right; " />
+    </div>
+    <div>
+        <form class="form-group">
+            <table class="table table-responsive-sm" id="datos">
+                <thead>
+                    <tr>
+                        <th>
+                            Nombre:
+                        </th>
+                        <th>
+                            Cantidad:
+                        </th>
+                        <th>
+                            Fecha Compra:
+                        </th>
+                        <th>
+                            Precio Compra:
+                        </th>
+                        <th>
+                            Precio de Alquiler:
+                        </th>
+                        <th>
+                            Tipo Producto
+                        </th>
+                        <th>
+                            Proveedor:
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Nombre)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Cantidad)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaCompra)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PrecioCompra)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PrecioAlquiler)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ProductosTipoID)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Proveedores.Cuit)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.PoductosID">Edit</a> |
+                                <a asp-action="Details" asp-route-id="@item.PoductosID">Details</a> |
+                                <a asp-action="Delete" asp-route-id="@item.PoductosID">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </form>
+    </div>
+</body>
+</html>
