@@ -22,8 +22,7 @@ namespace Alpid.Controllers
         // GET: Productos
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Productos.Include(p => p.Proveedores)
-                                                         .Include(p => p.ProductoTipos);
+            var applicationDbContext = _context.Productos.Include(p => p.Proveedores);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -36,7 +35,6 @@ namespace Alpid.Controllers
             }
 
             var productos = await _context.Productos.Include(p => p.Proveedores)
-                                                    .Include(p => p.ProductoTipos)
                                                     .FirstOrDefaultAsync(m => m.PoductosID == id);
             if (productos == null)
             {
@@ -50,17 +48,14 @@ namespace Alpid.Controllers
         public IActionResult Create()
         {
             ViewData["ProveedoresID"] = new SelectList(_context.Proveedores, "ProveedoresId", "RazonSocial");
-            ViewData["ProductosTipoID"] = new SelectList(_context.ProductoTipos, "ProductosTipoID", "Tipo");
 
             return View();
         }
 
         // POST: Productos/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PoductosID,Nombre,Cantidad,FechaCompra,PrecioCompra,FechaBaja,FechaAlta,MotivoBaja,PrecioAlquiler,ProductosTipoID,ProveedoresID")] Productos productos)
+        public async Task<IActionResult> Create([Bind("PoductosID,Nombre,Cantidad,ProductosTipo,FechaAlta,PrecioAlquiler,ProveedoresID")] Productos productos)
         {
             if (ModelState.IsValid)
             {
@@ -69,7 +64,6 @@ namespace Alpid.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ProveedoresID"] = new SelectList(_context.Proveedores, "ProveedoresId", "RazonSocial", productos.ProveedoresID);
-            ViewData["ProductosTipoID"] = new SelectList(_context.ProductoTipos, "ProductosTipoID", "Tipo", productos.ProductosTipoID);
 
             return View(productos);
         }
@@ -88,7 +82,6 @@ namespace Alpid.Controllers
                 return NotFound();
             }
             ViewData["ProveedoresID"] = new SelectList(_context.Proveedores, "ProveedoresId", "RazonSocial", productos.ProveedoresID);
-            ViewData["ProductosTipoID"] = new SelectList(_context.ProductoTipos, "ProductosTipoID", "Tipo", productos.ProductosTipoID);
             return View(productos);
         }
 
@@ -97,7 +90,7 @@ namespace Alpid.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PoductosID,Nombre,Cantidad,FechaCompra,PrecioCompra,FechaBaja,FechaAlta,MotivoBaja,PrecioAlquiler,ProductosTipoID,ProveedoresID")] Productos productos)
+        public async Task<IActionResult> Edit(int id, [Bind("PoductosID,Nombre,Cantidad,FechaBaja,FechaAlta,MotivoBaja,PrecioAlquiler,ProductosTipoID,ProveedoresID")] Productos productos)
         {
             if (id != productos.PoductosID)
             {
@@ -125,7 +118,6 @@ namespace Alpid.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ProveedoresID"] = new SelectList(_context.Proveedores, "ProveedoresId", "RazonSocial", productos.ProveedoresID);
-            ViewData["ProductosTipoID"] = new SelectList(_context.ProductoTipos, "ProductosTipoID", "Tipo", productos.ProductosTipoID);
             return View(productos);
         }
 
@@ -139,7 +131,6 @@ namespace Alpid.Controllers
 
             var productos = await _context.Productos
                 .Include(p => p.Proveedores)
-                .Include(p => p.ProductoTipos)
                 .FirstOrDefaultAsync(m => m.PoductosID == id);
             if (productos == null)
             {

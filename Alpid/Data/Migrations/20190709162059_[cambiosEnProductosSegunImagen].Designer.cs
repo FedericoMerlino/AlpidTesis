@@ -4,14 +4,16 @@ using Alpid.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Alpid.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190709162059_[cambiosEnProductosSegunImagen]")]
+    partial class cambiosEnProductosSegunImagen
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -142,7 +144,7 @@ namespace Alpid.Data.Migrations
                     b.Property<string>("ProductosTipo")
                         .IsRequired();
 
-                    b.Property<int?>("ProveedoresID");
+                    b.Property<int>("ProveedoresID");
 
                     b.HasKey("PoductosID");
 
@@ -414,7 +416,8 @@ namespace Alpid.Data.Migrations
                 {
                     b.HasOne("Alpid.Models.Proveedores", "Proveedores")
                         .WithMany("Productos")
-                        .HasForeignKey("ProveedoresID");
+                        .HasForeignKey("ProveedoresID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

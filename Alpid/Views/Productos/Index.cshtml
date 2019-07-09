@@ -20,8 +20,12 @@
 
             <h5 style="initial-letter:inherit; font-family: Homer Simpson, cursive; padding-right:10px">
                 Tipo de productos:
-                <label><input type="checkbox" id="cbox1" onclick="showContentActivos()"> De alquiler </label>
-                <label style="padding-left:10px"><input type="checkbox" id="cbox2" onclick="showContentEliminados()"> Inmoviliarios</label><br>
+                <label><input type="checkbox" id="alquiler" onclick="validarcheck()"> De alquiler </label>
+                <label style="padding-left:10px"><input type="checkbox" id="Inmobiliarios" onclick="validarcheck()"> Inmobiliarios</label><br>
+
+                Estados:
+                <label style="padding-left:10px"><input type="checkbox" id="cbox1" onclick="validarcheck()" checked="checked"> Activos</label>
+                <label style="padding-left:10px"><input type="checkbox" id="cbox2" onclick="validarcheck()" checked="checked"> Eliminados</label><br>
             </h5>
         </div>
 
@@ -42,16 +46,10 @@
                             Cantidad:
                         </th>
                         <th>
-                            Fecha Compra:
-                        </th>
-                        <th>
-                            Precio Compra:
+                            Tipo Producto:
                         </th>
                         <th>
                             Precio de Alquiler:
-                        </th>
-                        <th>
-                            Tipo Producto
                         </th>
                         <th>
                             Proveedor:
@@ -62,34 +60,116 @@
                 <tbody>
                     @foreach (var item in Model)
                     {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Nombre)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Cantidad)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.FechaCompra)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.PrecioCompra)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.PrecioAlquiler)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ProductosTipoID)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Proveedores.Cuit)
-                            </td>
-                            <td>
-                                <a asp-action="Edit" asp-route-id="@item.PoductosID">Edit</a> |
-                                <a asp-action="Details" asp-route-id="@item.PoductosID">Details</a> |
-                                <a asp-action="Delete" asp-route-id="@item.PoductosID">Delete</a>
-                            </td>
-                        </tr>
+                        @if (item.FechaBaja != null)
+                        {
+                            if (item.ProductosTipo == "Inmobiliario")
+                            {
+                                <tr id="GrillaEliminados" name="inmobiliarios" style="background-color:blanchedalmond;">
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Nombre)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Cantidad)
+                                    </td>
+                                    <td>
+                                        Inmobiliario
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PrecioAlquiler)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Proveedores.Cuit)
+                                    </td>
+                                    <td>
+                                        <a asp-action="Edit" asp-route-id="@item.PoductosID">Edit</a> |
+                                        <a asp-action="Details" asp-route-id="@item.PoductosID">Details</a> |
+                                        <a asp-action="Delete" asp-route-id="@item.PoductosID">Delete</a>
+                                    </td>
+                                </tr>
+                            }
+                            if (item.ProductosTipo == "DeAlquiler")
+                            {
+                                <tr id="GrillaEliminados" name="Alquiler">
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Nombre)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Cantidad)
+                                    </td>
+                                    <td>
+                                        De Alquiler
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PrecioAlquiler)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Proveedores.Cuit)
+                                    </td>
+                                    <td>
+                                        <a asp-action="Edit" asp-route-id="@item.PoductosID">Edit</a> |
+                                        <a asp-action="Details" asp-route-id="@item.PoductosID">Details</a> |
+                                        <a asp-action="Delete" asp-route-id="@item.PoductosID">Delete</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        @if (item.FechaBaja is null)
+                        {
+                            if (item.ProductosTipo == "Inmobiliario")
+                            {
+                                <tr id="GrillaActivos" name="inmobiliarios" style="background-color:blanchedalmond;">
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Nombre)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Cantidad)
+                                    </td>
+                                    <td>
+                                        Inmobiliario
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PrecioAlquiler)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Proveedores.Cuit)
+                                    </td>
+                                    <td>
+                                        <a asp-action="Edit" asp-route-id="@item.PoductosID">Edit</a> |
+                                        <a asp-action="Details" asp-route-id="@item.PoductosID">Details</a> |
+                                        <a asp-action="Delete" asp-route-id="@item.PoductosID">Delete</a>
+                                    </td>
+                                </tr>
+                            }
+                            if (item.ProductosTipo == "DeAlquiler")
+                            {
+                                <tr id="GrillaActivos" name="Alquiler">
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Nombre)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Cantidad)
+                                    </td>
+                                    <td>
+                                        De Alquiler
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PrecioAlquiler)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Proveedores.Cuit)
+                                    </td>
+                                    <td>
+                                        <a asp-action="Edit" asp-route-id="@item.PoductosID">Edit</a> |
+                                        <a asp-action="Details" asp-route-id="@item.PoductosID">Details</a> |
+                                        <a asp-action="Delete" asp-route-id="@item.PoductosID">Delete</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
                     }
                 </tbody>
             </table>
@@ -97,3 +177,37 @@
     </div>
 </body>
 </html>
+
+<script>
+    function validarcheck() {
+        $('#cbox1').on('click', function () {
+            if ($(this).is(':checked')) {
+                document.getElementById('GrillaActivos').style.display = 'block';
+            }
+            else {
+                document.getElementById('GrillaActivos').style.display = 'none';
+            }
+        });
+        $('#cbox2').on('click', function () {
+            if ($(this).is(':checked')) {
+                document.getElementById('GrillaEliminados').style.display = 'block';
+            }
+            else {
+                document.getElementById('GrillaEliminados').style.display = 'none';
+            }
+        });
+   
+        $('#checkInmobiliario').on('click', function () {
+            if ($(this).is(':checked')) {
+                document.getElementsByName('Inmobiliario').style.display = 'block';
+                document.getElementsByName('Alquiler').style.display = 'none';
+            }
+        });
+        $('#checkAlquiler').on('click', function () {
+            if ($(this).is(':checked')) {
+                document.getElementsByName('Alquiler').style.display = 'block';
+                document.getElementsByName('Inmobiliario').style.display = 'none';
+            }
+        });
+    }
+</script>

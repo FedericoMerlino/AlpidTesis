@@ -17,8 +17,7 @@ namespace Alpid.Data
         public DbSet<Cuotas> Cuotas { get; set; }
         public DbSet<Proveedores> Proveedores { get; set; }
         public DbSet<Socios> Socios { get; set; }
-        public DbSet<Alpid.Models.Productos> Productos { get; set; }
-        public DbSet<Alpid.Models.ProductoTipos> ProductoTipos { get; set; }
+        public DbSet<Productos> Productos { get; set; }
     }
 }
 

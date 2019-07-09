@@ -11,17 +11,14 @@ namespace Alpid.Models
         [Key]
         public int PoductosID { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Favor de ingresar un Nombre")]
         public string Nombre { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Favor de ingresar una cantidad")]
         public int Cantidad { get; set; }
 
         [Required]
-        public DateTime FechaCompra { get; set; }
-
-        [Required]
-        public decimal PrecioCompra { get; set; }
+        public string ProductosTipo { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
         public DateTime? FechaBaja { get; set; }
@@ -31,14 +28,9 @@ namespace Alpid.Models
 
         public string MotivoBaja { get; set; }
 
-        [Required]
         public decimal PrecioAlquiler { get; set; }
 
-        public int ProductosTipoID { get; set; }
-
-        public ProductoTipos ProductoTipos { get; set; }
-
-        public int ProveedoresID { get; set; }
+        public int? ProveedoresID { get; set; }
 
         public Proveedores Proveedores { get; set; }
 
