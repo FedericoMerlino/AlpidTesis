@@ -12,19 +12,33 @@
     <p>
         <a asp-action="Create" class='btn btn-info'>Crear Socio</a>
     </p>
-    Buscar: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
-    <input type="submit" value="Buscar" class="btn btn-default" />
-    <a asp-action="Index">Todos los registros </a> | Registros mostrados @Model.TotalR
+    <form asp-action="Index" method="get">
+        <div class="form-actions no-color">
+            <p>
+                Buscar: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                <input type="submit" value="Buscar" class="btn btn-dark" />
+                <a asp-action="Index" class="btn btn-info">Cancelar búsqueda </a>
+            </p>
+        </div>
+    </form>
+
     <div class="input-group-append" style="padding-top:30px">
         <div class="form-group">
             <h2 style="initial-letter:inherit; font-family: Homer Simpson, cursive; color:#0932ff;"> Grilla socios </h2>
+            <form asp-action="Index" method="get">
+                <div class="form-actions no-color">
+                    <h5 style="initial-letter:inherit; font-family: Homer Simpson, cursive; padding-right:10px">
+                        Estados:
+                        <label style="padding-left:10px"><input type="radio" name="Coordinar" id="cbox1" onclick="validarcheck()" checked="checked"> Activos</label>
+                        <label style="padding-left:10px"><input type="radio" name="Coordinar" id="cbox2" onclick="validarcheck()"> Eliminados</label>
+                        <input type="text" id="FechasGrilla" name="filtroFecha" value="@ViewData["DateFilter"]" style="display:none;" />
+                        <input type="submit" value="Buscar" class="btn btn-dark" />
+                    </h5>
 
-            <h5 style="initial-letter:inherit; font-family: Homer Simpson, cursive; padding-right:10px">
-                Estados:
-                <label style="padding-left:10px"><input type="checkbox" id="cbox1" onclick="validarcheck()" checked="checked"> Activos</label>
+                </div>
 
-                <label style="padding-left:10px"><input type="checkbox" id="cbox2" onclick="validarcheck()" checked="checked"> Eliminados</label><br>
-            </h5>
+
+            </form>
         </div>
 
     </div>
@@ -65,7 +79,7 @@
                     {
                         @if (item.FechaBaja != null)
                         {
-                            <tr id="GrillaEliminados" style="background-color:salmon">
+                            <tr style="background-color:salmon">
 
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Cuit)
@@ -93,7 +107,7 @@
                         }
                         @if (item.FechaBaja is null)
                         {
-                            <tr id="GrillaActivos">
+                            <tr>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Cuit)
                                 </td>
@@ -121,6 +135,12 @@
                     }
                 </tbody>
             </table>
+            <h5>
+                <label style="padding-bottom:5px; font-weight: bold;"> Referencias:</label> <br />
+                <input type="text" style="height:20px;width:20px;" disabled /> Activo
+                <input type="text" style="height:20px;width:20px;background-color:salmon;" disabled /> Eliminado
+
+            </h5>
             <div style="float:right; padding-bottom: 30px;">
                 @{
                     var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
@@ -160,20 +180,13 @@
     function validarcheck() {
         $('#cbox1').on('click', function () {
             if ($(this).is(':checked')) {
-                document.getElementById('GrillaActivos').style.display = 'block';
-            }
-            else {
-                document.getElementById('GrillaActivos').style.display = 'none';
+                document.getElementById('FechasGrilla').value = '';
             }
         });
         $('#cbox2').on('click', function () {
             if ($(this).is(':checked')) {
-                document.getElementById('GrillaEliminados').style.display = 'block';
-            }
-            else {
-                document.getElementById('GrillaEliminados').style.display = 'none';
+                document.getElementById('FechasGrilla').value = 'eliminados';
             }
         });
     }
-
 </script>

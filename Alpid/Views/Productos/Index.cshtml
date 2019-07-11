@@ -196,17 +196,22 @@
                 document.getElementById('GrillaEliminados').style.display = 'none';
             }
         });
-   
+
         $('#checkInmobiliario').on('click', function () {
             if ($(this).is(':checked')) {
                 document.getElementsByName('Inmobiliario').style.display = 'block';
-                document.getElementsByName('Alquiler').style.display = 'none';
+            }
+            else {
+                document.getElementsByName('Inmobiliario').style.display = 'none';
             }
         });
+
         $('#checkAlquiler').on('click', function () {
             if ($(this).is(':checked')) {
                 document.getElementsByName('Alquiler').style.display = 'block';
-                document.getElementsByName('Inmobiliario').style.display = 'none';
+            }
+            else {
+                document.getElementsByName('Alquiler').style.display = 'none';
             }
         });
     }

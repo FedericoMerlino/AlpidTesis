@@ -18,7 +18,7 @@ namespace Alpid.Controllers
         }
 
         // GET: Socios
-        public async Task<IActionResult> Index(string currentFilter, string searchString, int? page)
+        public async Task<IActionResult> Index(string currentFilter, string searchString, int? page, string filtroFecha,string DateFilter)
         {
             if (searchString != null)
             {
@@ -35,7 +35,19 @@ namespace Alpid.Controllers
             {
                 socio = socio.Where(s => s.Cuit.Contains(searchString) || s.RazonSocial.Contains(searchString));
             }
-            int pageSize = 10;
+
+            ViewData["DateFilter"] = filtroFecha;
+
+            if (filtroFecha == null)
+            {
+                socio = socio.Where(s => s.FechaBaja == null);
+            }
+            else
+            {
+                socio = socio.Where(s => s.FechaBaja != null);
+            }
+
+            int pageSize = 15;
             return View(await Paginacion<Socios>.CreateAsync(socio.AsNoTracking().OrderByDescending(x => x.FechaAlta), page ?? 1, pageSize));
         }
 

@@ -4,66 +4,63 @@
     ViewData["Title"] = "Delete";
 }
 
-<h1>Delete</h1>
+<html>
+<body>
+    <header>
+        <link href="~/css/cssKanze/style.min.css" rel="stylesheet" />
+    </header>
+    <h2 style="color:red; padding-bottom:30px">¿Esta seguro que desea eliminar el producto "@Html.DisplayFor(model => model.Nombre)"?</h2>
+    <div>
+        <h4>Información del producto a Eliminar:</h4>
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                <form asp-action="Delete">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="PoductosID" />
+                    <div class="form-group">
+                        <label asp-for="Nombre" class="control-label">Nombre</label>
+                        <input asp-for="Nombre" class="form-control"  readonly="readonly" />
+                        <span asp-validation-for="Nombre" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Cantidad" class="control-label">Cantidad</label>
+                        <input asp-for="Cantidad" class="form-control" readonly="readonly" />
+                        <span asp-validation-for="Cantidad" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ProductosTipo" class="control-label">Tipo de producto</label>
+                        <input asp-for="ProductosTipo"  value="Inmobiliario" class="form-control" readonly="readonly" />
+                        <span asp-validation-for="ProductosTipo" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="FechaAlta" class="control-label"> Fecha ingreso</label>
+                        <input asp-for="FechaAlta" type="date" class="form-control" readonly="readonly" />
+                        <span asp-validation-for="FechaAlta" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="FechaBaja" class="control-label"> Fecha ingreso</label>
+                        <input asp-for="FechaBaja" type="date" class="form-control" readonly="readonly" />
+                        <span asp-validation-for="FechaBaja" class="text-danger"></span>
+                    </div>
+          
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Productos</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            Nombre:
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nombre)
-        </dd>
-        <dt class = "col-sm-2">
-            Cantidad:
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Cantidad)
-        </dd>
-        <dt class = "col-sm-2">
-            Fecha :
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FechaBaja)
-        </dd>
-        <dt class = "col-sm-2">
-            FechaAlta)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FechaAlta)
-        </dd>
-        <dt class = "col-sm-2">
-            MotivoBaja)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MotivoBaja)
-        </dd>
-        <dt class = "col-sm-2">
-            PrecioAlquiler)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PrecioAlquiler)
-        </dd>
-        <dt class = "col-sm-2">
-         Tipo Producto
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ProductosTipo)
-        </dd>
-        <dt class = "col-sm-2">
-            Proveedores)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Proveedores.Cuit)
-        </dd class>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="PoductosID" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
-</div>
+                    <div class="form-group">
+                        <label asp-for="ProveedoresID" class="control-label">Proveedor</label>
+                        <input asp-for="ProveedoresID" class="form-control" readonly="readonly" />
+                        <span asp-validation-for="ProveedoresID" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-12">
+                        <input type="submit" value="Eliminar" class="btn btn-primary" />
+                        <a asp-action="Index" style="float:right;" class="btn btn-info">Regresar sin eliminar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

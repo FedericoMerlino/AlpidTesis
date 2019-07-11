@@ -129,27 +129,78 @@ namespace Alpid.Controllers
                 return NotFound();
             }
 
-            var productos = await _context.Productos
-                .Include(p => p.Proveedores)
-                .FirstOrDefaultAsync(m => m.PoductosID == id);
+            var productos = await _context.Productos.FindAsync(id);
             if (productos == null)
             {
                 return NotFound();
             }
-
+            ViewData["ProveedoresID"] = new SelectList(_context.Proveedores, "ProveedoresId", "RazonSocial", productos.ProveedoresID);
             return View(productos);
         }
 
-        // POST: Productos/Delete/5
+        //// POST: Productos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id, [Bind("PoductosID,Nombre,Cantidad,FechaBaja,FechaAlta,MotivoBaja,PrecioAlquiler,ProductosTipoID,ProveedoresID")] Productos productos)
         {
-            var productos = await _context.Productos.FindAsync(id);
-            _context.Productos.Remove(productos);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            if (id != productos.PoductosID)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(productos);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ProductosExists(productos.PoductosID))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["ProveedoresID"] = new SelectList(_context.Proveedores, "ProveedoresId", "RazonSocial", productos.ProveedoresID);
+            return View(productos);
         }
+
+        //// GET: Productos/Delete/5
+        //public async Task<IActionResult> Delete(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var productos = await _context.Productos
+        //        .Include(p => p.Proveedores)
+        //        .FirstOrDefaultAsync(m => m.PoductosID == id);
+        //    if (productos == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return View(productos);
+        //}
+
+        //// POST: Productos/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> DeleteConfirmed(int id)
+        //{
+        //    var productos = await _context.Productos.FindAsync(id);
+        //    _context.Productos.Remove(productos);
+        //    await _context.SaveChangesAsync();
+        //    return RedirectToAction(nameof(Index));
+        //}
 
         private bool ProductosExists(int id)
         {

@@ -13,9 +13,15 @@
     <p>
         <a asp-action="Create" class='btn btn-info'>Nuevo Proveedor</a>
     </p>
-    Buscar: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
-    <input type="submit" value="Buscar" class="btn btn-default" />
-    <a asp-action="Index">Todos los registros </a> | Registros mostrados @Model.TotalR
+    <form asp-action="Index" method="get">
+        <div class="form-actions no-color">
+            <p>
+                Buscar: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                <input type="submit" value="Buscar" class="btn btn-dark" />
+                <a asp-action="Index" class="btn btn-info">Cancelar búsqueda </a>
+            </p>
+        </div>
+    </form>
     <div class="input-group-append" style="padding-top:30px">
         <div class="form-group">
             <h2 style="initial-letter:inherit; font-family: Homer Simpson, cursive; color:#0932ff;"> Grilla socios </h2>
@@ -90,7 +96,7 @@
                             }
                         </tr>
 
-                        <tr id="GrillaActivos" >
+                        <tr id="GrillaActivos">
                             @if (item.FechaBaja is null)
                             {
                                 <td>
@@ -120,6 +126,12 @@
                     }
                 </tbody>
             </table>
+            <h5>
+                <label style="padding-bottom:5px; font-weight: bold;"> Referencias:</label> <br />
+                <input type="text" style="height:20px;width:20px;" disabled /> Activo
+                <input type="text" style="height:20px;width:20px;background-color:salmon;" disabled /> Eliminado
+
+            </h5>
             <div style="float:right; padding-bottom: 30px;">
                 @{
                     var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";

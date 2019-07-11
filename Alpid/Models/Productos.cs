@@ -17,7 +17,6 @@ namespace Alpid.Models
         [Required(ErrorMessage ="Favor de ingresar una cantidad")]
         public int Cantidad { get; set; }
 
-        [Required]
         public string ProductosTipo { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
