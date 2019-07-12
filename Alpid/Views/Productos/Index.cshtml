@@ -12,8 +12,15 @@
     <p>
         <a asp-action="Create" class='btn btn-info'>Nuevo Producto</a>
     </p>
-    Buscar: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
-    <input type="submit" value="Buscar" class="btn btn-default" />
+    <form asp-action="Index" method="get">
+        <div class="form-actions no-color">
+            <p>
+                Buscar: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                <input type="submit" value="Buscar" class="btn btn-dark" />
+                <a asp-action="Index" class="btn btn-info">Cancelar búsqueda </a>
+            </p>
+        </div>
+    </form>
     <div class="input-group-append" style="padding-top:30px">
         <div class="form-group">
             <h2 style="initial-letter:inherit; font-family: Homer Simpson, cursive; color:#0932ff;"> Grilla producots </h2>
@@ -79,7 +86,7 @@
                                     </td>
 
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Proveedores.Cuit)
+                                        @Html.DisplayFor(modelItem => item.Proveedores.RazonSocial)
                                     </td>
                                     <td>
                                         <a asp-action="Edit" asp-route-id="@item.PoductosID">Edit</a> |

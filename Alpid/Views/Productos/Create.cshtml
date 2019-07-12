@@ -16,13 +16,13 @@
             <h5 style="padding-top:20px; color:#d6ba2b;">Es obligatorio completar los campos que poseen *</h5>
             <div class="form-group">
                 <label class="control-label">Seleccione el tipo de producto que desea ingresar</label><br />
-                <input id="checkAlquiler" name="radio" style="padding-left:10px;" TYPE="radio" onclick="validarcheck()"> De Alquiler
-                <input id="checkInmobiliario" name="radio" TYPE="radio" onclick="validarcheck()"> Inmobiliario
+                <label> <input id="checkAlquiler" name="radio" style="padding-left:10px;" TYPE="radio" onclick="validarcheck()"> De Alquiler</label>
+                <label><input id="checkInmobiliario" name="radio" TYPE="radio" onclick="validarcheck()"> Inmobiliario</label>
             </div>
             <form asp-action="Create" id="formInmobiliario" style="display:none">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
-                    <label asp-for="Nombre" class="control-label">Nombre</label>
+                    <label asp-for="Nombre" class="control-label">Producto</label>
                     <input asp-for="Nombre" class="form-control" />
                     <span asp-validation-for="Nombre" class="text-danger"></span>
                 </div>
@@ -31,13 +31,13 @@
                     <input asp-for="Cantidad" class="form-control" />
                     <span asp-validation-for="Cantidad" class="text-danger"></span>
                 </div>
-                <div class="form-group" style="display:none">
+                <div class="form-group">
                     <label asp-for="FechaAlta" class="control-label">Fecha ingreso</label>
                     <input asp-for="FechaAlta" type="date" id="fechaActual" class="form-control" readonly="readonly" />
                     <span asp-validation-for="FechaAlta" class="text-danger"></span>
                 </div>
                 <div class="form-group" style="display:none">
-                    <label asp-for="ProductosTipo" class="control-label">Nombre</label>
+                    <label asp-for="ProductosTipo" class="control-label"></label>
                     <input asp-for="ProductosTipo" value="Inmobiliario" class="form-control" />
                     <span asp-validation-for="ProductosTipo" class="text-danger"></span>
                 </div>
@@ -57,9 +57,9 @@
                     <input asp-for="Cantidad" class="form-control" />
                     <span asp-validation-for="Cantidad" class="text-danger"></span>
                 </div>
-                <div class="form-group" style="display:none">
+                <div class="form-group">
                     <label asp-for="FechaAlta" class="control-label">Fecha ingreso</label>
-                    <input asp-for="FechaAlta" type="date" id="fechaActual" class="form-control" readonly="readonly" />
+                    <input asp-for="FechaAlta" type="date" id="fechaActualSegundo" class="form-control" readonly="readonly"/>
                     <span asp-validation-for="FechaAlta" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -84,7 +84,7 @@
     </div>
 
     <div>
-        <a asp-action="Index" class="btn btn-info">Regresar a la grilla</a>
+        <a asp-action="Index" class="btn btn-link">Regresar a la grilla</a>
     </div>
 </body>
 </html>

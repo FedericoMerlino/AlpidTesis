@@ -20,9 +20,13 @@ namespace Alpid.Controllers
         // GET: Socios
         public async Task<IActionResult> Index(string currentFilter, string searchString, int? page, string filtroFecha,string DateFilter)
         {
+            var bandera = true;
+
             if (searchString != null)
             {
                 page = 1;
+                bandera = false;
+
             }
             else
             {
@@ -38,11 +42,11 @@ namespace Alpid.Controllers
 
             ViewData["DateFilter"] = filtroFecha;
 
-            if (filtroFecha == null)
+            if (filtroFecha == null && bandera == true)
             {
                 socio = socio.Where(s => s.FechaBaja == null);
             }
-            else
+            if (filtroFecha != null && bandera == true)
             {
                 socio = socio.Where(s => s.FechaBaja != null);
             }
