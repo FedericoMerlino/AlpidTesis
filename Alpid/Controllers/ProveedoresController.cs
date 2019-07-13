@@ -18,18 +18,20 @@ namespace Alpid.Controllers
         }
 
         // GET: Proveedores
-        public async Task<IActionResult> Index(string currentFilter, string searchString, int? page)
+        public async Task<IActionResult> Index(string currentFilter, string searchString, int? page, string filtroFecha, string DateFilter)
         {
-            
+            var bandera = true;
+
             if (searchString != null)
             {
                 page = 1;
+                bandera = false;
+
             }
             else
             {
                 searchString = currentFilter;
             }
-
             ViewData["CurrentFilter"] = searchString;
             var proveedor = from s in _context.Proveedores select s;
 
@@ -37,8 +39,20 @@ namespace Alpid.Controllers
             {
                 proveedor = proveedor.Where(s => s.Cuit.Contains(searchString) || s.RazonSocial.Contains(searchString));
             }
-                       int pageSize = 10;
-            return View(await Paginacion<Proveedores>.CreateAsync(proveedor.AsNoTracking(), page ?? 1, pageSize));
+
+            ViewData["DateFilter"] = filtroFecha;
+
+            if (filtroFecha == null && bandera == true)
+            {
+                proveedor = proveedor.Where(s => s.FechaBaja == null);
+            }
+            if (filtroFecha != null && bandera == true)
+            {
+                proveedor = proveedor.Where(s => s.FechaBaja != null);
+            }
+
+            int pageSize = 15;
+            return View(await Paginacion<Proveedores>.CreateAsync(proveedor.AsNoTracking().OrderByDescending(x => x.FechaAlta), page ?? 1, pageSize));
         }
 
         // GET: Proveedores/Details/5

@@ -1,0 +1,55 @@
+﻿@model Alpid.Models.Productos
+
+@{
+    ViewData["Title"] = "Eliminar Producto";
+}
+
+<html>
+<body>
+    <header>
+        <link href="~/css/cssKanze/style.min.css" rel="stylesheet" />
+    </header>
+    <h2 style="color:red; ">¿Esta seguro que desea eliminar el producto:"@Html.DisplayFor(model => model.Nombre)"?</h2>
+    <h3 style="color:red; padding-bottom:20px">Si se elimina el producto no se podrá recuperar la información</h3>
+    <div>
+        <h5>Información del producto a Eliminar:</h5>
+            <div>
+                <dl class="row">
+                    <dt class="col-sm-2">
+                        Nombre:
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Nombre)
+                    </dd>
+                    <dt class="col-sm-2">
+                        Cantidad:
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Cantidad)
+                    </dd>
+                    <dt class="col-sm-2">
+                        Tipo Producto:
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.ProductosTipo)
+                    </dd>
+                    <dt class="col-sm-2">
+                        Fecha ingreso:
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.FechaAlta)
+                    </dd>
+                </dl>
+            </div>
+</div>
+    <form asp-action="DeletePhysical">
+        <input type="hidden" asp-for="PoductosID" />
+        <input type="submit"  value="Eliminar" class="btn btn-danger" /> 
+        <a asp-action="Index" class="btn btn-info">Cancelar</a>
+    </form>
+</body>
+</html>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

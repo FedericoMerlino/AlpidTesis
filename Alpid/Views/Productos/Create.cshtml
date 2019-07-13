@@ -15,19 +15,21 @@
         <div class="col-md-5">
             <h5 style="padding-top:20px; color:#d6ba2b;">Es obligatorio completar los campos que poseen *</h5>
             <div class="form-group">
+                <!--elegir uno de los dos para que aparezca la pantalla-->
                 <label class="control-label">Seleccione el tipo de producto que desea ingresar</label><br />
                 <label> <input id="checkAlquiler" name="radio" style="padding-left:10px;" TYPE="radio" onclick="validarcheck()"> De Alquiler</label>
                 <label><input id="checkInmobiliario" name="radio" TYPE="radio" onclick="validarcheck()"> Inmobiliario</label>
             </div>
+            <!--si se selecciona el radiobutton inmobiliario-->
             <form asp-action="Create" id="formInmobiliario" style="display:none">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
-                    <label asp-for="Nombre" class="control-label">Producto</label>
+                    <label asp-for="Nombre" class="control-label">Producto*</label>
                     <input asp-for="Nombre" class="form-control" />
                     <span asp-validation-for="Nombre" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Cantidad" class="control-label">Catidad</label>
+                    <label asp-for="Cantidad" class="control-label">Catidad*</label>
                     <input asp-for="Cantidad" class="form-control" />
                     <span asp-validation-for="Cantidad" class="text-danger"></span>
                 </div>
@@ -45,25 +47,26 @@
                     <input type="submit" value="Crear Producto" class="btn btn-primary" />
                 </div>
             </form>
+            <!--si se selecciona el radiobutton alquiler-->
             <form asp-action="Create" id="formAlquiler" style="display:none">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
-                    <label asp-for="Nombre" class="control-label">Nombre</label>
+                    <label asp-for="Nombre" class="control-label">Producto*</label>
                     <input asp-for="Nombre" class="form-control" />
                     <span asp-validation-for="Nombre" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Cantidad" class="control-label">Catidad</label>
+                    <label asp-for="Cantidad" class="control-label">Catidad*</label>
                     <input asp-for="Cantidad" class="form-control" />
                     <span asp-validation-for="Cantidad" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="FechaAlta" class="control-label">Fecha ingreso</label>
-                    <input asp-for="FechaAlta" type="date" id="fechaActualSegundo" class="form-control" readonly="readonly"/>
+                    <input asp-for="FechaAlta" type="date" id="fechaActualSegundo" class="form-control" readonly="readonly" />
                     <span asp-validation-for="FechaAlta" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="PrecioAlquiler" class="control-label"> Precio a alquilar</label>
+                    <label asp-for="PrecioAlquiler" class="control-label"> Precio a alquilar*</label>
                     <input asp-for="PrecioAlquiler" class="form-control" />
                     <span asp-validation-for="PrecioAlquiler" class="text-danger"></span>
                 </div>
@@ -76,15 +79,15 @@
                     <input asp-for="ProductosTipo" value="DeAlquiler" class="form-control" />
                     <span asp-validation-for="ProductosTipo" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <input type="submit" value="Crear Producto" class="btn btn-primary" />
+                <div class="col-md-12">
+                    <input type="submit" value="Crear nuevo" class="btn btn-primary" />
                 </div>
             </form>
         </div>
     </div>
-
-    <div>
-        <a asp-action="Index" class="btn btn-link">Regresar a la grilla</a>
+    <!--volver a la grilla-->
+    <div class="col-md-12" style="padding: 10px;">
+        <a asp-action="Index"  class="btn btn-info">Cancelar</a>
     </div>
 </body>
 </html>
@@ -92,6 +95,7 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
 <script>
+    // cambia los valores y muestra la pantalla que se desea
     function validarcheck() {
         $('#checkInmobiliario').on('click', function () {
             if ($(this).is(':checked')) {

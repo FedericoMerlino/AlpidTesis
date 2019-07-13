@@ -90,7 +90,7 @@ namespace Alpid.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PoductosID,Nombre,Cantidad,FechaBaja,FechaAlta,MotivoBaja,PrecioAlquiler,ProductosTipoID,ProveedoresID")] Productos productos)
+        public async Task<IActionResult> Edit(int id, [Bind("PoductosID,Nombre,Cantidad,ProductosTipo,FechaAlta,PrecioAlquiler,ProveedoresID")] Productos productos)
         {
             if (id != productos.PoductosID)
             {
@@ -172,35 +172,35 @@ namespace Alpid.Controllers
             return View(productos);
         }
 
-        //// GET: Productos/Delete/5
-        //public async Task<IActionResult> Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        // GET: Productos/DeletePhysical/5
+        public async Task<IActionResult> DeletePhysical(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        //    var productos = await _context.Productos
-        //        .Include(p => p.Proveedores)
-        //        .FirstOrDefaultAsync(m => m.PoductosID == id);
-        //    if (productos == null)
-        //    {
-        //        return NotFound();
-        //    }
+            var productos = await _context.Productos
+                .Include(p => p.Proveedores)
+                .FirstOrDefaultAsync(m => m.PoductosID == id);
+            if (productos == null)
+            {
+                return NotFound();
+            }
 
-        //    return View(productos);
-        //}
+            return View(productos);
+        }
 
-        //// POST: Productos/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(int id)
-        //{
-        //    var productos = await _context.Productos.FindAsync(id);
-        //    _context.Productos.Remove(productos);
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
+        // POST: Productos/DeletePhysical/5
+        [HttpPost, ActionName("DeletePhysical")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var productos = await _context.Productos.FindAsync(id);
+            _context.Productos.Remove(productos);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
 
         private bool ProductosExists(int id)
         {

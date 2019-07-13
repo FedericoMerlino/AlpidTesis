@@ -23,8 +23,10 @@ namespace Alpid.Models
         public string Domicilio { get; set; }
 
         [Required(ErrorMessage = "Debe de ingresar un Teléfono")]
+        [Phone]
         public string Telefono { get; set; }
 
+        [EmailAddress]
         public string Email { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]

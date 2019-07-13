@@ -9,9 +9,11 @@
         <link href="~/css/cssKanze/style.min.css" rel="stylesheet" />
     </header>
     <h1>Socios Alpid</h1>
+    <!--Boton para crear nuevo socio-->
     <p>
         <a asp-action="Create" class='btn btn-info'>Crear Socio</a>
     </p>
+    <!--busca en toda la tabla en la base de datos de socios-->
     <form asp-action="Index" method="get">
         <div class="form-actions no-color">
             <p>
@@ -21,7 +23,7 @@
             </p>
         </div>
     </form>
-
+    <!--diferentes funcionalidades dentro de la grilla-->
     <div class="input-group-append" style="padding-top:30px">
         <div class="form-group">
             <h2 style="initial-letter:inherit; font-family: Homer Simpson; color:#0932ff;"> Grilla socios </h2>
@@ -31,31 +33,31 @@
                         Estados:
                         <label style="padding-left:10px"><input type="radio" name="Coordinar" id="cbox1" onclick="validarcheck()" checked="checked"> Activos</label>
                         <label style="padding-left:10px"><input type="radio" name="Coordinar" id="cbox2" onclick="validarcheck()"> Eliminados</label>
+                        <!--Se utiliza para pasar la info al controlador sobre que estado se desea buscar-->
                         <input type="text" id="FechasGrilla" name="filtroFecha" value="@ViewData["DateFilter"]" style="display:none;" />
                         <input type="submit" value="Buscar" class="btn btn-dark" />
                     </h5>
 
                 </div>
-
-
             </form>
         </div>
-
     </div>
+    <!--Busca solamente la info que se muestra en la grilla-->
     <div>
         <i class="fa fa-search fa-2x" style="Float: right; padding-left:10px; padding-top:2px;"></i>
         <input id="searchTerm" type="text" onkeyup="doSearch()" class="form-control" placeholder="Buscar" style=" width:200px; Float: right; " />
     </div>
+    <!--tabla con la informacion del socio-->
     <div>
         <form class="form-group">
             <table class="table table-responsive-sm" id="datos">
                 <thead>
                     <tr>
                         <th>
-                            CUIT
+                            Razón Social
                         </th>
                         <th>
-                            Razón Social
+                            Cuit/Documento
                         </th>
                         <th>
                             Domicilio
@@ -77,15 +79,15 @@
                 <tbody>
                     @foreach (var item in Model)
                     {
+                        <!--filtra los Socios por fecha de baja-->
                         @if (item.FechaBaja != null)
                         {
                             <tr style="background-color:salmon">
-
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Cuit)
-                                </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.RazonSocial)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Cuit)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Domicilio)
@@ -105,14 +107,15 @@
                                 </td>
                             </tr>
                         }
+                        <!--filtra los Socios que no tengan fecha de baja fecha de baja-->
                         @if (item.FechaBaja is null)
                         {
                             <tr>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Cuit)
+                                    @Html.DisplayFor(modelItem => item.RazonSocial)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.RazonSocial)
+                                    @Html.DisplayFor(modelItem => item.Cuit)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Domicilio)
@@ -141,6 +144,7 @@
                 <input type="text" style="height:20px;width:20px;background-color:salmon;" disabled /> Eliminado
 
             </h5>
+            <!--realiza la paginacion del lado del servidor-->
             <div style="float:right; padding-bottom: 30px;">
                 @{
                     var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
@@ -177,6 +181,7 @@
 </html>
 
 <script>
+    //cambia el valor de los radiobutton de estados para luego pasarle la info que se requiere al controlador
     function validarcheck() {
         $('#cbox1').on('click', function () {
             if ($(this).is(':checked')) {

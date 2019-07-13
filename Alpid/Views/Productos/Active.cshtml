@@ -1,7 +1,7 @@
 ﻿@model Alpid.Models.Productos
 
 @{
-    ViewData["Title"] = "Editar producto";
+    ViewData["Title"] = "Activar producto";
 }
 <html>
 <body>
@@ -35,6 +35,11 @@
                     <input asp-for="FechaAlta" type="date" class="form-control" readonly="readonly" />
                     <span asp-validation-for="FechaAlta" class="text-danger"></span>
                 </div>
+                <div class="form-group" style="display:none;">
+                    <label asp-for="FechaBaja" class="control-label">Fecha eliminación</label>
+                    <input asp-for="FechaBaja" type="date" class="form-control" value="null" readonly="readonly" />
+                    <span asp-validation-for="FechaBaja" class="text-danger"></span>
+                </div>
                 <div class="form-group">
                     <label asp-for="PrecioAlquiler" class="control-label">Precio a alquilar</label>
                     <input asp-for="PrecioAlquiler" class="form-control" />
@@ -46,14 +51,17 @@
                     <input asp-for="ProveedoresID" class="form-control" readonly="readonly" />
                     <span asp-validation-for="ProveedoresID" class="text-danger"></span>
                 </div>
+                <div class="form-group" style="display:none;">
+                    <label asp-for="MotivoBaja" class="control-label">Motivo de eliminación</label>
+                    <input asp-for="MotivoBaja" class="form-control" value="" readonly="readonly" />
+                    <span asp-validation-for="MotivoBaja" class="text-danger"></span>
+                </div>
                 <div class="col-md-12">
-                    <input type="submit" value="Editar" class="btn btn-primary" />
+                    <input type="submit" value="Activar" class="btn btn-primary" />
+                    <a asp-action="Index" style="float:right;" class="btn btn-info">Cancelar</a>
                 </div>
             </form>
         </div>
-    </div>
-    <div>
-        <a asp-action="Index" class="btn btn-link">Regresar a la grilla</a>
     </div>
 </body>
 </html>

@@ -20,8 +20,10 @@ namespace Alpid.Models
         public string Domicilio { get; set; }
 
         [Required]
+        [Phone]
         public string Telefono { get; set; }
 
+        [EmailAddress]
         public string Mail { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]

@@ -27,7 +27,7 @@ namespace Alpid.Models
 
         public string MotivoBaja { get; set; }
 
-        public decimal PrecioAlquiler { get; set; }
+        public double PrecioAlquiler { get; set; }
 
         public int? ProveedoresID { get; set; }
 

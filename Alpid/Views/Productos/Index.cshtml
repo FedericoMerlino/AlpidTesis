@@ -12,6 +12,7 @@
     <p>
         <a asp-action="Create" class='btn btn-info'>Nuevo Producto</a>
     </p>
+    <!--Busca en la base de datos-->
     <form asp-action="Index" method="get">
         <div class="form-actions no-color">
             <p>
@@ -23,43 +24,44 @@
     </form>
     <div class="input-group-append" style="padding-top:30px">
         <div class="form-group">
-            <h2 style="initial-letter:inherit; font-family: Homer Simpson, cursive; color:#0932ff;"> Grilla producots </h2>
-
+            <h2 style="initial-letter:inherit; font-family: Homer Simpson; color:#0932ff;"> Grilla productos </h2>
+            <!--boton para abrir modal inmobiliarions-->
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                Productos inmobiliarios
+            </button>
+            <!--para seleccionar estados-->
             <h5 style="initial-letter:inherit; font-family: Homer Simpson, cursive; padding-right:10px">
-                Tipo de productos:
-                <label><input type="checkbox" id="alquiler" onclick="validarcheck()"> De alquiler </label>
-                <label style="padding-left:10px"><input type="checkbox" id="Inmobiliarios" onclick="validarcheck()"> Inmobiliarios</label><br>
-
                 Estados:
                 <label style="padding-left:10px"><input type="checkbox" id="cbox1" onclick="validarcheck()" checked="checked"> Activos</label>
                 <label style="padding-left:10px"><input type="checkbox" id="cbox2" onclick="validarcheck()" checked="checked"> Eliminados</label><br>
             </h5>
         </div>
-
     </div>
+    <!--busca solamente en lo datos que se encunetran en la tabla con la funcion js que esta en el layaut-->
     <div>
         <i class="fa fa-search fa-2x" style="Float: right; padding-left:10px; padding-top:2px;"></i>
         <input id="searchTerm" type="text" onkeyup="doSearch()" class="form-control" placeholder="Buscar" style=" width:200px; Float: right; " />
     </div>
+    <!--de alquiler-->
     <div>
         <form class="form-group">
             <table class="table table-responsive-sm" id="datos">
                 <thead>
                     <tr>
                         <th>
-                            Nombre:
+                            Nombre
                         </th>
                         <th>
-                            Cantidad:
+                            Cantidad
                         </th>
                         <th>
-                            Tipo Producto:
+                            Tipo Producto
                         </th>
                         <th>
-                            Precio de Alquiler:
+                            Precio de Alquiler
                         </th>
                         <th>
-                            Proveedor:
+                            Proveedor
                         </th>
                         <th></th>
                     </tr>
@@ -69,35 +71,9 @@
                     {
                         @if (item.FechaBaja != null)
                         {
-                            if (item.ProductosTipo == "Inmobiliario")
-                            {
-                                <tr id="GrillaEliminados" name="inmobiliarios" style="background-color:blanchedalmond;">
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Nombre)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Cantidad)
-                                    </td>
-                                    <td>
-                                        Inmobiliario
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.PrecioAlquiler)
-                                    </td>
-
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Proveedores.RazonSocial)
-                                    </td>
-                                    <td>
-                                        <a asp-action="Edit" asp-route-id="@item.PoductosID">Edit</a> |
-                                        <a asp-action="Details" asp-route-id="@item.PoductosID">Details</a> |
-                                        <a asp-action="Delete" asp-route-id="@item.PoductosID">Delete</a>
-                                    </td>
-                                </tr>
-                            }
                             if (item.ProductosTipo == "DeAlquiler")
                             {
-                                <tr id="GrillaEliminados" name="Alquiler">
+                                <tr id="GrillaEliminados" style="background-color:salmon;" name="Alquiler">
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Nombre)
                                     </td>
@@ -108,48 +84,21 @@
                                         De Alquiler
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.PrecioAlquiler)
+                                       $ @Html.DisplayFor(modelItem => item.PrecioAlquiler)
                                     </td>
 
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Proveedores.Cuit)
                                     </td>
                                     <td>
-                                        <a asp-action="Edit" asp-route-id="@item.PoductosID">Edit</a> |
-                                        <a asp-action="Details" asp-route-id="@item.PoductosID">Details</a> |
-                                        <a asp-action="Delete" asp-route-id="@item.PoductosID">Delete</a>
+                                        <a asp-action="Active" class='btn btn-primary' asp-route-id="@item.PoductosID">Reactivar</a>|
+                                        <a asp-action="Details" class='btn btn-info' asp-route-id="@item.PoductosID">Ver</a>
                                     </td>
                                 </tr>
                             }
                         }
                         @if (item.FechaBaja is null)
                         {
-                            if (item.ProductosTipo == "Inmobiliario")
-                            {
-                                <tr id="GrillaActivos" name="inmobiliarios" style="background-color:blanchedalmond;">
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Nombre)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Cantidad)
-                                    </td>
-                                    <td>
-                                        Inmobiliario
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.PrecioAlquiler)
-                                    </td>
-
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Proveedores.Cuit)
-                                    </td>
-                                    <td>
-                                        <a asp-action="Edit" asp-route-id="@item.PoductosID">Edit</a> |
-                                        <a asp-action="Details" asp-route-id="@item.PoductosID">Details</a> |
-                                        <a asp-action="Delete" asp-route-id="@item.PoductosID">Delete</a>
-                                    </td>
-                                </tr>
-                            }
                             if (item.ProductosTipo == "DeAlquiler")
                             {
                                 <tr id="GrillaActivos" name="Alquiler">
@@ -163,16 +112,15 @@
                                         De Alquiler
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.PrecioAlquiler)
+                                      $ @Html.DisplayFor(modelItem => item.PrecioAlquiler)
                                     </td>
 
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Proveedores.Cuit)
                                     </td>
                                     <td>
-                                        <a asp-action="Edit" asp-route-id="@item.PoductosID">Edit</a> |
-                                        <a asp-action="Details" asp-route-id="@item.PoductosID">Details</a> |
-                                        <a asp-action="Delete" asp-route-id="@item.PoductosID">Delete</a>
+                                        <a asp-action="Edit" class='btn btn-info' asp-route-id="@item.PoductosID">Editar</a> |
+                                        <a asp-action="Delete" class='btn btn-danger' asp-route-id="@item.PoductosID">Borrar</a>
                                     </td>
                                 </tr>
                             }
@@ -182,6 +130,67 @@
             </table>
         </form>
     </div>
+    <!--inmobiliarios-->
+    <!-- The Modal-->
+    <div class="modal" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Productos inmobiliarios</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form class="form-group">
+                        <table class="table table-responsive-sm" id="datos">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Nombre
+                                    </th>
+                                    <th>
+                                        Cantidad
+                                    </th>
+
+                                    <th>
+                                        Acciones
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    if (item.ProductosTipo == "Inmobiliario")
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Nombre)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Cantidad)
+                                            </td>
+
+                                            <td>
+                                                <a asp-action="Edit" class='btn btn-info' asp-route-id="@item.PoductosID">Editar</a> |
+                                                <a asp-action="DeletePhysical" class='btn btn-danger' asp-route-id="@item.PoductosID">Borrar</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer" style="float:left;">
+                <button type="button" class="btn btn-info" id="Close" data-dismiss="modal"> Cerrar </button>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
 

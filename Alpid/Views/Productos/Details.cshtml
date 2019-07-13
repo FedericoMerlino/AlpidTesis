@@ -3,63 +3,70 @@
 @{
     ViewData["Title"] = "Detalle producto";
 }
+<html>
+<body>
+    <header>
+        <link href="~/css/cssKanze/style.min.css" rel="stylesheet" />
+    </header>
+    <h1>Informacion producto "@Html.DisplayFor(model => model.Nombre)" </h1>
 
-<h1>Informacion producto "@Html.DisplayFor(model => model.Nombre)" </h1>
+    <div>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                Nombre:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Nombre)
+            </dd>
+            <dt class="col-sm-2">
+                Cantidad:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Cantidad)
+            </dd>
+            <dt class="col-sm-2">
+                Tipo Producto:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ProductosTipo)
+            </dd>
+            <dt class="col-sm-2">
+                Fecha eliminación:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.FechaBaja)
+            </dd>
+            <dt class="col-sm-2">
+                Fecha ingreso:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.FechaAlta)
+            </dd>
+            <dt class="col-sm-2">
+                Motivo eliminación:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.MotivoBaja)
+            </dd>
+            <dt class="col-sm-2">
+                Precio de Alquiler:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.PrecioAlquiler)
+            </dd>
 
-<div>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            Nombre:
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Nombre)
-        </dd>
-        <dt class="col-sm-2">
-            Cantidad:
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Cantidad)
-        </dd>
-        <dt class="col-sm-2">
-            Tipo Producto:
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ProductosTipo)
-        </dd>
-        <dt class="col-sm-2">
-            Fecha eliminación:
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FechaBaja)
-        </dd>
-        <dt class="col-sm-2">
-            Fecha ingreso:
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FechaAlta)
-        </dd>
-        <dt class="col-sm-2">
-            Motivo eliminación:
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.MotivoBaja)
-        </dd>
-        <dt class="col-sm-2">
-            Precio de Alquiler:
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.PrecioAlquiler)
-        </dd>
-
-        <dt class="col-sm-2">
-            Proveedor:
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Proveedores.Cuit)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Index" class="btn btn-info">Regresar</a>
-</div>
+            <dt class="col-sm-2">
+                Proveedor:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Proveedores.Cuit)
+            </dd>
+        </dl>
+    </div>
+    <div>
+        <a asp-action="Index" class="btn btn-info">Regresar</a>
+        <a asp-action="Active" class='btn btn-primary' asp-route-id="@Model.PoductosID">Reactivar</a> |
+    </div>
+</body>
+</html>

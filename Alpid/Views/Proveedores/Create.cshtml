@@ -46,14 +46,12 @@
                     <input asp-for="FechaAlta" type="date" id="fechaActual" class="form-control" readonly="readonly" />
                     <span asp-validation-for="FechaAlta" class="text-danger"></span>
                 </div>
-                <div class="class=" col-md-12"">
-                    <input type="submit" value="Crear Proveedor" class="btn btn-primary" />
+                <div class="col-md-12">
+                    <input type="submit" value="Crear nuevo" class="btn btn-primary" />
+                    <a asp-action="Index" style="float:right;" class="btn btn-info">Cancelar</a>
                 </div>
             </form>
         </div>
-    </div>
-    <div>
-        <a asp-action="Index" class="btn btn-link">Regresar a la grilla</a>
     </div>
 </body>
 </html>

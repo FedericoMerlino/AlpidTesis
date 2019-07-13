@@ -3,62 +3,69 @@
 @{
     ViewData["Title"] = "Detalle socio";
 }
+<html>
+<body>
+    <header>
+        <link href="~/css/cssKanze/style.min.css" rel="stylesheet" />
+    </header>
+    <h1>Informacion Socio "@Html.DisplayFor(model => model.RazonSocial)" </h1>
 
-<h1>Informacion Socio "@Html.DisplayFor(model => model.RazonSocial)" </h1>
-
-<div>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            Cuit:
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Cuit)
-        </dd>
-        <dt class = "col-sm-2">
-            Razón Social:
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RazonSocial)
-        </dd>
-        <dt class = "col-sm-2">
-            Domicilio:
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Domicilio)
-        </dd>
-        <dt class = "col-sm-2">
-            Teléfono:
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Telefono)
-        </dd>
-        <dt class = "col-sm-2">
-            Email:
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            Fecha eliminación:
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FechaBaja)
-        </dd>
-        <dt class = "col-sm-2">
-            Fecha ingreso:
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FechaAlta)
-        </dd>
-        <dt class = "col-sm-2">
-            Motivo eliminación:
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MotivoBaja)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Index" class="btn btn-info">Regresar</a>
-</div>
+    <div>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                Cuit/Documento:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Cuit)
+            </dd>
+            <dt class="col-sm-2">
+                Razón Social:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.RazonSocial)
+            </dd>
+            <dt class="col-sm-2">
+                Domicilio:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Domicilio)
+            </dd>
+            <dt class="col-sm-2">
+                Teléfono:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Telefono)
+            </dd>
+            <dt class="col-sm-2">
+                Email:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Email)
+            </dd>
+            <dt class="col-sm-2">
+                Fecha eliminación:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.FechaBaja)
+            </dd>
+            <dt class="col-sm-2">
+                Fecha ingreso:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.FechaAlta)
+            </dd>
+            <dt class="col-sm-2">
+                Motivo eliminación:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.MotivoBaja)
+            </dd>
+        </dl>
+    </div>
+    <div>
+        <a asp-action="Index" class="btn btn-info">Regresar</a>
+        <a asp-action="Active"  class='btn btn-primary' asp-route-id="@Model.SociosID">Reactivar</a>
+    </div>
+</body>
+</html>
