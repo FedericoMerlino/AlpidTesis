@@ -3,82 +3,99 @@
 @{
     ViewData["Title"] = "Index";
 }
+<html>
+<body>
+    <header>
+        <link href="~/css/cssKanze/style.min.css" rel="stylesheet" />
+    </header>
+    <h1>Caja Alpid</h1>
+    <div class="form-group">
+        <p>
+            <a asp-action="Create" class="btn btn-danger">Reterirar Dinero</a>
+      
+            <a asp-action="Create" class="btn btn-primary">Ingresar Dinero</a>
+        </p>
+    </div>
+    <!--Busca solamente la info que se muestra en la grilla-->
+    <div>
+        <i class="fa fa-search fa-2x" style="Float: right; padding-left:10px; padding-top:2px;"></i>
+        <input id="searchTerm" type="text" onkeyup="doSearch()" class="form-control" placeholder="Buscar" style=" width:200px; Float: right; " />
+    </div>
+    <!--tabla con la informacion de la caja-->
+    <div>
+        <form class="form-group">
+            <table class="table table-responsive-sm" id="datos">
+                <thead>
+                    <tr>
+                        <th>
+                            Fecha Movimiento
+                        </th>
+                        <th>
+                            Tipo Movimiento
+                        </th>
+                        <th>
+                            Observaciones
+                        </th>
+                        <th>
+                            Ingreso
+                        </th>
+                        <th>
+                            Salida
+                        </th>
+                        <th>
+                            Total
+                        </th>
+                        @*<th>
+                                CuotaID)
+                            </th>
+                            <th>
+                                Alquiler)
+                            </th>*@
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaMovimiento)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TipoMovimiento)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Observaciones)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Debe)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Haber)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Total)
+                            </td>
+                            @*<td>
+                                    @Html.DisplayFor(modelItem => item.CuotaID)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Alquiler.AlquilerID)
+                                </td>*@
+                            @*<td>
+                                    <a asp-action="Edit" asp-route-id="@item.CajaId">Edit</a> |
+                                    <a asp-action="Details" asp-route-id="@item.CajaId">Details</a> |
+                                    <a asp-action="Delete" asp-route-id="@item.CajaId">Delete</a>
+                                </td>*@
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </form>
+    </div>
+</body>
+</html>
+<script>
+    
 
-<h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Debe)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Haber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TipoMovimiento)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Observaciones)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Estado)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FechaMovimiento)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Total)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CuotaID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Alquiler)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Debe)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Haber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TipoMovimiento)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Observaciones)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Estado)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FechaMovimiento)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Total)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CuotaID)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Alquiler.AlquilerID)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.CajaId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.CajaId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.CajaId">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+</script>

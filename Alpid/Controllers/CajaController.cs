@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Alpid.Data;
@@ -59,14 +58,39 @@ namespace Alpid.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CajaId,Debe,Haber,TipoMovimiento,Observaciones,Estado,FechaMovimiento,Total,CuotaID,AlquilerID")] Caja caja)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(caja);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    //busca el ultimo id 
+                    var db = _context.Caja.Include(c => c.Alquiler)
+                                      .Max(c => c.CajaId);
+                    //busca el valor del total del ultimo id obtenido arriba
+                    var UltimoValor = _context.Caja.SingleOrDefault(c => c.CajaId == db);
+                    // se usa solo para el ingreso de direno
+                    if (caja.Debe != null)
+                    {
+                        caja.Total = UltimoValor.Total + caja.Debe;
+                    }
+                    //se usa solo para la salida de dinero
+                    if (caja.Haber != null)
+                    {
+                        caja.Total = UltimoValor.Total - caja.Haber;
+                    }
+                    _context.Add(caja);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                ViewData["AlquilerID"] = new SelectList(_context.Alquiler, "AlquilerID", "AlquilerID", caja.AlquilerID);
+                return View(caja);
             }
-            ViewData["AlquilerID"] = new SelectList(_context.Alquiler, "AlquilerID", "AlquilerID", caja.AlquilerID);
-            return View(caja);
+            catch (Exception e)
+            {
+                Console.Write(e);
+
+                var applicationDbContext = _context.Caja.Include(c => c.Alquiler);
+                return View(await applicationDbContext.ToListAsync());
+            }
         }
 
         // GET: Caja/Edit/5

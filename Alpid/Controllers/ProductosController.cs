@@ -141,7 +141,58 @@ namespace Alpid.Controllers
         //// POST: Productos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int id, [Bind("PoductosID,Nombre,Cantidad,FechaBaja,FechaAlta,MotivoBaja,PrecioAlquiler,ProductosTipoID,ProveedoresID")] Productos productos)
+        public async Task<IActionResult> Delete(int id, [Bind("PoductosID,Nombre,Cantidad,ProductosTipo,FechaAlta,PrecioAlquiler,ProveedoresID,FechaBaja,MotivoBaja")] Productos productos)
+        {
+            if (id != productos.PoductosID)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(productos);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ProductosExists(productos.PoductosID))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["ProveedoresID"] = new SelectList(_context.Proveedores, "ProveedoresId", "RazonSocial", productos.ProveedoresID);
+            return View(productos);
+        }
+
+        // GET: Productos/Active/5
+        public async Task<IActionResult> Active(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var productos = await _context.Productos.FindAsync(id);
+            if (productos == null)
+            {
+                return NotFound();
+            }
+            ViewData["ProveedoresID"] = new SelectList(_context.Proveedores, "ProveedoresId", "RazonSocial", productos.ProveedoresID);
+            return View(productos);
+        }
+
+        //// POST: Productos/Active/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Active(int id, [Bind("PoductosID,Nombre,Cantidad,ProductosTipo,FechaAlta,PrecioAlquiler,ProveedoresID,FechaBaja,MotivoBaja")] Productos productos)
         {
             if (id != productos.PoductosID)
             {
