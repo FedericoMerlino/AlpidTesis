@@ -1,0 +1,50 @@
+﻿@model Alpid.Models.Caja
+
+@{
+    ViewData["Title"] = "Ingresar Dinero";
+}
+<html>
+<body>
+    <header>
+        <link href="~/css/cssKanze/style.min.css" rel="stylesheet" />
+    </header>
+    <h1>Ingresar dinero</h1>
+
+    <h4>Caja</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="CreateIngreso">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Debe" class="control-label">Ingreso Dinero</label>
+                    <input asp-for="Debe" class="form-control" required />
+                    <span asp-validation-for="Debe" class="text-danger"></span>
+                </div>
+                <div class="form-group" style="display:none;">
+                    <label asp-for="TipoMovimiento" class="control-label"></label>
+                    <input asp-for="TipoMovimiento" value="Entrada" class="form-control" />
+                    <span asp-validation-for="TipoMovimiento" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Observaciones" class="control-label"></label>
+                    <input asp-for="Observaciones" class="form-control" required />
+                    <span asp-validation-for="Observaciones" class="text-danger"></span>
+                </div>
+                <div class="form-group" style="display:none;">
+                    <label asp-for="FechaMovimiento" class="control-label"></label>
+                    <input asp-for="FechaMovimiento" type="date" id="fechaActual" class="form-control" />
+                    <span asp-validation-for="FechaMovimiento" class="text-danger"></span>
+                </div>
+                <div class="col-md-12">
+                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                    <a asp-action="Index" style="float:right;" class="btn btn-info">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

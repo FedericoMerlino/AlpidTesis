@@ -11,9 +11,9 @@ namespace Alpid.Models
         [Key]
         public int SociosID { get; set; }
 
-        [Required(ErrorMessage = "Debe de ingresar un Cuit")]
-        [MaxLength(11, ErrorMessage = "Debe ingresar 13 números")]
-        [MinLength(7, ErrorMessage = "Debe ingresar 13 números")]
+        [Required(ErrorMessage = "Debe de ingresar un Documento/cuit")]
+        [MaxLength(11, ErrorMessage = "Debe ingresar como máximo 13 números")]
+        [MinLength(7, ErrorMessage = "Debe ingresar al menos 7 dígitos")]
         [Range(0,99999999999, ErrorMessage = "El valor debe ser numérico")]
         public string Cuit { get; set; }
 

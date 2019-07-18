@@ -12,7 +12,13 @@ namespace Alpid.Models
         public int AlquilerID { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
-        public DateTime Fecha { get; set; }
+        [Required(ErrorMessage = "Debe ingresar una fecha")]
+
+        public DateTime FechaDesde { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
+        [Required(ErrorMessage ="Debe ingresar una fecha")]
+        public DateTime FechaHasta { get; set; }
 
         public string Observacion { get; set; }
 

@@ -11,16 +11,18 @@ namespace Alpid.Models
         [Key]
         public int CajaId { get; set; }
 
+        [Range(0, 99999999999, ErrorMessage = "El valor debe ser numérico")]
         public double? Debe { get; set; }
 
+        [Range(0, 99999999999, ErrorMessage = "El valor debe ser numérico")]
         public double? Haber { get; set; }
 
         public string TipoMovimiento { get; set; }
 
-        [Required(ErrorMessage ="Debe ingresar un motivo")]
+        [Required(ErrorMessage = "Debe ingresar un motivo")]
         public string Observaciones { get; set; }
 
-        [Required]
+        [DataType(DataType.DateTime, ErrorMessage = "Favor de ingresar una fecha")]
         public DateTime FechaMovimiento { get; set; }
 
         public double? Total { get; set; }

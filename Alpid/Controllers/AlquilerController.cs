@@ -50,7 +50,7 @@ namespace Alpid.Controllers
         public IActionResult Create()
         {
             ViewData["ProductosID"] = new SelectList(_context.Set<Productos>(), "PoductosID", "Nombre");
-            ViewData["SociosId"] = new SelectList(_context.Socios, "SociosID", "Cuit");
+            ViewData["SociosId"] = new SelectList(_context.Socios, "SociosID", "RazonSocial");
             return View();
         }
 
@@ -68,7 +68,7 @@ namespace Alpid.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ProductosID"] = new SelectList(_context.Set<Productos>(), "PoductosID", "Nombre", alquiler.ProductosID);
-            ViewData["SociosId"] = new SelectList(_context.Socios, "SociosID", "Cuit", alquiler.SociosId);
+            ViewData["SociosId"] = new SelectList(_context.Socios, "SociosID", "RazonSocial", alquiler.SociosId);
             return View(alquiler);
         }
 
@@ -86,7 +86,7 @@ namespace Alpid.Controllers
                 return NotFound();
             }
             ViewData["ProductosID"] = new SelectList(_context.Set<Productos>(), "PoductosID", "Nombre", alquiler.ProductosID);
-            ViewData["SociosId"] = new SelectList(_context.Socios, "SociosID", "Cuit", alquiler.SociosId);
+            ViewData["SociosId"] = new SelectList(_context.Socios, "SociosID", "RazonSocial", alquiler.SociosId);
             return View(alquiler);
         }
 
@@ -123,7 +123,7 @@ namespace Alpid.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ProductosID"] = new SelectList(_context.Set<Productos>(), "PoductosID", "Nombre", alquiler.ProductosID);
-            ViewData["SociosId"] = new SelectList(_context.Socios, "SociosID", "Cuit", alquiler.SociosId);
+            ViewData["SociosId"] = new SelectList(_context.Socios, "SociosID", "RazonSocial", alquiler.SociosId);
             return View(alquiler);
         }
 

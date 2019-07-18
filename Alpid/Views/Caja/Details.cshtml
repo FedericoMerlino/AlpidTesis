@@ -4,64 +4,68 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>Detalle Movimiento caja</h1>
 
 <div>
-    <h4>Caja</h4>
+    <h4>Información:</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Debe)
+        <dt class="col-sm-2">
+            Fecha del movimiento:
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Debe)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Haber)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Haber)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TipoMovimiento)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TipoMovimiento)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Observaciones)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Observaciones)
-        </dd>
-       
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FechaMovimiento)
-        </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.FechaMovimiento)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Total)
+        <dt class="col-sm-2">
+            Entrada Dinero:
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10" style="color:#49d292;">
+            @if (Model.Debe != null)
+            {
+                <label>$</label> @Html.DisplayFor(model => model.Debe)
+            }
+        </dd>
+        <dt class="col-sm-2">
+            Salida Dinero:
+        </dt>
+        <dd class="col-sm-10" style="color:red;">
+            @if (Model.Haber != null)
+            {
+                <label>$</label> @Html.DisplayFor(model => model.Haber)
+            }
+        </dd>
+        <dt class="col-sm-2">
+            Tipo de movimiento:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TipoMovimiento)
+        </dd>
+        <dt class="col-sm-2">
+            Observaciones:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Observaciones)
+        </dd>
+        <dt class="col-sm-2">
+            Total en caja:
+        </dt>
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Total)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CuotaID)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CuotaID)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Alquiler)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Alquiler.AlquilerID)
-        </dd>
+        @*<dt class="col-sm-2">
+                CuotaID)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.CuotaID)
+            </dd>
+            <dt class="col-sm-2">
+                Alquiler)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Alquiler.AlquilerID)
+            </dd>*@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.CajaId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="btn btn-info">Regresar</a>
 </div>

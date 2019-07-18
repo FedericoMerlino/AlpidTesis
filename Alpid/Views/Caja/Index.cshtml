@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Alpid.Models.Caja>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Caja";
 }
 <html>
 <body>
@@ -11,9 +11,9 @@
     <h1>Caja Alpid</h1>
     <div class="form-group">
         <p>
-            <a asp-action="Create" class="btn btn-danger">Reterirar Dinero</a>
-      
-            <a asp-action="Create" class="btn btn-primary">Ingresar Dinero</a>
+            <a asp-action="CreateRetire" class="btn btn-danger">Reterirar Dinero</a>
+
+            <a asp-action="CreateIngreso" class="btn btn-primary">Ingresar Dinero</a>
         </p>
     </div>
     <!--Busca solamente la info que se muestra en la grilla-->
@@ -27,7 +27,7 @@
             <table class="table table-responsive-sm" id="datos">
                 <thead>
                     <tr>
-                        <th>
+                                                <th>
                             Fecha Movimiento
                         </th>
                         <th>
@@ -66,14 +66,25 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.Observaciones)
                             </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Debe)
+                            <td style="color:#49d292;">
+                                @if (item.Debe != null)
+                                {
+                                    <label>$</label> @Html.DisplayFor(modelItem => item.Debe)
+                                }
                             </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Haber)
+                            <td style="color:red;">
+                                <!--if para que solamente traiga el signo de pregunta a los campos que tiene valores-->
+                                @if (item.Haber != null)
+                                {
+                                    <label>$</label> @Html.DisplayFor(modelItem => item.Haber)
+                                }
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Total)
+                            </td>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@item.CajaId">Ver</a>
+
                             </td>
                             @*<td>
                                     @Html.DisplayFor(modelItem => item.CuotaID)
@@ -95,7 +106,7 @@
 </body>
 </html>
 <script>
-    
+
 
 
 </script>
