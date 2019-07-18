@@ -20,10 +20,33 @@ namespace Alpid.Controllers
         }
 
         // GET: Cuotas
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string currentFilter, string searchString, int? page, string filtroFecha, 
+                                                string DateFilter)
         {
-            var applicationDbContext = _context.Cuotas.Include(c => c.Socios);
-            return View(await applicationDbContext.ToListAsync());
+
+            var ultimoid = _context.CuotaPrecio.Max(c => c.CuotaPrecioID);
+            var valor = _context.CuotaPrecio.SingleOrDefault(c => c.CuotaPrecioID == ultimoid);
+            ViewData["precio"] = valor.Importe;
+
+            //return View(await applicationDbContext.ToListAsync());
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewData["CurrentFilter"] = searchString;
+            var cuota = from s in _context.Cuotas select s;
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                cuota = cuota.Where(s => s.Socios.RazonSocial.Contains(searchString));
+            }
+            int pageSize = 15;
+            return View(await Paginacion<Cuotas>.CreateAsync(cuota.AsNoTracking(), page ?? 1, pageSize) );
         }
 
         // GET: Cuotas/Details/5
@@ -48,7 +71,7 @@ namespace Alpid.Controllers
         // GET: Cuotas/Create
         public IActionResult Create()
         {
-            ViewData["SociosID"] = new SelectList(_context.Set<Socios>(), "SociosID", "Cuit");
+            ViewData["SociosID"] = new SelectList(_context.Set<Socios>(), "SociosID", "RazonSocial");
             return View();
         }
 
@@ -65,7 +88,7 @@ namespace Alpid.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SociosID"] = new SelectList(_context.Set<Socios>(), "SociosID", "Cuit", cuotas.SociosID);
+            ViewData["SociosID"] = new SelectList(_context.Set<Socios>(), "SociosID", "RazonSocial", cuotas.SociosID);
             return View(cuotas);
         }
 
@@ -82,7 +105,7 @@ namespace Alpid.Controllers
             {
                 return NotFound();
             }
-            ViewData["SociosID"] = new SelectList(_context.Set<Socios>(), "SociosID", "Cuit", cuotas.SociosID);
+            ViewData["SociosID"] = new SelectList(_context.Set<Socios>(), "SociosID", "RazonSocial", cuotas.SociosID);
             return View(cuotas);
         }
 
@@ -118,7 +141,7 @@ namespace Alpid.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SociosID"] = new SelectList(_context.Set<Socios>(), "SociosID", "Cuit", cuotas.SociosID);
+            ViewData["SociosID"] = new SelectList(_context.Set<Socios>(), "SociosID", "RazonSocial", cuotas.SociosID);
             return View(cuotas);
         }
 

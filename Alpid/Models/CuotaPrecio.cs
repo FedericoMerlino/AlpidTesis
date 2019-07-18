@@ -11,13 +11,12 @@ namespace Alpid.Models
         [Key]
         public int CuotaPrecioID { get; set; }
 
-        public decimal Importe { get; set; }
+        [Required(ErrorMessage ="Favor de ingresar un valor")]
+        [Range(0, 99999999999, ErrorMessage = "El valor debe ser numérico")]
+        public double Importe { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
+        [Required(ErrorMessage ="Favor de ingresar una fecha")]
         public DateTime FechaDesde { get; set; }
-
-        [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
-        public DateTime FechaHasta { get; set; }
-
     }
 }

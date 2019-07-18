@@ -12,10 +12,9 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Estado" /> @Html.DisplayNameFor(model => model.Estado)
-                </label>
+            <div class="form-group" style="display:none;">
+                <label asp-for="Estado" class="control-label"></label>
+                <input asp-for="Estado" value="Pagado" class="form-control" />
             </div>
             <div class="form-group">
                 <label asp-for="Observacion" class="control-label"></label>

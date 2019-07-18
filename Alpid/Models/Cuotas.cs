@@ -11,7 +11,7 @@ namespace Alpid.Models
         [Key]
         public int CuotasID { get; set; }
 
-        public Boolean Estado { get; set; } = false;
+        public string Estado { get; set; }
 
         public decimal Observacion { get; set; }
 
