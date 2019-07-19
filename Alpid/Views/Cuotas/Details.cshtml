@@ -1,54 +1,51 @@
 ﻿@model Alpid.Models.Cuotas
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalle cuota";
 }
 <html>
 <body>
     <header>
         <link href="~/css/cssKanze/style.min.css" rel="stylesheet" />
     </header>
-    <h1>Details</h1>
-
+    <h1>Detalle cuota</h1>
     <div>
-        <h4>Cuotas</h4>
         <hr />
         <dl class="row">
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Socios.Cuit) - @Html.DisplayFor(model => model.Socios.RazonSocial)
+            </dd>
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Estado)
+                Estado:
             </dt>
             <dd class="col-sm-10">
                 @Html.DisplayFor(model => model.Estado)
             </dd>
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Observacion)
+                Observación:
             </dt>
             <dd class="col-sm-10">
                 @Html.DisplayFor(model => model.Observacion)
             </dd>
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.FechaPago)
+                Fecha Desde:
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.FechaPago)
+                @Html.DisplayFor(model => model.FechaDesde)
             </dd>
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.FechaEmicion)
+                Fecha Hasta:
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.FechaEmicion)
+                @Html.DisplayFor(model => model.FechaHasta)
             </dd>
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Socios)
+                Socio:
             </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Socios.Cuit)
-            </dd>
         </dl>
     </div>
     <div>
-        <a asp-action="Edit" asp-route-id="@Model.CuotasID">Edit</a> |
-        <a asp-action="Index">Back to List</a>
+        <a asp-action="Index" class="btn btn-info">Regresar</a>
     </div>
 </body>
 </html>

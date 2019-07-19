@@ -14,7 +14,7 @@
     </div>
     <!--nuevo alquieler-->
     <p>
-        <a asp-action="Create">Nuevo pago</a>
+        <a asp-action="Create" class="btn btn-primary">Nuevo pago</a>
     </p>
     <!--busca en toda la tabla en la base de datos-->
     <form asp-action="Index" method="get">
@@ -54,39 +54,45 @@
                             Observación
                         </th>
                         <th>
-                            Fecha emición
+                            Importe
                         </th>
                         <th>
-                            Fecha pago
+                            Fecha desde
                         </th>
-                        <th></th>
+                        <th>
+                            Fecha hasta
+                        </th>
+                        <th>
+                            Acción
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model)
                     {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Socios.Cuit + " - " + item.Socios.RazonSocial)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Estado)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Observacion)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.FechaEmicion)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.FechaPago)
-                            </td>
-                            <td>
-                                <a asp-action="Edit" asp-route-id="@item.CuotasID">Edit</a> |
-                                <a asp-action="Details" asp-route-id="@item.CuotasID">Details</a> |
-                                <a asp-action="Delete" asp-route-id="@item.CuotasID">Delete</a>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td>
+                           @Html.DisplayFor(modelItem => item.Socios.RazonSocial)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Estado)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Observacion)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Importe)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FechaDesde)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FechaHasta)
+                        </td>
+                        <td>
+                            <a asp-action="Details" class="btn btn-info" asp-route-id="@item.CuotasID">Ver</a> 
+                        </td>
+                    </tr>
                     }
                 </tbody>
             </table>

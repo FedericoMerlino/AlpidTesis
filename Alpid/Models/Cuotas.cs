@@ -13,13 +13,15 @@ namespace Alpid.Models
 
         public string Estado { get; set; }
 
-        public decimal Observacion { get; set; }
+        public string Observacion { get; set; }
+
+        public double Importe { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
-        public DateTime? FechaPago { get; set; }
+        public DateTime? FechaDesde { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
-        public DateTime FechaEmicion { get; set; }
+        public DateTime FechaHasta { get; set; }
 
         public int SociosID { get; set; }
 
