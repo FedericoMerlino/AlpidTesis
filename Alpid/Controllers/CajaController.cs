@@ -130,5 +130,40 @@ namespace Alpid.Controllers
                 return View(await applicationDbContext.ToListAsync());
             }
         }
+
+        public async Task<IActionResult> PagoCuota(int ID, double debe)
+        {
+            try
+            {
+                var caja = new Caja();
+
+                if (ModelState.IsValid)
+                {
+                    //busca el ultimo id 
+                    var db = _context.Caja.Include(c => c.Alquiler)
+                                      .Max(c => c.CajaId);
+                    //busca el valor del total del ultimo id obtenido arriba
+                    var UltimoValor = _context.Caja.SingleOrDefault(c => c.CajaId == db);
+                    var imorte = debe;
+                    //sumar valor
+                    caja.Total = UltimoValor.Total + imorte;
+                    caja.Debe = imorte;
+                    caja.FechaMovimiento = DateTime.Now;
+                    caja.CuotaID = ID;//"va el id de la cuota"
+                    caja.TipoMovimiento = "Couta";
+                    caja.Observaciones = "Pago cuota del socio";
+                    _context.Add(caja);
+                    await _context.SaveChangesAsync();
+                }
+                return RedirectToAction("Index", "Cuotas", new { FileUploadMsg = "File   uploaded successfully" });
+            }
+            catch (Exception e)
+            {
+                Console.Write(e);
+
+                var applicationDbContext = _context.Caja.Include(c => c.Alquiler);
+                return View(await applicationDbContext.ToListAsync());
+            }
+        }
     }
 }

@@ -4,14 +4,16 @@ using Alpid.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Alpid.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190721231148_[AgregarUsuarios]")]
+    partial class AgregarUsuarios
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -209,21 +211,6 @@ namespace Alpid.Data.Migrations
                     b.HasKey("SociosID");
 
                     b.ToTable("Socios");
-                });
-
-            modelBuilder.Entity("Alpid.Models.Usuarios", b =>
-                {
-                    b.Property<int>("UsuariosID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Contraseña");
-
-                    b.Property<string>("NombreUsuario");
-
-                    b.HasKey("UsuariosID");
-
-                    b.ToTable("Usuarios");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

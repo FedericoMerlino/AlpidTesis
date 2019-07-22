@@ -80,25 +80,18 @@ namespace Alpid.Controllers
         }
 
         // POST: Cuotas/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CuotasID,Estado,Observacion,Importe,FechaDesde,FechaHasta,SociosID")] Cuotas cuotas)
         {
             if (ModelState.IsValid)
             {
-                //var valor = _context.Cuotas.Select(c => c.Importe);
-                //var caja = _context.Caja.Select(c => c.CajaId);
+                var importe = _context.Caja.Select(c => c.CajaId);
                 
                 _context.Add(cuotas);
                 await _context.SaveChangesAsync();
-
-                 // RedirectToAction("CreateIngreso", "Caja", new { caja = 30 });
-                return RedirectToAction(nameof(Index));
             }
-            ViewData["SociosID"] = new SelectList(_context.Set<Socios>(), "SociosID", "RazonSocial", cuotas.SociosID);
-            return View(cuotas);
+            return RedirectToAction("PagoCuota", "Caja", new { ID = cuotas.CuotasID, debe = cuotas.Importe});
         }
     }
 }
