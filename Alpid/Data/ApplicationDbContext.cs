@@ -18,6 +18,7 @@ namespace Alpid.Data
         public DbSet<Proveedores> Proveedores { get; set; }
         public DbSet<Socios> Socios { get; set; }
         public DbSet<Productos> Productos { get; set; }
+        public DbSet<Usuario> Usuario { get; set; }
     }
 }
 
