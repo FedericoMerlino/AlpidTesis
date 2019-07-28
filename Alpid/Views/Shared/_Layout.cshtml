@@ -117,14 +117,14 @@
         </div>
     </footer>
 
-    <environment include="Development">
+    <environment include="Production">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" /> <!--icons fa-fa-->
         <script src="~/js/SearchGrid.js"></script>
         <script src="~/js/ObtenerFechaActual.js"></script>
     </environment>
-    <environment exclude="Development">
+    <environment exclude="Production">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
                 asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
                 asp-fallback-test="window.jQuery"
