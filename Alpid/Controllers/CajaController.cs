@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Alpid.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Alpid.Controllers
 {
+    [Authorize]
     public class CajaController : Controller
     {
         private readonly ApplicationDbContext _context;

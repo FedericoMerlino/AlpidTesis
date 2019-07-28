@@ -5,9 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Alpid.Data;
 using Alpid.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Alpid.Controllers
 {
+    [Authorize]
     public class ProveedoresController : Controller
     {
         private readonly ApplicationDbContext _context;

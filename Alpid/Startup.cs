@@ -70,7 +70,7 @@ namespace Alpid
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Usuarios}/{action=Index}/{id?}");
+                    template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
