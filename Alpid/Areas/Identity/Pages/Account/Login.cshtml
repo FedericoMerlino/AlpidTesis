@@ -4,40 +4,56 @@
 @{
     ViewData["Title"] = "Login";
 }
-<!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-    @*@{
-        Layout = "";
-    }*@
-    <link href="~/css/Login.css" rel="stylesheet" />
     <link href="~/css/cssKanze/style.min.css" rel="stylesheet" />
+    <link href="~/css/Login.css" rel="stylesheet" />
 </head>
 <body>
-    <div class="row">
-        <div class="col-md-4">
-            <section>
-                <form id="account" method="post">
-                    <hr />
-                    <div asp-validation-summary="All" class="text-danger"></div>
-                    <div class="form-group">
-                        <label asp-for="Input.Email"> Mail</label>
-                        <input asp-for="Input.Email" class="form-control" />
-                        <span asp-validation-for="Input.Email" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Input.Password">Contraseña</label>
-                        <input asp-for="Input.Password" class="form-control" />
-                        <span asp-validation-for="Input.Password" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Ingresar</button>
-                    </div>
-
-                </form>
-            </section>
+    <div class="body"></div>
+    <div class="grad"></div>
+    <br>
+    <div class="col-md-4" style="float:right;">
+        <div class="header">
         </div>
+        <section>
+            <form id="account" method="post">
+                <div class="header">
+                    <div>ALPID<span>Sunchales</span></div>
+                    <br>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.User" style="font-size:medium;"> Usuario</label>
+                    <input asp-for="Input.User" class="form-control" />
+                    <span asp-validation-for="Input.User" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.Password" style="font-size:medium;">Contraseña</label>
+                    <input asp-for="Input.Password" class="form-control" />
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                <div asp-validation-summary="All" class="text-danger" style="font-size:medium"></div>
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label asp-for="Input.RememberMe" style="font-size:medium;">
+                            <input asp-for="Input.RememberMe" />
+                            @Html.DisplayNameFor(m => m.Input.RememberMe)
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Ingresar</button>
+                </div>
+                <br>
+                <div class="form-group">
+                    <p>
+                        <a id="forgot-password" asp-page="./ForgotPassword" style="font-size:medium; float:right;">Olvidaste tu contraseña?</a> <br />
+                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" style="font-size:medium;">Registrar nuevo usuario</a>
+                    </p>
+                </div>
+            </form>
+        </section>
     </div>
 </body>
 </html>

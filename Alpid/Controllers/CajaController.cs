@@ -47,7 +47,6 @@ namespace Alpid.Controllers
             return View(caja);
         }
 
-        // GET: Caja/Create
         //Retiro de dinero
         public IActionResult CreateRetire()
         {
@@ -55,7 +54,6 @@ namespace Alpid.Controllers
             return View();
         }
 
-        // POST: Caja/Create
         //Retiro de dinero
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -90,16 +88,14 @@ namespace Alpid.Controllers
             }
         }
 
-        // GET: Caja/Create
-        //Retiro de dinero
+        //ingreso de dinero
         public IActionResult CreateIngreso()
         {
             ViewData["AlquilerID"] = new SelectList(_context.Alquiler, "AlquilerID", "AlquilerID");
             return View();
         }
 
-        // POST: Caja/Create
-        //Retiro de dinero
+        //ingreso de dinero
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateIngreso([Bind("CajaId,Debe,Haber,TipoMovimiento,Observaciones,Estado,FechaMovimiento,Total,CuotaID,AlquilerID")] Caja caja)
@@ -108,13 +104,22 @@ namespace Alpid.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    //busca el ultimo id 
-                    var db = _context.Caja.Include(c => c.Alquiler)
+                    if (_context.Caja.Select(x => x.CajaId) == null)
+                    {
+                        //busca el ultimo id 
+                        var db = _context.Caja.Include(c => c.Alquiler)
                                       .Max(c => c.CajaId);
-                    //busca el valor del total del ultimo id obtenido arriba
-                    var UltimoValor = _context.Caja.SingleOrDefault(c => c.CajaId == db);
-                    //sumar valor
-                    caja.Total = UltimoValor.Total + caja.Debe;
+                        //busca el valor del total del ultimo id obtenido arriba
+                        var UltimoValor = _context.Caja.SingleOrDefault(c => c.CajaId == db);
+                        //sumar valor
+                        caja.Total = UltimoValor.Total + caja.Debe;
+                    }
+                    //para cuando la base de datos esta vacia
+                    else
+                    {
+                        var UltimoValor = 0;
+                        caja.Total = UltimoValor + caja.Debe;
+                    }
                     //Obtener fecha y hora actual
                     caja.FechaMovimiento = DateTime.Now;
                     _context.Add(caja);
