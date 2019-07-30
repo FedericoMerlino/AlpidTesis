@@ -22,10 +22,6 @@ namespace Alpid.Areas.Identity.Pages.Account
             _logger = logger;
         }
 
-        public void OnGet()
-        {
-        }
-
         public async Task<IActionResult> OnPost(string returnUrl = null)
         {
             await _signInManager.SignOutAsync();
@@ -38,6 +34,9 @@ namespace Alpid.Areas.Identity.Pages.Account
             {
                 return Page();
             }
+        }
+        public void OnGet()
+        {
         }
     }
 }

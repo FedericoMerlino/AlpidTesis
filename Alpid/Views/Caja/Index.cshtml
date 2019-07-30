@@ -16,6 +16,17 @@
             <a asp-action="CreateIngreso" class="btn btn-primary">Ingresar Dinero</a>
         </p>
     </div>
+    <!--Buscar por fechas-->
+    <form asp-action="Index" method="get">
+        <div class="form-actions no-color">
+            <p>
+                Fecha desde<input type="date" name="fechaDesde" value="@ViewData["FechaDesdeFilter"]" />
+                Fecha hasta<input type="date" name="fechaHasta" value="@ViewData["FechaHastaFilter"]" />
+                <input type="submit" value="Buscar" class="btn btn-dark" />
+
+            </p>
+        </div>
+    </form>
     <!--Busca solamente la info que se muestra en la grilla-->
     <div>
         <i class="fa fa-search fa-2x" style="Float: right; padding-left:10px; padding-top:2px;"></i>
@@ -27,7 +38,7 @@
             <table class="table table-responsive-sm" id="datos">
                 <thead>
                     <tr>
-                                                <th>
+                        <th>
                             Fecha Movimiento
                         </th>
                         <th>

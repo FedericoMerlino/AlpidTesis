@@ -22,10 +22,41 @@ namespace Alpid.Controllers
         }
 
         // GET: Productos
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string currentFilter, string searchString, int? page, string filtroFecha, string DateFilter)
         {
-            var applicationDbContext = _context.Productos.Include(p => p.Proveedores);
-            return View(await applicationDbContext.ToListAsync());
+            var bandera = true;
+
+            if (searchString != null)
+            {
+                page = 1;
+                bandera = false;
+
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewData["CurrentFilter"] = searchString;
+            var producto = from s in _context.Productos select s;
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                producto = producto.Where(s => s.Nombre.Contains(searchString));
+            }
+
+            ViewData["DateFilter"] = filtroFecha;
+
+            if (filtroFecha == null && bandera == true)
+            {
+                producto = producto.Where(s => s.FechaBaja == null);
+            }
+            if (filtroFecha != null && bandera == true)
+            {
+                producto = producto.Where(s => s.FechaBaja != null);
+            }
+
+            int pageSize = 15;
+            return View(await Paginacion<Productos>.CreateAsync(producto.AsNoTracking().OrderByDescending(x => x.FechaAlta).Include(x => x.Proveedores), page ?? 1, pageSize));
         }
 
         // GET: Productos/Details/5

@@ -22,19 +22,27 @@
             </p>
         </div>
     </form>
+    <!--boton para abrir modal inmobiliarions-->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+        Productos inmobiliarios
+    </button>
+    <!--diferentes funcionalidades dentro de la grilla-->
     <div class="input-group-append" style="padding-top:30px">
         <div class="form-group">
-            <h2 style="initial-letter:inherit; font-family: Homer Simpson; color:#0932ff;"> Grilla productos </h2>
-            <!--boton para abrir modal inmobiliarions-->
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-                Productos inmobiliarios
-            </button>
-            <!--para seleccionar estados-->
-            <h5 style="initial-letter:inherit; font-family: Homer Simpson, cursive; padding-right:10px">
-                Estados:
-                <label style="padding-left:10px"><input type="checkbox" id="cbox1" onclick="validarcheck()" checked="checked"> Activos</label>
-                <label style="padding-left:10px"><input type="checkbox" id="cbox2" onclick="validarcheck()" checked="checked"> Eliminados</label><br>
-            </h5>
+            <h2 style="initial-letter:inherit; font-family: Homer Simpson; color:#0932ff;"> Grilla socios </h2>
+            <form asp-action="Index" method="get">
+                <div class="form-actions no-color">
+                    <h5 style="initial-letter:inherit; font-family: Homer Simpson, cursive; padding-right:10px">
+                        Estados:
+                        <label style="padding-left:10px"><input type="radio" name="Coordinar" id="cbox1" onclick="validarcheck()" checked="checked"> Activos</label>
+                        <label style="padding-left:10px"><input type="radio" name="Coordinar" id="cbox2" onclick="validarcheck()"> Eliminados</label>
+                        <!--Se utiliza para pasar la info al controlador sobre que estado se desea buscar-->
+                        <input type="text" id="FechasGrilla" name="filtroFecha" value="@ViewData["DateFilter"]" style="display:none;" />
+                        <input type="submit" value="Buscar" class="btn btn-dark" />
+                    </h5>
+
+                </div>
+            </form>
         </div>
     </div>
     <!--busca solamente en lo datos que se encunetran en la tabla con la funcion js que esta en el layaut-->
@@ -84,7 +92,7 @@
                                         De Alquiler
                                     </td>
                                     <td>
-                                       $ @Html.DisplayFor(modelItem => item.PrecioAlquiler)
+                                        $ @Html.DisplayFor(modelItem => item.PrecioAlquiler)
                                     </td>
 
                                     <td>
@@ -112,7 +120,7 @@
                                         De Alquiler
                                     </td>
                                     <td>
-                                      $ @Html.DisplayFor(modelItem => item.PrecioAlquiler)
+                                        $ @Html.DisplayFor(modelItem => item.PrecioAlquiler)
                                     </td>
 
                                     <td>
@@ -195,7 +203,17 @@
 </html>
 
 <script>
+    //cambia el valor de los radiobutton de estados para luego pasarle la info que se requiere al controlador
     function validarcheck() {
-       
+        $('#cbox1').on('click', function () {
+            if ($(this).is(':checked')) {
+                document.getElementById('FechasGrilla').value = '';
+            }
+        });
+        $('#cbox2').on('click', function () {
+            if ($(this).is(':checked')) {
+                document.getElementById('FechasGrilla').value = 'eliminados';
+            }
+        });
     }
 </script>

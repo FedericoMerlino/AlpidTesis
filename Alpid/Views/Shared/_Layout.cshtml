@@ -45,13 +45,12 @@
                 </div>
             </div>
         </div>
-
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
+            <div class="container" style="background-color: aliceblue;">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                    <label style="color:lightblue;">ALPID</label> 
+                    <label style="color:lightblue;">ALPID</label>
                     <label style="color:mediumpurple;"> Sunchales</label>
-                    </a>
+                </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -65,7 +64,7 @@
                         <li class="nav-item"><a asp-area="" asp-controller="Caja" asp-action="Index"><i class="fa fa-dollar"></i> Caja</a></li>
                         <li class="nav-item"><a asp-area="" asp-controller="Proveedores" asp-action="Index"><i class="fa fa-truck"></i> Proveedores</a></li>
                         <li class="nav-item"><a asp-area="" asp-controller="Cuotas" asp-action="Index"><i class="fa fa-money"></i> Cuotas</a></li>
-                        <li class="nav-item"><a asp-area="Identity" asp-controller="Account" asp-action="Register"><i class="fa fa-money"></i> Nuevo usuario</a></li>
+                        <li class="nav-item"><a href="~/Identity/Account/Register"><i class="fa fa-user"></i> Nuevo Usuario</a></li>
                     </ul>
                 </div>
             </div>

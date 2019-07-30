@@ -21,10 +21,19 @@ namespace Alpid.Controllers
         }
 
         // GET: Caja
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(DateTime fechaDesde, DateTime fechaHasta,string FechaDesdeFilter, string FechaHastaFilter)
         {
-            var applicationDbContext = _context.Caja.Include(c => c.Alquiler)
-                                                    .OrderByDescending(x => x.FechaMovimiento);
+            ViewData["FechaDesdeFilter"] = fechaDesde.ToString("dd/MM/yyyy");
+            ViewData["FechaHastaFilter"] = fechaHasta.ToString("dd/MM/yyyy");
+
+            var caja = from s in _context.Caja select s;
+
+            caja = caja.Where(s => s.FechaMovimiento >= fechaDesde);
+            caja = caja.Where(s => s.FechaMovimiento <= fechaHasta);
+
+            var applicationDbContext = caja;
+                //_context.Caja.Include(c => c.Alquiler)
+                //                                    .OrderByDescending(x => x.FechaMovimiento);
             return View(await applicationDbContext.ToListAsync());
         }
 
