@@ -1,59 +1,73 @@
 ﻿@model IEnumerable<Alpid.Models.Alquiler>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Alquiler";
 }
-
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.FechaDesde)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Observacion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Valor)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Productos)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Socios)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaDesde)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Observacion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Valor)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Productos.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Socios.Cuit)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.AlquilerID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.AlquilerID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.AlquilerID">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<html>
+<body>
+    <h1>Alquiler de productos</h1>
+    <!--Boton para crear nuevo alquiler-->
+    <p>
+        <a asp-action="Create" class='btn btn-success'>Nuevo alquiler</a>
+    </p>
+    <!--busca en toda la tabla en la base de datos de socios-->
+    <form asp-action="Index" method="get">
+        <div class="form-actions no-color">
+            <p>
+                Buscar: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                <input type="submit" value="Buscar" class="btn btn-dark" />
+                <a asp-action="Index" class="btn btn-info">Cancelar búsqueda </a>
+            </p>
+        </div>
+    </form>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Fecha alquiler
+                </th>
+                <th>
+                    Observación
+                </th>
+                <th>
+                    Valor alquiler
+                </th>
+                <th>
+                    Productos
+                </th>
+                <th>
+                    Socio
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FechaDesde)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Observacion)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Valor)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Productos.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Socios.RazonSocial)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.AlquilerID">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.AlquilerID">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.AlquilerID">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>

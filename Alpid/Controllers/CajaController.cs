@@ -26,14 +26,12 @@ namespace Alpid.Controllers
             ViewData["FechaDesdeFilter"] = fechaDesde.ToString("dd/MM/yyyy");
             ViewData["FechaHastaFilter"] = fechaHasta.ToString("dd/MM/yyyy");
 
-            var caja = from s in _context.Caja select s;
+            var caja = from s in _context.Caja where ((s.FechaMovimiento >= fechaDesde) && (s.FechaMovimiento <= fechaHasta)) select s;
 
-            caja = caja.Where(s => s.FechaMovimiento >= fechaDesde);
-            caja = caja.Where(s => s.FechaMovimiento <= fechaHasta);
+            //caja = caja.Where(s => s.FechaMovimiento >= fechaDesde);
+            //caja = caja.Where(s => s.FechaMovimiento <= fechaHasta);
 
             var applicationDbContext = caja;
-                //_context.Caja.Include(c => c.Alquiler)
-                //                                    .OrderByDescending(x => x.FechaMovimiento);
             return View(await applicationDbContext.ToListAsync());
         }
 

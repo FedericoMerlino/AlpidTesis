@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Alpid.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class AlquilerController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -24,6 +24,7 @@ namespace Alpid.Controllers
         // GET: Alquiler
         public async Task<IActionResult> Index()
         {
+            
             var applicationDbContext = _context.Alquiler.Include(a => a.Productos).Include(a => a.Socios);
             return View(await applicationDbContext.ToListAsync());
         }

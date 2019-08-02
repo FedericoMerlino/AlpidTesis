@@ -1,51 +1,138 @@
 ﻿@model Alpid.Models.Alquiler
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Nuevo alquiler";
 }
+<html>
+<body>
+    <h1>Create</h1>
 
-<h1>Create</h1>
+    <h4>Alquiler</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create" name="formCrearProducto">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="FechaDesde" class="control-label">Fecha alquiler</label>
+                    <input asp-for="FechaDesde" type="date" class="form-control" />
+                    <span asp-validation-for="FechaDesde" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Observacion" class="control-label">Observación</label>
+                    <input asp-for="Observacion" class="form-control" />
+                    <span asp-validation-for="Observacion" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Valor" class="control-label">Importe alquiler</label>
+                    <input asp-for="Valor" class="form-control" />
+                    <span asp-validation-for="Valor" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="SociosId" class="control-label">Socios</label>
+                    <select asp-for="SociosId" class="form-control" asp-items="ViewBag.SociosId"></select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ProductosID" class="control-label">Producto</label>
+                    <datalist> </datalist>
+                    <select asp-for="ProductosID" id="txtProducto" class="form-control" asp-items="ViewBag.ProductosID"></select>
 
-<h4>Alquiler</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="FechaDesde" class="control-label"></label>
-                <input asp-for="FechaDesde" class="form-control" />
-                <span asp-validation-for="FechaDesde" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Observacion" class="control-label"></label>
-                <input asp-for="Observacion" class="form-control" />
-                <span asp-validation-for="Observacion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Valor" class="control-label"></label>
-                <input asp-for="Valor" class="form-control" />
-                <span asp-validation-for="Valor" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProductosID" class="control-label"></label>
-                <select asp-for="ProductosID" class ="form-control" asp-items="ViewBag.ProductosID"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="SociosId" class="control-label"></label>
-                <select asp-for="SociosId" class ="form-control" asp-items="ViewBag.SociosId"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+                </div>
+                <input asp-for="Valor" type="number" id="txtCantidad" class="form-control" />
+
+                <input type="button" value="Producto" onclick="savetoLocal()" />
+                <input type="text" id="prod" />
+                <input type="text" id="cant" />
+
+                <table id="tablaPruduct">
+                    <thead>
+                        <tr>
+                            <th>
+                                Producto
+                            </th>
+                            <th>
+                                Cantidad
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td name="GuardaProductoCant"></td>
+
+                        </tr>
+
+                    </tbody>
+                </table>
+                <input type="text" name="GuardaProducto" />
+
+                <div class="col-md-12">
+                    <input type="submit" value="Crear nuevo" class="btn btn-primary" />
+                    <a asp-action="Index" style="float:right;" class="btn btn-info">Cancelar</a>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
+</body>
+</html>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+<script>
+
+    //document.querySelector('#btnSaveProduct').addEventListener('click', getProduct());
+    
+
+    //var ProductList = [];
+
+    //function AddProduct(Prod, Cant) {
+
+    //    var newProduct = {
+    //        Producto: Prod,
+    //        Cantidad: Cant
+    //    };
+    //    console.log(newProduct);
+    //    ProductList.push(newProduct);
+    //    ListProduct(ProductList);
+    //}
+
+    //function getProduct() {
+    //    var StoreList = localStorage.getItem('LocalProduct');
+    //    if (StoreList == null) {
+    //        ProductList = [];
+    //        console.log("fede");
+    //    }
+    //    else {
+    //        ProductList = JSON.parse(StoreList);
+    //    }
+    //    return ProductList;
+    //}
+
+    //function ListProduct(plist) {
+    //    localStorage.setItem('LocalProduct', JSON.stringify(plist));
+    //}
+
+
+    function savetoLocal() {
+        var valor = {};
+
+        valor = {
+            Producto: $("#txtProducto").val(),
+            Cantidad: $("#txtCantidad").val()
+        };
+
+        window.localStorage.setItem("valor", JSON.stringify(valor));
+
+        var objetoProduct = localStorage.getItem("valor");
+        var resultado = JSON.parse(objetoProduct);
+
+        document.formCrearProducto.cant.value = resultado.Cantidad;
+        document.formCrearProducto.prod.value = resultado.Producto;
+
+
+    }
+
+    function fnGetData() {
+        alert(window.localStorage.getItem("Producto"));
+        //alert(window.localStorage.getItem("CustAddr"));
+    }
+</script>
