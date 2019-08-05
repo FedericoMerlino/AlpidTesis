@@ -18,10 +18,10 @@
                 <!--elegir uno de los dos para que aparezca la pantalla-->
                 <label class="control-label">Seleccione el tipo de producto que desea ingresar</label><br />
                 <label> <input id="checkAlquiler" name="radio" style="padding-left:10px;" TYPE="radio" onclick="validarcheck()"> De Alquiler</label>
-                <label><input id="checkInmobiliario" name="radio" TYPE="radio" onclick="validarcheck()"> Inmobiliario</label>
+                <label><input id="checkMobiliarios" name="radio" TYPE="radio" onclick="validarcheck()"> Mobiliarios</label>
             </div>
-            <!--si se selecciona el radiobutton inmobiliario-->
-            <form asp-action="Create" id="formInmobiliario" style="display:none">
+            <!--si se selecciona el radiobutton Mobiliarios-->
+            <form asp-action="Create" id="formMobiliarios" style="display:none">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="Nombre" class="control-label">Producto*</label>
@@ -40,7 +40,7 @@
                 </div>
                 <div class="form-group" style="display:none">
                     <label asp-for="ProductosTipo" class="control-label"></label>
-                    <input asp-for="ProductosTipo" value="Inmobiliario" class="form-control" />
+                    <input asp-for="ProductosTipo" value="Mobiliarios" class="form-control" />
                     <span asp-validation-for="ProductosTipo" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -97,16 +97,16 @@
 <script>
     // cambia los valores y muestra la pantalla que se desea
     function validarcheck() {
-        $('#checkInmobiliario').on('click', function () {
+        $('#checkMobiliarios').on('click', function () {
             if ($(this).is(':checked')) {
-                document.getElementById('formInmobiliario').style.display = 'block';
+                document.getElementById('formMobiliarios').style.display = 'block';
                 document.getElementById('formAlquiler').style.display = 'none';
             }
         });
         $('#checkAlquiler').on('click', function () {
             if ($(this).is(':checked')) {
                 document.getElementById('formAlquiler').style.display = 'block';
-                document.getElementById('formInmobiliario').style.display = 'none';
+                document.getElementById('formMobiliarios').style.display = 'none';
             }
         });
     }

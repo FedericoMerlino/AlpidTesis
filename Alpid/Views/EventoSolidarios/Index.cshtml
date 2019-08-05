@@ -1,0 +1,79 @@
+﻿@model IEnumerable<Alpid.Models.EventoSolidarios>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<html>
+<body>
+    <h1>Index</h1>
+
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+    <!--Busca solamente la info que se muestra en la grilla-->
+    <div>
+        <i class="fa fa-search fa-2x" style="Float: right; padding-left:10px; padding-top:2px;"></i>
+        <input id="searchTerm" type="text" onkeyup="doSearch()" class="form-control" placeholder="Buscar" style=" width:200px; Float: right; " />
+    </div>
+    <!--tabla con la informacion de los eventos solidarios-->
+    <div>
+        <form class="form-group">
+            <table class="table table-responsive-sm" id="datos">
+                <thead>
+                    <tr>
+                        <th>
+                            Fecha
+                        </th>
+                        <th>
+                            Cantidad
+                        </th>
+                        <th>
+                            Concepto
+                        </th>
+                        <th>
+                            Ingreso
+                        </th>
+                        <th>
+                            Salida
+                        </th>
+                        <th>
+                            Total
+                        </th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Fecha)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Cantidad)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Concepto)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Ingreso)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Salida)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Total)
+                            </td>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@item.EventoSolidarioID">Ver</a> |
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </form>
+    </div>
+
+</body>
+</html>

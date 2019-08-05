@@ -1,4 +1,4 @@
-﻿@model Alpid.Models.Caja
+﻿@model Alpid.Models.EventoSolidarios
 
 @{
     ViewData["Title"] = "Delete";
@@ -8,39 +8,32 @@
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>Caja</h4>
+    <h4>EventoSolidarios</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            Debe)
+            Cantidad)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Debe)
+            @Html.DisplayFor(model => model.Cantidad)
         </dd>
         <dt class = "col-sm-2">
-            Haber)
+            Concepto)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Haber)
+            @Html.DisplayFor(model => model.Concepto)
         </dd>
         <dt class = "col-sm-2">
-            TipoMovimiento)
+            Ingreso)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TipoMovimiento)
+            @Html.DisplayFor(model => model.Ingreso)
         </dd>
         <dt class = "col-sm-2">
-            Observaciones)
+            Salida)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Observaciones)
-        </dd>
-      
-        <dt class = "col-sm-2">
-            FechaMovimiento)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FechaMovimiento)
+            @Html.DisplayFor(model => model.Salida)
         </dd>
         <dt class = "col-sm-2">
             Total)
@@ -49,21 +42,15 @@
             @Html.DisplayFor(model => model.Total)
         </dd>
         <dt class = "col-sm-2">
-            CuotaID)
+            Fecha)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CuotaID)
+            @Html.DisplayFor(model => model.Fecha)
         </dd>
-        <dt class = "col-sm-2">
-            Alquiler)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Alquiler.AlquilerID)
-        </dd class>
     </dl>
     
     <form asp-action="Delete">
-        <input type="hidden" asp-for="CajaId" />
+        <input type="hidden" asp-for="EventoSolidarioID" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-action="Index">Back to List</a>
     </form>
