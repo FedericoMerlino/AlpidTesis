@@ -24,115 +24,85 @@
                     <span asp-validation-for="Observacion" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Valor" class="control-label">Importe alquiler</label>
-                    <input asp-for="Valor" class="form-control" />
-                    <span asp-validation-for="Valor" class="text-danger"></span>
-                </div>
-                <div class="form-group">
                     <label asp-for="SociosId" class="control-label">Socios</label>
                     <select asp-for="SociosId" class="form-control" asp-items="ViewBag.SociosId"></select>
                 </div>
-                <div class="form-group">
-                    <label asp-for="ProductosID" class="control-label">Producto</label>
-                    <datalist> </datalist>
-                    <select asp-for="ProductosID" id="txtProducto" class="form-control" asp-items="ViewBag.ProductosID"></select>
-
-                </div>
-                <input asp-for="Valor" type="number" id="txtCantidad" class="form-control" />
-
-                <input type="button" value="Producto" onclick="savetoLocal()" />
-                <input type="text" id="prod" />
-                <input type="text" id="cant" />
-
-                <table id="tablaPruduct">
-                    <thead>
+                <h3 style="color:blue;">Seleccionar productos</h3>
+                <div class="container">
+                    <div class="form-group col-md-4" style="float: inherit;">
+                        <p>
+                            <label  class="control-label">Producto</label>
+                            <select id="NombreProducto" class="form-control" asp-items="ViewBag.ProductosID"></select>
+                        </p>
+                        <p>
+                            <label>Cantidad:</label> <br>
+                            <input id="Cantidad" class="form-control" type="number"><br>
+                        </p>
+                        <p>
+                            <label>Entre su C&eacute;dula:</label> <br>
+                            <input id="Precio" class="form-control" type="text"> <br>
+                        </p>
+                        <button id="adicionar" class="btn btn-success" type="button">Agregar a la lista</button>
+                    </div>
+                    <p>
+                        Elementos en la Tabla:
+                        <div id="adicionados"></div>
+                    </p>
+                    <table id="mytable" class="table table-bordered table-hover ">
                         <tr>
-                            <th>
-                                Producto
-                            </th>
-                            <th>
-                                Cantidad
-                            </th>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Quitar</th>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td name="GuardaProductoCant"></td>
-
-                        </tr>
-
-                    </tbody>
-                </table>
-                <input type="text" name="GuardaProducto" />
-
-                <div class="col-md-12">
-                    <input type="submit" value="Crear nuevo" class="btn btn-primary" />
-                    <a asp-action="Index" style="float:right;" class="btn btn-info">Cancelar</a>
+                    </table>
+                    <div class="col-md-12">
+                        <input type="submit" value="Crear nuevo" class="btn btn-primary" />
+                        <a asp-action="Index" style="float:right;" class="btn btn-info">Cancelar</a>
+                    </div>
                 </div>
             </form>
         </div>
     </div>
 </body>
 </html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+        //obtenemos el valor de los input
+
+        $('#adicionar').click(function () {
+            var NombreProducto = document.getElementById("NombreProducto").value;
+            var Cantidad = document.getElementById("Cantidad").value;
+            var Precio = document.getElementById("Precio").value;
+            var i = 1; //contador para asignar id al boton que borrara la fila
+            var fila = '<tr id="row' + i + '"><td>' + NombreProducto + '</td><td>' + Cantidad + '</td><td>' + Precio + '</td><td><button type="button" name="remove" id="' + i + '" class="btn btn-danger btn_remove">Quitar</button></td></tr>'; //esto seria lo que contendria la fila
+
+            i++;
+
+            $('#mytable tr:first').after(fila);
+            $("#adicionados").text(""); //esta instruccion limpia el div adicioandos para que no se vayan acumulando
+            var nFilas = $("#mytable tr").length;
+            $("#adicionados").append(nFilas - 1);
+            //le resto 1 para no contar la fila del header
+            document.getElementById("Cantidad").value = "";
+            document.getElementById("Precio").value = "";
+            document.getElementById("NombreProducto").value = "";
+            document.getElementById("NombreProducto").focus();
+        });
+        $(document).on('click', '.btn_remove', function () {
+            var button_id = $(this).attr("id");
+            //cuando da click obtenemos el id del boton
+            $('#row' + button_id + '').remove(); //borra la fila
+            //limpia el para que vuelva a contar las filas de la tabla
+            $("#adicionados").text("");
+            var nFilas = $("#mytable tr").length;
+            $("#adicionados").append(nFilas - 1);
+        });
+    });
+</script>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
-<script>
-
-    //document.querySelector('#btnSaveProduct').addEventListener('click', getProduct());
-    
-
-    //var ProductList = [];
-
-    //function AddProduct(Prod, Cant) {
-
-    //    var newProduct = {
-    //        Producto: Prod,
-    //        Cantidad: Cant
-    //    };
-    //    console.log(newProduct);
-    //    ProductList.push(newProduct);
-    //    ListProduct(ProductList);
-    //}
-
-    //function getProduct() {
-    //    var StoreList = localStorage.getItem('LocalProduct');
-    //    if (StoreList == null) {
-    //        ProductList = [];
-    //        console.log("fede");
-    //    }
-    //    else {
-    //        ProductList = JSON.parse(StoreList);
-    //    }
-    //    return ProductList;
-    //}
-
-    //function ListProduct(plist) {
-    //    localStorage.setItem('LocalProduct', JSON.stringify(plist));
-    //}
-
-
-    function savetoLocal() {
-        var valor = {};
-
-        valor = {
-            Producto: $("#txtProducto").val(),
-            Cantidad: $("#txtCantidad").val()
-        };
-
-        window.localStorage.setItem("valor", JSON.stringify(valor));
-
-        var objetoProduct = localStorage.getItem("valor");
-        var resultado = JSON.parse(objetoProduct);
-
-        document.formCrearProducto.cant.value = resultado.Cantidad;
-        document.formCrearProducto.prod.value = resultado.Producto;
-
-
-    }
-
-    function fnGetData() {
-        alert(window.localStorage.getItem("Producto"));
-        //alert(window.localStorage.getItem("CustAddr"));
-    }
-</script>
