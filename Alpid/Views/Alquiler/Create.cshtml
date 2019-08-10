@@ -1,7 +1,7 @@
 ﻿@model Alpid.Models.Alquiler
 
 @{
-    ViewData["Title"] = "";
+    ViewData["Title"] = "Nuevo alquiler";
 }
 <html>
 <body>
@@ -13,7 +13,7 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="FechaDesde" class="control-label">Fecha alquiler</label>
-                    <input asp-for="FechaDesde" type="date" class="form-control"/>
+                    <input asp-for="FechaDesde" type="date" class="form-control" />
                     <span asp-validation-for="FechaDesde" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -30,14 +30,14 @@
                     <div class="form-group col-md-4" style="float: inherit;">
                         <p>
                             <label class="control-label">Producto</label>
-                            <select id="NombreProducto" class="form-control" asp-items="ViewBag.ProductosID"></select>
+                            <select id="NombreProducto" class="form-control" asp-items="ViewBag.NombreProducto"></select>
                         </p>
                         <p>
                             <label>Cantidad:</label> <br>
                             <input id="Cantidad" class="form-control" type="number"><br>
                         </p>
                         <p>
-                            <label>Entre su C&eacute;dula:</label> <br>
+                            <label>Precio unitario</label> <br>
                             <input id="Precio" class="form-control" type="text"> <br>
                         </p>
                         <button id="adicionar" class="btn btn-success" type="button">Agregar a la lista</button>
@@ -70,7 +70,7 @@
     //LLenar la tabla con los valores seleccionados
     $(document).ready(function () {
         //obtenemos el valor de los input
-            $('#adicionar').click(function () {
+        $('#adicionar').click(function () {
             var NombreProducto = document.getElementById("NombreProducto").value;
             var Cantidad = document.getElementById("Cantidad").value;
             var Precio = document.getElementById("Precio").value;

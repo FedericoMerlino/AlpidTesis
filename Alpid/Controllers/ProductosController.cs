@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Alpid.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class ProductosController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -80,8 +80,10 @@ namespace Alpid.Controllers
         // GET: Productos/Create
         public IActionResult Create()
         {
-            ViewData["ProveedoresID"] = new SelectList(_context.Proveedores, "ProveedoresId", "RazonSocial");
-
+            //Busca los proveedores que no esten dados de baja
+            var proveedor = from s in _context.Proveedores select s;
+            proveedor = proveedor.Where(s => s.FechaBaja == null);
+            ViewData["ProveedoresID"] = new SelectList(proveedor, "ProveedoresId", "RazonSocial");
             return View();
         }
 

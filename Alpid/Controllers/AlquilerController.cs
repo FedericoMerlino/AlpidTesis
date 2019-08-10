@@ -52,8 +52,14 @@ namespace Alpid.Controllers
         // GET: Alquiler/Create
         public IActionResult Create()
         {
-                       ViewData["ProductosID"] = new SelectList(_context.Set<Productos>(), "PoductosID", "Nombre");
-            ViewData["SociosId"] = new SelectList(_context.Socios, "SociosID", "RazonSocial");
+            //busca los productos que no esten dados de baja y solo sean de alquiler
+            var producto = from s in _context.Productos select s;
+            producto = producto.Where(s => s.FechaBaja == null && s.ProductosTipo == "DeAlquiler");
+            ViewData["NombreProducto"] = new SelectList(producto, "Nombre", "Nombre");
+            //Busca los socios que no esten dados de baja
+            var socio = from s in _context.Socios select s;
+            socio = socio.Where(s => s.FechaBaja == null);
+            ViewData["SociosId"] = new SelectList(socio, "SociosID", "RazonSocial");
             return View();
         }
 
@@ -66,6 +72,7 @@ namespace Alpid.Controllers
         {
             if (ModelState.IsValid)
             {
+
                 _context.Add(alquiler);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
