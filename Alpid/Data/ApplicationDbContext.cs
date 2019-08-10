@@ -24,13 +24,10 @@ namespace Alpid.Data
             modelBuilder.Entity<IdentityUserRole<string>>().HasKey(ba => new { ba.UserId });
             modelBuilder.Entity<IdentityUserToken<string>>().HasKey(ba => new { ba.UserId });
         }
-
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
       : base(options)
         {
-            //Database.EnsureCreated();
         }
-
     }
 }
 

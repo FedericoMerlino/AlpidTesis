@@ -62,6 +62,8 @@
             </form>
         </div>
     </div>
+    <input type="button" onclick="verValores()" value="Valores tabla" class="btn btn-primary" />
+
 </body>
 </html>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -99,6 +101,12 @@
             $("#adicionados").append(nFilas - 1);
         });
     });
+    function verValores() {
+        //var Row = document.getElementById("mytable").innerText;
+        var Row = document.getElementById("mytable");
+        var Cells = Row.getElementsByTagName("td");
+        alert(Cells[1].innerText);
+    };
 </script>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

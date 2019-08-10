@@ -23,8 +23,16 @@ namespace Alpid.Controllers
         // GET: Caja
         public async Task<IActionResult> Index(DateTime fechaDesde, DateTime fechaHasta,string FechaDesdeFilter, string FechaHastaFilter)
         {
-            ViewData["FechaDesdeFilter"] = fechaDesde.ToString("dd/MM/yyyy");
-            ViewData["FechaHastaFilter"] = fechaHasta.ToString("dd/MM/yyyy");
+            if (fechaDesde.Day == 1 && fechaDesde.Month == 1 && fechaDesde.Year == 1)
+            {
+                fechaDesde = DateTime.Now;
+            }
+            if (fechaHasta.Day == 1 && fechaHasta.Month == 1 && fechaHasta.Year == 1)
+            {
+                fechaHasta = DateTime.Now;
+            }
+            ViewData["FechaDesdeFilter"] = fechaDesde.ToShortDateString();
+            ViewData["FechaHastaFilter"] = fechaHasta.ToShortDateString();
 
             var caja = from s in _context.Caja where ((s.FechaMovimiento >= fechaDesde) && (s.FechaMovimiento <= fechaHasta)) select s;
 

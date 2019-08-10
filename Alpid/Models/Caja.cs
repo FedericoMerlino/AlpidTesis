@@ -34,5 +34,7 @@ namespace Alpid.Models
         public int? AlquilerID { get; set; }
 
         public Alquiler Alquiler { get; set; }
+
+        public string Usuario { get; set; }
     }
 }
