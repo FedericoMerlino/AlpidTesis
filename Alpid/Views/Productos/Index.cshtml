@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<Alpid.Models.Productos>
 
 @{
-    ViewData["Title"] = "Productos";
+    ViewData["Title"] = "Elemento ortopédico";
 }
 <html>
 <body>
     <h1>Productos Alpid</h1>
     <p>
-        <a asp-action="Create" class='btn btn-success'>Nuevo Producto</a>
+        <a asp-action="Create" class='btn btn-success'>Nuevo elemento ortopédico</a>
     </p>
     <!--Busca en la base de datos-->
     <form asp-action="Index" method="get">
@@ -21,12 +21,12 @@
     </form>
     <!--boton para abrir modal Mobiliariosns-->
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-        Productos Mobiliarios
+        Elementos Mobiliarios
     </button>
     <!--diferentes funcionalidades dentro de la grilla-->
     <div class="input-group-append" style="padding-top:30px">
         <div class="form-group">
-            <h2 style="initial-letter:inherit; font-family: Homer Simpson; color:#0932ff;"> Grilla Productos </h2>
+            <h2 style="initial-letter:inherit; font-family: Homer Simpson; color:#0932ff;"> Grilla elementos ortopédico </h2>
             <form asp-action="Index" method="get">
                 <div class="form-actions no-color">
                     <h5 style="initial-letter:inherit; font-family: Homer Simpson; padding-right:10px">

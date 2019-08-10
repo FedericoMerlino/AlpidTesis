@@ -42,11 +42,11 @@
                         </p>
                         <button id="adicionar" class="btn btn-success" type="button">Agregar a la lista</button>
                     </div>
-                    <p>
-                        Elementos en la Tabla:
-                        <div id="adicionados"></div>
-                    </p>
-                    <table id="mytable" class="table table-bordered table-hover ">
+                    <div class="form-group-lg">
+
+                        Elementos en la Tabla: <div id="adicionados" value=></div>
+                    </div>
+                    <table id="mytable" class="table d-lg-table-row table-hover ">
                         <tr>
                             <th>Producto</th>
                             <th>Cantidad</th>
@@ -77,7 +77,7 @@
             var i = 1; //contador para asignar id al boton que borrara la fila
             var fila = '<tr id="row' + i + '"><td>' + NombreProducto + '</td><td>' + Cantidad + '</td><td>' + Precio + '</td><td><button type="button" name="remove" id="' + i + '" class="btn btn-danger btn_remove">Quitar</button></td></tr>'; //esto seria lo que contendria la fila
 
-            i++;
+            i = i + 1;
 
             $('#mytable tr:first').after(fila);
             $("#adicionados").text(""); //esta instruccion limpia el div adicioandos para que no se vayan acumulando

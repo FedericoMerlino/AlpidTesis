@@ -1,25 +1,26 @@
 ﻿@model Alpid.Models.Productos
 
 @{
-    ViewData["Title"] = "Nuevo producto";
+    ViewData["Title"] = "Nuevo elemento";
 }
 <html>
 <body>
-    <h1>Nuevo producto</h1>
+    <h1>Nuevo Elemento</h1>
     <div class="row">
         <div class="col-md-5">
             <h5 style="padding-top:20px; color:#d6ba2b;">Es obligatorio completar los campos que poseen *</h5>
             <div class="form-group">
                 <!--elegir uno de los dos para que aparezca la pantalla-->
-                <label class="control-label">Seleccione el tipo de producto que desea ingresar</label><br />
-                <label> <input id="checkAlquiler" name="radio" style="padding-left:10px;" TYPE="radio" onclick="validarcheck()"> De Alquiler</label>
+                <label class="control-label">Seleccione el tipo de elemento que desea ingresar</label><br />
+                <label> <input id="checkAlquiler" name="radio" style="padding-left:10px;" TYPE="radio" onclick="validarcheck()"> Ortopédico</label>
                 <label><input id="checkMobiliarios" name="radio" TYPE="radio" onclick="validarcheck()"> Mobiliarios</label>
+                <label><input id="checkOtros" name="radio" TYPE="radio" onclick="validarcheck()"> Otros</label>
             </div>
             <!--si se selecciona el radiobutton Mobiliarios-->
             <form asp-action="Create" id="formMobiliarios" style="display:none">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
-                    <label asp-for="Nombre" class="control-label">Producto*</label>
+                    <label asp-for="Nombre" class="control-label">Nombre elemento mobiliario*</label>
                     <input asp-for="Nombre" class="form-control" />
                     <span asp-validation-for="Nombre" class="text-danger"></span>
                 </div>
@@ -47,7 +48,7 @@
             <form asp-action="Create" id="formAlquiler" style="display:none">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
-                    <label asp-for="Nombre" class="control-label">Producto*</label>
+                    <label asp-for="Nombre" class="control-label">Nombre elemento ortopédico*</label>
                     <input asp-for="Nombre" class="form-control" />
                     <span asp-validation-for="Nombre" class="text-danger"></span>
                 </div>
@@ -69,6 +70,39 @@
                 <div class="form-group">
                     <label asp-for="ProveedoresID" class="control-label">Proveedor</label>
                     <select asp-for="ProveedoresID" class="form-control" asp-items="ViewBag.ProveedoresID"></select>
+                </div>
+                <div class="form-group" style="display:none">
+                    <label asp-for="ProductosTipo" class="control-label"></label>
+                    <input asp-for="ProductosTipo" value="DeAlquiler" class="form-control" />
+                    <span asp-validation-for="ProductosTipo" class="text-danger"></span>
+                </div>
+                <div class="col-md-12">
+                    <input type="submit" value="Crear nuevo" class="btn btn-primary" />
+                    <a asp-action="Index" style="float:right;" class="btn btn-info">Cancelar</a>
+                </div>
+            </form>
+            <!--si se selecciona el radiobutton Otros-->
+            <form asp-action="Create" id="formOtros" style="display:none">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Nombre" class="control-label">Nombre otro producto*</label>
+                    <input asp-for="Nombre" class="form-control" />
+                    <span asp-validation-for="Nombre" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Cantidad" class="control-label">Catidad*</label>
+                    <input asp-for="Cantidad" class="form-control" />
+                    <span asp-validation-for="Cantidad" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="FechaAlta" class="control-label">Fecha ingreso</label>
+                    <input asp-for="FechaAlta" type="date" id="fechaActualTercero" class="form-control" readonly="readonly" />
+                    <span asp-validation-for="FechaAlta" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PrecioAlquiler" class="control-label"> Precio</label>
+                    <input asp-for="PrecioAlquiler" class="form-control"  />
+                    <span asp-validation-for="PrecioAlquiler" class="text-danger"></span>
                 </div>
                 <div class="form-group" style="display:none">
                     <label asp-for="ProductosTipo" class="control-label"></label>
@@ -102,6 +136,8 @@
                 document.getElementById('formAlquiler').style.display = 'none';
                 //Quita el boton de cancelar que aparece al principio
                 document.getElementById('BotonCancelar').style.display = 'none';
+                //Quita el formulario de productos de otros
+                document.getElementById('formOtros').style.display = 'none';
             }
         });
         $('#checkAlquiler').on('click', function () {
@@ -112,6 +148,20 @@
                 document.getElementById('formMobiliarios').style.display = 'none';
                 //Quita el boton de cancelar que aparece al principio
                 document.getElementById('BotonCancelar').style.display = 'none';
+                //Quita el formulario de productos de otros
+                document.getElementById('formOtros').style.display = 'none';
+            }
+        });
+        $('#checkOtros').on('click', function () {
+            if ($(this).is(':checked')) {
+                //Agrega el formulario de productos de alquiler
+                document.getElementById('formAlquiler').style.display = 'none';
+                //Quita el formulario de productos mobiliarios
+                document.getElementById('formMobiliarios').style.display = 'none';
+                //Quita el boton de cancelar que aparece al principio
+                document.getElementById('BotonCancelar').style.display = 'none';
+                //Quita el formulario de productos de otros
+                document.getElementById('formOtros').style.display = 'block';
             }
         });
     }
