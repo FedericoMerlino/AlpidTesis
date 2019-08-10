@@ -13,4 +13,4 @@ window.onload = function () {
     document.getElementById('fechaActual').value = ano + "-" + mes + "-" + dia;
     document.getElementById('fechaActualSegundo').value = ano + "-" + mes + "-" + dia;
 }
-
+    // dar formato a la fecha dd mm yyyy

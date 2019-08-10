@@ -5,12 +5,9 @@
 }
 <html>
 <body>
-    <header>
-        <link href="~/css/cssKanze/style.min.css" rel="stylesheet" />
-    </header>
     <h1>Productos Alpid</h1>
     <p>
-        <a asp-action="Create" class='btn btn-info'>Nuevo Producto</a>
+        <a asp-action="Create" class='btn btn-success'>Nuevo Producto</a>
     </p>
     <!--Busca en la base de datos-->
     <form asp-action="Index" method="get">
@@ -29,10 +26,10 @@
     <!--diferentes funcionalidades dentro de la grilla-->
     <div class="input-group-append" style="padding-top:30px">
         <div class="form-group">
-            <h2 style="initial-letter:inherit; font-family: Homer Simpson; color:#0932ff;"> Grilla socios </h2>
+            <h2 style="initial-letter:inherit; font-family: Homer Simpson; color:#0932ff;"> Grilla Productos </h2>
             <form asp-action="Index" method="get">
                 <div class="form-actions no-color">
-                    <h5 style="initial-letter:inherit; font-family: Homer Simpson, cursive; padding-right:10px">
+                    <h5 style="initial-letter:inherit; font-family: Homer Simpson; padding-right:10px">
                         Estados:
                         <label style="padding-left:10px"><input type="radio" name="Coordinar" id="cbox1" onclick="validarcheck()" checked="checked"> Activos</label>
                         <label style="padding-left:10px"><input type="radio" name="Coordinar" id="cbox2" onclick="validarcheck()"> Eliminados</label>

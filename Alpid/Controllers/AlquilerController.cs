@@ -52,7 +52,7 @@ namespace Alpid.Controllers
         // GET: Alquiler/Create
         public IActionResult Create()
         {
-            ViewData["ProductosID"] = new SelectList(_context.Set<Productos>(), "PoductosID", "Nombre");
+                       ViewData["ProductosID"] = new SelectList(_context.Set<Productos>(), "PoductosID", "Nombre");
             ViewData["SociosId"] = new SelectList(_context.Socios, "SociosID", "RazonSocial");
             return View();
         }

@@ -1,13 +1,11 @@
 ﻿@model Alpid.Models.Alquiler
 
 @{
-    ViewData["Title"] = "Nuevo alquiler";
+    ViewData["Title"] = "";
 }
 <html>
 <body>
-    <h1>Create</h1>
-
-    <h4>Alquiler</h4>
+    <h1>Nuevo alquiler</h1>
     <hr />
     <div class="row">
         <div class="col-md-4">
@@ -15,7 +13,7 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="FechaDesde" class="control-label">Fecha alquiler</label>
-                    <input asp-for="FechaDesde" type="date" class="form-control" />
+                    <input asp-for="FechaDesde" type="date" class="form-control"/>
                     <span asp-validation-for="FechaDesde" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -24,14 +22,14 @@
                     <span asp-validation-for="Observacion" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="SociosId" class="control-label">Socios</label>
+                    <label asp-for="SociosId" class="control-label">Socio</label>
                     <select asp-for="SociosId" class="form-control" asp-items="ViewBag.SociosId"></select>
                 </div>
                 <h3 style="color:blue;">Seleccionar productos</h3>
                 <div class="container">
                     <div class="form-group col-md-4" style="float: inherit;">
                         <p>
-                            <label  class="control-label">Producto</label>
+                            <label class="control-label">Producto</label>
                             <select id="NombreProducto" class="form-control" asp-items="ViewBag.ProductosID"></select>
                         </p>
                         <p>
@@ -69,11 +67,10 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
 <script>
-
+    //LLenar la tabla con los valores seleccionados
     $(document).ready(function () {
         //obtenemos el valor de los input
-
-        $('#adicionar').click(function () {
+            $('#adicionar').click(function () {
             var NombreProducto = document.getElementById("NombreProducto").value;
             var Cantidad = document.getElementById("Cantidad").value;
             var Precio = document.getElementById("Precio").value;

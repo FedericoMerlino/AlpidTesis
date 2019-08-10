@@ -3,46 +3,48 @@
 @{
     ViewData["Title"] = "Details";
 }
+<html>
+<body>
+    <h1>Details</h1>
 
-<h1>Details</h1>
-
-<div>
-    <h4>Alquiler</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            FechaDesde)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FechaDesde)
-        </dd>
-        <dt class = "col-sm-2">
-            Observacion)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Observacion)
-        </dd>
-        <dt class = "col-sm-2">
-            Valor)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Valor)
-        </dd>
-        <dt class = "col-sm-2">
-            Productos)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Productos.Nombre)
-        </dd>
-        <dt class = "col-sm-2">
-            Socios)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Socios.Cuit)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.AlquilerID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div>
+        <h4>Alquiler</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                Fecha Desde:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.FechaDesde)
+            </dd>
+            <dt class="col-sm-2">
+                Observación:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Observacion)
+            </dd>
+            <dt class="col-sm-2">
+                Valor unitario:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Valor)
+            </dd>
+            <dt class="col-sm-2">
+                Productos:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Productos.Nombre)
+            </dd>
+            <dt class="col-sm-2">
+                Socio:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Socios.Cuit)
+            </dd>
+        </dl>
+    </div>
+    <div>
+        <a asp-action="Index" class="btn btn-info">Regresar</a>
+    </div>
+</body>
+</html>

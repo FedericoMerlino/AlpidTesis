@@ -1,58 +1,58 @@
 ﻿@model Alpid.Models.EventoSolidarios
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Nuevo evento soliario";
 }
-
-<h1>Create</h1>
-
-<h4>EventoSolidarios</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Cantidad" class="control-label"></label>
-                <input asp-for="Cantidad" class="form-control" />
-                <span asp-validation-for="Cantidad" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Concepto" class="control-label"></label>
-                <input asp-for="Concepto" class="form-control" />
-                <span asp-validation-for="Concepto" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Ingreso" class="control-label"></label>
-                <input asp-for="Ingreso" class="form-control" />
-                <span asp-validation-for="Ingreso" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Salida" class="control-label"></label>
-                <input asp-for="Salida" class="form-control" />
-                <span asp-validation-for="Salida" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Total" class="control-label"></label>
-                <input asp-for="Total" class="form-control" />
-                <span asp-validation-for="Total" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Fecha" class="control-label"></label>
-                <input asp-for="Fecha" class="form-control" />
-                <span asp-validation-for="Fecha" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+<html>
+<body>
+    <h1>Nuevo evento soliario</h1>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Cantidad" class="control-label"></label>
+                    <input asp-for="Cantidad" class="form-control" />
+                    <span asp-validation-for="Cantidad" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Concepto" class="control-label"></label>
+                    <input asp-for="Concepto" class="form-control" />
+                    <span asp-validation-for="Concepto" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Ingreso" class="control-label"></label>
+                    <input asp-for="Ingreso" class="form-control" />
+                    <span asp-validation-for="Ingreso" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Salida" class="control-label"></label>
+                    <input asp-for="Salida" class="form-control" />
+                    <span asp-validation-for="Salida" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Total" class="control-label"></label>
+                    <input asp-for="Total" class="form-control" />
+                    <span asp-validation-for="Total" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Fecha" class="control-label"></label>
+                    <input asp-for="Fecha" class="form-control" />
+                    <span asp-validation-for="Fecha" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+</body>
+</html>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
