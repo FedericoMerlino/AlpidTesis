@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Alpid.Models;
 using Microsoft.AspNetCore.Authorization;
+using Rotativa.AspNetCore;
 
 namespace Alpid.Controllers
 {
@@ -41,6 +42,11 @@ namespace Alpid.Controllers
 
             var applicationDbContext = caja;
             return View(await applicationDbContext.ToListAsync());
+        }
+
+        public IActionResult ViewAsPDFCaja()
+        {
+            return new ViewAsPdf("Report");
         }
 
         // GET: Caja/Details/5

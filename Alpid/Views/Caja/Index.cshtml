@@ -12,15 +12,17 @@
     <div class="form-group">
         <p>
             <a asp-action="CreateIngreso" class="btn btn-primary">Ingresar Dinero</a>
-
             <a asp-action="CreateRetire" class="btn btn-danger">Reterirar Dinero</a>
         </p>
+    </div>
+    <div>
+        <a asp-action="ViewAsPDFCaja" class="btn btn-dark" style="float:right;">Reporte caja</a>
     </div>
     <!--Buscar por fechas-->
     <form asp-action="Index" method="get">
         <div class="form-actions no-color">
             <p>
-                Fecha desde<input type="datetime" name="fechaDesde" value="@ViewData["FechaDesdeFilter"]" />
+                Fecha desde<input type="date" name="fechaDesde" value="@ViewData["FechaDesdeFilter"]" />
                 Fecha hasta<input type="datetime" name="fechaHasta" value="@ViewData["FechaHastaFilter"]" />
                 <input type="submit" value="Buscar" class="btn btn-dark" />
 
@@ -95,6 +97,7 @@
                             </td>
                             <td>
                                 <a asp-action="Details" asp-route-id="@item.CajaId">Ver</a>
+                                <a asp-action="DemoViewAsPDF">Edit</a> |
 
                             </td>
                             @*<td>

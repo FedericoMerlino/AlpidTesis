@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Alpid.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Rotativa.AspNetCore;
 
 namespace Alpid
 {
@@ -72,6 +73,7 @@ namespace Alpid
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+            RotativaConfiguration.Setup(env);
         }
     }
 }
