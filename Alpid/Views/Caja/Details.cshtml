@@ -40,7 +40,6 @@
                 }
             </dd>
         }
-
         <dt class="col-sm-2">
             Tipo de movimiento:
         </dt>
@@ -59,34 +58,12 @@
         <dd class="col-sm-10">
             <label>$</label> @Html.DisplayFor(model => model.Total)
         </dd>
-        @if (Model.CuotaID != null)
-        {
-            <dt class="col-sm-2" style="color:blue;">
-                Socio:
-            </dt>
-            <dd class="col-sm-10" style="color:blue;">
-                @Html.DisplayFor(model => model.Cuotas.Socios.RazonSocial)
-            </dd>
-            <dt class="col-sm-2" style="color:blue;">
-                Fecha desde:
-            </dt>
-            <dd class="col-sm-10" style="color:blue;">
-                @Html.DisplayFor(model => model.Cuotas.FechaDesde)
-            </dd>
-            <dt class="col-sm-2" style="color:blue;">
-                Fecha hasta:
-            </dt>
-            <dd class="col-sm-10" style="color:blue;">
-                @Html.DisplayFor(model => model.Cuotas.FechaHasta)
-            </dd>
-        }
-
-        @*<dt class="col-sm-2">
-                Alquiler
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Alquiler.AlquilerID)
-            </dd>*@
+        <dt class="col-sm-2">
+            Usuario:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Usuario)
+        </dd>
     </dl>
 </div>
 <div>

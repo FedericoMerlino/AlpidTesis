@@ -21,8 +21,8 @@ namespace Alpid.Models
         public DateTime FechaHasta { get; set; }
 
         public string Observacion { get; set; }
-
-        public decimal Valor { get; set; }
+        
+        public double Valor { get; set; }
 
         public int ProductosID { get; set; }
 

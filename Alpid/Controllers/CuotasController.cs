@@ -93,7 +93,10 @@ namespace Alpid.Controllers
                 _context.Add(cuotas);
                 await _context.SaveChangesAsync();
             }
-            return RedirectToAction("PagoCuota", "Caja", new { ID = cuotas.CuotasID, debe = cuotas.Importe});
+
+            return RedirectToAction(nameof(Index));
+
+            //return RedirectToAction("PagoCuota", "Caja", new { ID = cuotas.CuotasID, debe = cuotas.Importe});
         }
     }
 }

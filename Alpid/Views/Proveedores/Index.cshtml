@@ -1,5 +1,4 @@
 ﻿@model Paginacion<Alpid.Models.Proveedores>
-
 @{
     ViewData["Title"] = "Proveedores";
 }
@@ -101,10 +100,8 @@
                                 </td>
                             }
                         </tr>
-
                         <tr id="GrillaActivos">
                             <!--busca los Activos-->
-
                             @if (item.FechaBaja is null)
                             {
                                 <td>
@@ -175,6 +172,8 @@
     </div>
 </body>
 </html>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<link rel="stylesheet" type="text/css" href="dist/sweetalert.css">
 <script>
     // sirve para obtener los activos o eliminados en la base de datos a traves del controlador
     function validarcheck() {
@@ -189,4 +188,24 @@
             }
         });
     }
+    var valor = "@ViewData["Message"]";
+    //si funciona todo correcto
+    if (valor == 1) {
+        swal({
+            title: "Felicidades!!",
+            text: "La operación se realizo con éxito",
+            icon: "success",
+            button: "Aceptar",
+        });
+    } else {
+        //si se produce algún error
+        if (valor == 2) {
+            swal({
+                title: "Error!!",
+                text: "No se pudo realizar la operación",
+                icon: "error",
+                button: "Aceptar",
+            });
+        };
+    };
 </script>

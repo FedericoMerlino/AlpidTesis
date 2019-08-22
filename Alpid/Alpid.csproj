@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Compile Remove="Migrations\20190810173957_[Initial].cs" />
+    <Compile Remove="Migrations\20190821203257_[Crear].cs" />
   </ItemGroup>
 
 
@@ -16,6 +17,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
     <PackageReference Include="Rotativa.AspNetCore" Version="1.0.6" />
+    <PackageReference Include="SweetAlert" Version="1.0.0" />
   </ItemGroup>
 
 </Project>

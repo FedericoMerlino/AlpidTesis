@@ -4,6 +4,9 @@
     ViewData["Title"] = "Caja";
 }
 <html>
+<head>
+
+</head>
 <body>
     <header>
         <link href="~/css/cssKanze/style.min.css" rel="stylesheet" />
@@ -12,7 +15,7 @@
     <div class="form-group">
         <p>
             <a asp-action="CreateIngreso" class="btn btn-primary">Ingresar Dinero</a>
-            <a asp-action="CreateRetire" class="btn btn-danger">Reterirar Dinero</a>
+            <a asp-action="CreateRetire" class="btn btn-danger">Retirar Dinero</a>
         </p>
     </div>
     <div>
@@ -44,9 +47,6 @@
                             Fecha Movimiento
                         </th>
                         <th>
-                            Tipo Movimiento
-                        </th>
-                        <th>
                             Observaciones
                         </th>
                         <th>
@@ -58,12 +58,6 @@
                         <th>
                             Total
                         </th>
-                        @*<th>
-                                CuotaID)
-                            </th>
-                            <th>
-                                Alquiler)
-                            </th>*@
                     </tr>
                 </thead>
                 <tbody>
@@ -72,9 +66,6 @@
                         <tr>
                             <td>
                                 @Html.DisplayFor(modelItem => item.FechaMovimiento)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.TipoMovimiento)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Observaciones)
@@ -97,8 +88,6 @@
                             </td>
                             <td>
                                 <a asp-action="Details" asp-route-id="@item.CajaId">Ver</a>
-                                <a asp-action="DemoViewAsPDF">Edit</a> |
-
                             </td>
                             @*<td>
                                     @Html.DisplayFor(modelItem => item.CuotaID)
@@ -119,8 +108,27 @@
     </div>
 </body>
 </html>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<link rel="stylesheet" type="text/css" href="dist/sweetalert.css">
 <script>
-
-
-
+    var valor = "@ViewData["Message"]";
+    //si funciona todo correcto
+    if (valor == 1) {
+        swal({
+            title: "Felicidades!!",
+            text: "La operación se realizo con éxito",
+            icon: "success",
+            button: "Aceptar",
+        });
+    } else {
+        //si se produce algún error
+        if (valor == 2) {
+            swal({
+                title: "Error!!",
+                text: "No se pudo realizar la operación",
+                icon: "error",
+                button: "Aceptar",
+            });
+        };
+    };
 </script>

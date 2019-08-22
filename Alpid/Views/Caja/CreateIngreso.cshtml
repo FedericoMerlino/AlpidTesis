@@ -7,8 +7,9 @@
 <body>
     <h1>Ingresar dinero</h1>
 
-    <h4>Caja</h4>
     <hr />
+    <h4 style="color: limegreen;">El total que posee la caja es: $@ViewData["TotalCaja"]</h4>
+    <br />
     <div class="row">
         <div class="col-md-4">
             <form asp-action="CreateIngreso">
@@ -32,6 +33,10 @@
                     <label asp-for="FechaMovimiento" class="control-label"></label>
                     <input asp-for="FechaMovimiento" type="date" id="fechaActual" class="form-control" />
                     <span asp-validation-for="FechaMovimiento" class="text-danger"></span>
+                </div>
+                <div class="form-group" style="display:none;">
+                    <label asp-for="Usuario" class="control-label"></label>
+                    <input asp-for="Usuario" type="text" value="@User.Identity.Name" class="form-control" />
                 </div>
                 <div class="col-md-12">
                     <input type="submit" value="Guardar" class="btn btn-primary" />

@@ -2,24 +2,30 @@
 @{
     Layout = null;
 }
-
 <html>
 <head>
     <meta charset="utf-8">
     <title>Reporte caja</title>
+
 </head>
 <body>
-    <!--tabla con la informacion de la caja-->
-    <div>
+    <header>
+        <address contenteditable style="float:right;">
+            <p>Joaquin V. Gonzales 110 - Sunchales(SF)</p>
+            <p>alpi@soon.com.ar</p>
+            <p>03493-452670</p>
+        </address>
+        <span><img src="~/img/logoReporte.jpg" style="float:right;" /></span>
+    </header><br />
+    <br /> <h3 style="text-align:center;">ALPID: Reporte de caja perteneceinte desde @ViewData["FechaDesdeFilter"] a @ViewData["FechaHastaFilter"]</h3>
+    <article style="padding-top:20%;">
+        <br />
         <form class="form-group">
             <table class="table table-responsive-sm" id="datos">
                 <thead>
                     <tr>
                         <th>
                             Fecha Movimiento
-                        </th>
-                        <th>
-                            Tipo Movimiento
                         </th>
                         <th>
                             Observaciones
@@ -33,57 +39,31 @@
                         <th>
                             Total
                         </th>
-                        @*<th>
-                                CuotaID)
-                            </th>
-                            <th>
-                                Alquiler)
-                            </th>*@
                     </tr>
                 </thead>
-                <tbody>
-                  
-                    <tr>
-                        <td>
-                           FechaMovimiento)
-                        </td>
-                        <td>
-                           TipoMovimiento)
-                        </td>
-                        <td>
-                           Observaciones)
-                        </td>
-                        <td style="color:#49d292;">
-                          d
-                        </td>
-                        <td style="color:red;">
-                            <!--if para que solamente traiga el signo de pregunta a los campos que tiene valores-->
-                           d
-                        </td>
-                        <td>
-                           Total)
-                        </td>
-                        <td>
-                           d
-                        </td>
-                        @*<td>
-                               CuotaID)
-                            </td>
-                            <td>
-                               Alquiler.AlquilerID)
-                            </td>*@
-                        @*<td>
-                                <a asp-action="Edit" asp-route-id="@item.CajaId">Edit</a> |
-                                <a asp-action="Details" asp-route-id="@item.CajaId">Details</a> |
-                                <a asp-action="Delete" asp-route-id="@item.CajaId">Delete</a>
-                            </td>*@
-                    </tr>
-                   
-                </tbody>
+                <tbody id="ListaCaja"> </tbody>
             </table>
         </form>
-    </div>
-
-
+    </article>
+    <aside>
+      
+    </aside>
 </body>
-</html>  
+</html>
+<script>
+    class Caja {
+        constructor() {
+        }
+        filtrarCaja(valor, action) {
+            valor = 'GET';
+            $.post(
+                action,
+                { valor },
+                (response) => {
+
+                    $("#ListaCaja").html(response);
+                });
+        };
+    };
+
+</script>

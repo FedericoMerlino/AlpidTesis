@@ -5,7 +5,7 @@
 }
 <html>
 <body>
-    <h2 style="color:red; padding-bottom:30px">¿Esta seguro que desea eliminar el Proveedor "@Html.DisplayFor(model => model.RazonSocial)"?</h2>
+    <h2 style="color:red; padding-bottom:30px">¿Está seguro que desea eliminar el Proveedor "@Html.DisplayFor(model => model.RazonSocial)"?</h2>
     <div>
         <h4>Información del proveedor a Eliminar:</h4>
         <hr />
@@ -15,7 +15,7 @@
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input type="hidden" asp-for="ProveedoresId" />
                     <div class="form-group">
-                        <label asp-for="Cuit" class="control-label">Cuit</label>
+                        <label asp-for="Cuit" class="control-label">CUIT</label>
                         <input asp-for="Cuit" class="form-control" readonly="readonly" />
                         <span asp-validation-for="Cuit" class="text-danger"></span>
                     </div>
@@ -46,7 +46,7 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="FechaAlta" class="control-label">Fecha ingreso</label>
-                        <input asp-for="FechaAlta" class="form-control" readonly="readonly" />
+                        <input asp-for="FechaAlta" type="date" class="form-control" readonly="readonly" />
                         <span asp-validation-for="FechaAlta" class="text-danger"></span>
                     </div>
                     <div class="form-group">

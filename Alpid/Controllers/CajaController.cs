@@ -8,10 +8,12 @@ using Microsoft.EntityFrameworkCore;
 using Alpid.Models;
 using Microsoft.AspNetCore.Authorization;
 using Rotativa.AspNetCore;
+using System.Collections.Generic;
+using Microsoft.VisualStudio.Web.CodeGeneration.Contracts.Messaging;
 
 namespace Alpid.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class CajaController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -20,28 +22,63 @@ namespace Alpid.Controllers
         {
             _context = context;
         }
-
         // GET: Caja
-        public async Task<IActionResult> Index(DateTime fechaDesde, DateTime fechaHasta,string FechaDesdeFilter, string FechaHastaFilter)
+        public async Task<IActionResult> Index(DateTime fechaDesde, DateTime fechaHasta,
+                        string FechaDesdeFilter, string FechaHastaFilter, int valor)
         {
-            if (fechaDesde.Day == 1 && fechaDesde.Month == 1 && fechaDesde.Year == 1)
+            try
             {
-                fechaDesde = DateTime.Now;
+                if (fechaDesde.Day == 1 && fechaDesde.Month == 1 && fechaDesde.Year == 1)
+                {
+                    fechaDesde = DateTime.Now;
+                }
+                if (fechaHasta.Day == 1 && fechaHasta.Month == 1 && fechaHasta.Year == 1)
+                {
+                    fechaHasta = DateTime.Now;
+                }
+                ViewData["FechaDesdeFilter"] = fechaDesde.ToShortDateString();
+                ViewData["FechaHastaFilter"] = fechaHasta.ToShortDateString();
+
+                var caja = from s in _context.Caja select s ;
+                //where((s.FechaMovimiento >= fechaDesde) && (s.FechaMovimiento <= fechaHasta))
+                //caja = caja.Where(s => s.FechaMovimiento >= fechaDesde);
+                //caja = caja.Where(s => s.FechaMovimiento <= fechaHasta);
+                caja = caja.OrderByDescending(s => s.FechaMovimiento);
+
+                ViewData["Message"] = valor;
+
+                var applicationDbContext = caja;
+                return View(await applicationDbContext.ToListAsync());
             }
-            if (fechaHasta.Day == 1 && fechaHasta.Month == 1 && fechaHasta.Year == 1)
+            catch (Exception e)
             {
-                fechaHasta = DateTime.Now;
+                Console.Write(e);
+                var PAsarvalor = 2;
+                return RedirectToAction("Index", "Caja", new { PAsarvalor });
             }
-            ViewData["FechaDesdeFilter"] = fechaDesde.ToShortDateString();
-            ViewData["FechaHastaFilter"] = fechaHasta.ToShortDateString();
+        }
 
-            var caja = from s in _context.Caja where ((s.FechaMovimiento >= fechaDesde) && (s.FechaMovimiento <= fechaHasta)) select s;
+        public String ListaCaja(DateTime fechaDesde, DateTime fechaHasta)
+        {
+            String dataFilter = "";
+            var caja = _context.Caja.OrderBy(p => p.AlquilerID).ToList();
+            var query = caja.Where(c => c.Debe == 100);//(c.FechaMovimiento >= fechaDesde) && (c.FechaMovimiento <= fechaHasta));
+            foreach (var item in query)
+            {
+                dataFilter += "<tr>" +
+                   "<td>" + item.FechaMovimiento + "</td>" +
+                   "<td>" + item.Observaciones + "</td>" +
+                   "<td>" + item.Debe + "</td>" +
+                    "<td>" + item.Haber + "</td>" +
+                   "<td>" + item.Total + "</td>" +
+               "</tr>";
+            }
+            return dataFilter;
+        }
 
-            //caja = caja.Where(s => s.FechaMovimiento >= fechaDesde);
-            //caja = caja.Where(s => s.FechaMovimiento <= fechaHasta);
-
-            var applicationDbContext = caja;
-            return View(await applicationDbContext.ToListAsync());
+        internal List<Caja> getCaja(DateTime fechaDesde, DateTime fechaHasta)
+        {
+            return _context.Caja.Where(c => (c.FechaMovimiento >= fechaDesde) && (c.FechaMovimiento <= fechaHasta)).ToList();
         }
 
         public IActionResult ViewAsPDFCaja()
@@ -52,33 +89,50 @@ namespace Alpid.Controllers
         // GET: Caja/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
+                if (id == null)
+                {
+                    return NotFound();
+                }
+                var caja = await _context.Caja
+                    .Include(c => c.Alquiler)
+                    .FirstOrDefaultAsync(m => m.CajaId == id);
+                if (caja == null)
+                {
+                    return NotFound();
+                }
+                return View(caja);
             }
-
-            var caja = await _context.Caja
-                .Include(c => c.Alquiler)
-                .FirstOrDefaultAsync(m => m.CajaId == id);
-            if (caja == null)
+            catch (Exception e)
             {
-                return NotFound();
+                Console.Write(e);
+                var PAsarvalor = 2;
+                return RedirectToAction("Index", "Caja", new { PAsarvalor });
             }
-
-            return View(caja);
         }
-
         //Retiro de dinero
-        public IActionResult CreateRetire()
+        public IActionResult CreateRetire(int valor)
         {
-            ViewData["AlquilerID"] = new SelectList(_context.Alquiler, "AlquilerID", "AlquilerID");
-            return View();
+            try
+            {
+                var ultimoID = _context.Caja.Max(x => x.CajaId);
+                var ultimoPrecio = _context.Caja.SingleOrDefault(x => x.CajaId == ultimoID);
+                ViewData["TotalCaja"] = ultimoPrecio.Total;
+                ViewData["Message"] = valor;
+                return View();
+            }
+            catch (Exception e)
+            {
+                Console.Write(e);
+                var PAsarvalor = 2;
+                return RedirectToAction("Index", "Caja", new { PAsarvalor });
+            }
         }
-
         //Retiro de dinero
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateRetire([Bind("CajaId,Debe,Haber,TipoMovimiento,Observaciones,Estado,FechaMovimiento,Total,CuotaID,AlquilerID")] Caja caja)
+        public async Task<IActionResult> CreateRetire([Bind("CajaId,Debe,Haber,TipoMovimiento,Observaciones,Estado,FechaMovimiento,Total,CuotaID,AlquilerID,Usuario")] Caja caja)
         {
             try
             {
@@ -93,9 +147,20 @@ namespace Alpid.Controllers
                     caja.Total = UltimoValor.Total - caja.Haber;
                     //Obtener fecha y hora actual
                     caja.FechaMovimiento = DateTime.Now;
-                    _context.Add(caja);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    if (caja.Total < 0)
+                    {
+                        var valor = 1;
+                        return RedirectToAction("CreateRetire", "Caja", new { valor });
+                    }
+                    else
+                    {
+                        _context.Add(caja);
+                        //valor para mostarr mensaje
+                        var valor = 1;
+                        await _context.SaveChangesAsync();
+
+                        return RedirectToAction("Index", "Caja", new { valor });
+                    }
                 }
                 ViewData["AlquilerID"] = new SelectList(_context.Alquiler, "AlquilerID", "AlquilerID", caja.AlquilerID);
                 return View(caja);
@@ -103,94 +168,59 @@ namespace Alpid.Controllers
             catch (Exception e)
             {
                 Console.Write(e);
-
-                var applicationDbContext = _context.Caja.Include(c => c.Alquiler);
-                return View(await applicationDbContext.ToListAsync());
+                var valor = 2;
+                return RedirectToAction("Index", "Caja", new { valor });
             }
         }
-
         //ingreso de dinero
         public IActionResult CreateIngreso()
         {
-            ViewData["AlquilerID"] = new SelectList(_context.Alquiler, "AlquilerID", "AlquilerID");
-            return View();
-        }
-
-        //ingreso de dinero
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateIngreso([Bind("CajaId,Debe,Haber,TipoMovimiento,Observaciones,Estado,FechaMovimiento,Total,CuotaID,AlquilerID")] Caja caja)
-        {
             try
             {
-                if (ModelState.IsValid)
-                {
-                    if (_context.Caja.Select(x => x.CajaId) == null)
-                    {
-                        //busca el ultimo id 
-                        var db = _context.Caja.Include(c => c.Alquiler)
-                                      .Max(c => c.CajaId);
-                        //busca el valor del total del ultimo id obtenido arriba
-                        var UltimoValor = _context.Caja.SingleOrDefault(c => c.CajaId == db);
-                        //sumar valor
-                        caja.Total = UltimoValor.Total + caja.Debe;
-                    }
-                    //para cuando la base de datos esta vacia
-                    else
-                    {
-                        var UltimoValor = 0;
-                        caja.Total = UltimoValor + caja.Debe;
-                    }
-                    //Obtener fecha y hora actual
-                    caja.FechaMovimiento = DateTime.Now;
-                    _context.Add(caja);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
-                }
-                ViewData["AlquilerID"] = new SelectList(_context.Alquiler, "AlquilerID", "AlquilerID", caja.AlquilerID);
-                return View(caja);
+                var ultimoID = _context.Caja.Max(x => x.CajaId);
+                var ultimoPrecio = _context.Caja.SingleOrDefault(x => x.CajaId == ultimoID);
+                ViewData["TotalCaja"] = ultimoPrecio.Total;
+                return View();
             }
             catch (Exception e)
             {
                 Console.Write(e);
-
-                var applicationDbContext = _context.Caja.Include(c => c.Alquiler);
-                return View(await applicationDbContext.ToListAsync());
+                var PAsarvalor = 2;
+                return RedirectToAction("Index", "Caja", new { PAsarvalor });
             }
         }
-
-        public async Task<IActionResult> PagoCuota(int ID, double debe)
+        //ingreso de dinero
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateIngreso([Bind("CajaId,Debe,Haber,TipoMovimiento,Observaciones,Estado,FechaMovimiento,Total,CuotaID,AlquilerID,Usuario")] Caja caja)
         {
             try
             {
-                var caja = new Caja();
-
                 if (ModelState.IsValid)
                 {
                     //busca el ultimo id 
                     var db = _context.Caja.Include(c => c.Alquiler)
-                                      .Max(c => c.CajaId);
+                                  .Max(c => c.CajaId);
                     //busca el valor del total del ultimo id obtenido arriba
                     var UltimoValor = _context.Caja.SingleOrDefault(c => c.CajaId == db);
-                    var imorte = debe;
                     //sumar valor
-                    caja.Total = UltimoValor.Total + imorte;
-                    caja.Debe = imorte;
+                    caja.Total = UltimoValor.Total + caja.Debe;
+                    //Obtener fecha y hora actual
                     caja.FechaMovimiento = DateTime.Now;
-                    caja.CuotaID = ID;//"va el id de la cuota"
-                    caja.TipoMovimiento = "Couta";
-                    caja.Observaciones = "Pago cuota del socio";
                     _context.Add(caja);
                     await _context.SaveChangesAsync();
+                    var valor = 1;
+                    return RedirectToAction("CreateRetire", "Caja", new { valor });
                 }
-                return RedirectToAction("Index", "Cuotas", new { FileUploadMsg = "File   uploaded successfully" });
+                ViewData["AlquilerID"] = new SelectList(_context.Alquiler, "AlquilerID", "AlquilerID", caja.AlquilerID);
+                return View(caja);
             }
             catch (Exception e)
             {
                 Console.Write(e);
 
-                var applicationDbContext = _context.Caja.Include(c => c.Alquiler);
-                return View(await applicationDbContext.ToListAsync());
+                var valor = 2;
+                return RedirectToAction("Index", "Caja", new { valor });
             }
         }
     }
