@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -27,7 +28,8 @@ namespace Alpid.Models
 
         public string MotivoBaja { get; set; }
 
-        public double PrecioAlquiler { get; set; }
+        [Column(TypeName = "decimal(18, 2)")]
+        public decimal PrecioAlquiler { get; set; }
 
         public int? ProveedoresID { get; set; }
 

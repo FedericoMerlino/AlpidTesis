@@ -4,14 +4,16 @@ using Alpid.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Alpid.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190822221253_[CrearCajaDecimal]")]
+    partial class CrearCajaDecimal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,8 +35,7 @@ namespace Alpid.Migrations
 
                     b.Property<string>("Observacion");
 
-                    b.Property<decimal>("Valor")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<double>("Valor");
 
                     b.HasKey("AlquilerID", "SociosId", "ProductosID");
 
@@ -100,8 +101,7 @@ namespace Alpid.Migrations
 
                     b.Property<DateTime>("FechaDesde");
 
-                    b.Property<decimal>("Importe")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<double>("Importe");
 
                     b.HasKey("CuotaPrecioID");
 
@@ -120,8 +120,7 @@ namespace Alpid.Migrations
 
                     b.Property<DateTime>("FechaHasta");
 
-                    b.Property<decimal>("Importe")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<double>("Importe");
 
                     b.Property<string>("Observacion");
 
@@ -146,14 +145,11 @@ namespace Alpid.Migrations
 
                     b.Property<DateTime>("Fecha");
 
-                    b.Property<decimal>("Ingreso")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<double>("Ingreso");
 
-                    b.Property<decimal>("Salida")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<double>("Salida");
 
-                    b.Property<decimal>("Total")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<double>("Total");
 
                     b.HasKey("EventoSolidarioID");
 
@@ -177,8 +173,7 @@ namespace Alpid.Migrations
                     b.Property<string>("Nombre")
                         .IsRequired();
 
-                    b.Property<decimal>("PrecioAlquiler")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<double>("PrecioAlquiler");
 
                     b.Property<string>("ProductosTipo");
 

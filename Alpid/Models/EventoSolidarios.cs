@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,11 +17,14 @@ namespace Alpid.Models
         [Required(ErrorMessage = "Favor de ingresar un concepto")]
         public int Concepto { get; set; }
 
-        public double Ingreso { get; set; }
+        [Column(TypeName = "decimal(18, 2)")]
+        public decimal Ingreso { get; set; }
 
-        public double Salida { get; set; }
+        [Column(TypeName = "decimal(18, 2)")]
+        public decimal Salida { get; set; }
 
-        public double Total { get; set; }
+        [Column(TypeName = "decimal(18, 2)")]
+        public decimal Total { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
         public DateTime Fecha { get; set; }

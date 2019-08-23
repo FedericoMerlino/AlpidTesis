@@ -53,8 +53,8 @@ namespace Alpid.Controllers
             catch (Exception e)
             {
                 Console.Write(e);
-                var PAsarvalor = 2;
-                return RedirectToAction("Index", "Caja", new { PAsarvalor });
+                valor = 2;
+                return RedirectToAction("Index", "Caja", new { valor });
             }
         }
 
@@ -111,6 +111,7 @@ namespace Alpid.Controllers
                 return RedirectToAction("Index", "Caja", new { PAsarvalor });
             }
         }
+       
         //Retiro de dinero
         public IActionResult CreateRetire(int valor)
         {
@@ -125,19 +126,20 @@ namespace Alpid.Controllers
             catch (Exception e)
             {
                 Console.Write(e);
-                var PAsarvalor = 2;
-                return RedirectToAction("Index", "Caja", new { PAsarvalor });
+                valor = 2;
+                return RedirectToAction("Index", "Caja", new { valor });
             }
         }
         //Retiro de dinero
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateRetire([Bind("CajaId,Debe,Haber,TipoMovimiento,Observaciones,Estado,FechaMovimiento,Total,CuotaID,AlquilerID,Usuario")] Caja caja)
         {
             try
             {
+                int valor;
                 if (ModelState.IsValid)
                 {
+                     valor = 1;
                     //busca el ultimo id 
                     var db = _context.Caja.Include(c => c.Alquiler)
                                       .Max(c => c.CajaId);
@@ -149,21 +151,18 @@ namespace Alpid.Controllers
                     caja.FechaMovimiento = DateTime.Now;
                     if (caja.Total < 0)
                     {
-                        var valor = 1;
                         return RedirectToAction("CreateRetire", "Caja", new { valor });
                     }
                     else
                     {
                         _context.Add(caja);
-                        //valor para mostarr mensaje
-                        var valor = 1;
                         await _context.SaveChangesAsync();
 
                         return RedirectToAction("Index", "Caja", new { valor });
                     }
                 }
-                ViewData["AlquilerID"] = new SelectList(_context.Alquiler, "AlquilerID", "AlquilerID", caja.AlquilerID);
-                return View(caja);
+                valor = 3;
+                return RedirectToAction("CreateRetire", "Caja", new { valor });
             }
             catch (Exception e)
             {
@@ -172,14 +171,17 @@ namespace Alpid.Controllers
                 return RedirectToAction("Index", "Caja", new { valor });
             }
         }
+        
         //ingreso de dinero
-        public IActionResult CreateIngreso()
+        public IActionResult CreateIngreso(int valor)
         {
             try
             {
                 var ultimoID = _context.Caja.Max(x => x.CajaId);
                 var ultimoPrecio = _context.Caja.SingleOrDefault(x => x.CajaId == ultimoID);
                 ViewData["TotalCaja"] = ultimoPrecio.Total;
+                ViewData["Message"] = valor;
+
                 return View();
             }
             catch (Exception e)
@@ -191,13 +193,14 @@ namespace Alpid.Controllers
         }
         //ingreso de dinero
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateIngreso([Bind("CajaId,Debe,Haber,TipoMovimiento,Observaciones,Estado,FechaMovimiento,Total,CuotaID,AlquilerID,Usuario")] Caja caja)
         {
             try
             {
+                int valor;
                 if (ModelState.IsValid)
                 {
+                    valor = 1;
                     //busca el ultimo id 
                     var db = _context.Caja.Include(c => c.Alquiler)
                                   .Max(c => c.CajaId);
@@ -209,11 +212,10 @@ namespace Alpid.Controllers
                     caja.FechaMovimiento = DateTime.Now;
                     _context.Add(caja);
                     await _context.SaveChangesAsync();
-                    var valor = 1;
-                    return RedirectToAction("CreateRetire", "Caja", new { valor });
+                    return RedirectToAction("Index", "Caja", new { valor });
                 }
-                ViewData["AlquilerID"] = new SelectList(_context.Alquiler, "AlquilerID", "AlquilerID", caja.AlquilerID);
-                return View(caja);
+                valor = 3;
+                return RedirectToAction("CreateIngreso", "Caja", new { valor });
             }
             catch (Exception e)
             {

@@ -107,6 +107,11 @@
         var Cells = Row.getElementsByTagName("td");
         alert(Cells[1].innerText);
     };
+    var tbl = $('table#mytable tr').get().map(function (row) {
+        return $(row).find('td').get().map(function (cell) {
+            return $(cell).html();
+        });
+    });
 </script>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
