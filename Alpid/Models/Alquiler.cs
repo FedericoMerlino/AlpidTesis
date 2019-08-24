@@ -23,13 +23,6 @@ namespace Alpid.Models
 
         public string Observacion { get; set; }
 
-        [Column(TypeName = "decimal(18, 2)")]
-        public decimal Valor { get; set; }
-
-        public int ProductosID { get; set; }
-
-        public Productos Productos { get; set; }
-
         public int SociosId { get; set; }
 
         public Socios Socios { get; set; }

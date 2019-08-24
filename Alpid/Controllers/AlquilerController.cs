@@ -25,7 +25,7 @@ namespace Alpid.Controllers
         public async Task<IActionResult> Index()
         {
             
-            var applicationDbContext = _context.Alquiler.Include(a => a.Productos).Include(a => a.Socios);
+            var applicationDbContext = _context.Alquiler.Include(a => a.Socios);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -38,7 +38,6 @@ namespace Alpid.Controllers
             }
 
             var alquiler = await _context.Alquiler
-                .Include(a => a.Productos)
                 .Include(a => a.Socios)
                 .FirstOrDefaultAsync(m => m.AlquilerID == id);
             if (alquiler == null)
@@ -77,7 +76,6 @@ namespace Alpid.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProductosID"] = new SelectList(_context.Set<Productos>(), "PoductosID", "Nombre", alquiler.ProductosID);
             ViewData["SociosId"] = new SelectList(_context.Socios, "SociosID", "RazonSocial", alquiler.SociosId);
             return View(alquiler);
         }
@@ -95,7 +93,6 @@ namespace Alpid.Controllers
             {
                 return NotFound();
             }
-            ViewData["ProductosID"] = new SelectList(_context.Set<Productos>(), "PoductosID", "Nombre", alquiler.ProductosID);
             ViewData["SociosId"] = new SelectList(_context.Socios, "SociosID", "RazonSocial", alquiler.SociosId);
             return View(alquiler);
         }
@@ -132,7 +129,6 @@ namespace Alpid.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProductosID"] = new SelectList(_context.Set<Productos>(), "PoductosID", "Nombre", alquiler.ProductosID);
             ViewData["SociosId"] = new SelectList(_context.Socios, "SociosID", "RazonSocial", alquiler.SociosId);
             return View(alquiler);
         }
@@ -146,7 +142,6 @@ namespace Alpid.Controllers
             }
 
             var alquiler = await _context.Alquiler
-                .Include(a => a.Productos)
                 .Include(a => a.Socios)
                 .FirstOrDefaultAsync(m => m.AlquilerID == id);
             if (alquiler == null)
