@@ -3,6 +3,27 @@
 }
 <!DOCTYPE html>
 <html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <link rel="stylesheet" href=@Url.Content("~/css/cssKanze/styles-merged.css")>
+    <link rel="stylesheet" href=@Url.Content("~/css/cssKanze/style.css")>
+    <link rel="stylesheet" href=@Url.Content("~/css/cssKanze/custom.css")>
+
+
+    <!--para que funcione el ajax-->
+    <!--Para los efectos que se realizan en el about-->
+    <script>
+        var OneSignal = window.OneSignal || [];
+        OneSignal.push(function () {
+            OneSignal.init({
+                appId: "3372a6a1-95d1-4beb-baa6-c45e5add089b",
+            });
+        });
+    </script>
+
+</head>
 <body>
     <div class="probootstrap-page-wrapper">
         <section class="probootstrap-section probootstrap-section-colored">
@@ -23,7 +44,7 @@
                                 <h3>¿Quienes somos?</h3>
                                 <p>
                                     La Asociación Sunchalense de Personas, sin fines de Lucro, encargada de la Integración del Discapacitado,
-                                    encargados de su bien estar y Recuperación
+                                    de su bien estar y Recuperación
                                 </p>
                             </div>
                             <div class="probootstrap-image probootstrap-animate" style="background-image: url(img/slider_4.jpg)">
@@ -93,7 +114,7 @@
                             <div class="icon"><i class="icon-checkmark"></i></div>
                             <div class="text">
                                 <h3>
-                                    <br />Alquieler de AparatosOrtopédics, los que se renuevan periódicmente y se mantienen en excelentes condiciones
+                                    <br />Alquieler de Aparatos Ortopédics, los que se renuevan periódicmente y se mantienen en excelentes condiciones
                                 </h3>
                             </div>
                         </div>
@@ -114,3 +135,7 @@
     </div>
 </body>
 </html>
+
+@*<script src=@Url.Content("~/js/jsKanze/scripts.min.js")></script>
+<script src=@Url.Content("~/js/jsKanze/main.min.js")></script>
+<script src=@Url.Content("~/js/jsKanze/custom.js")></script>*@

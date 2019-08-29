@@ -135,7 +135,7 @@ jQuery.fn.putCursorAtEnd = function () {
         // If this function exists...
         if (this.setSelectionRange) {
             // ... then use it (Doesn't work in IE)
-            // Double the length because Opera is inconsistent about whether a carriage return is one character or two. Sigh.
+            // decimal the length because Opera is inconsistent about whether a carriage return is one character or two. Sigh.
             var len = $(this).val().length * 2;
             this.setSelectionRange(len, len);
         } else {

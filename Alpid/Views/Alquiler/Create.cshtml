@@ -8,44 +8,46 @@
     <h1>Nuevo alquiler</h1>
     <hr />
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-8">
             <form asp-action="Create" name="formCrearProducto">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
+                <div class="form-group col-md-4">
                     <label asp-for="FechaDesde" class="control-label">Fecha alquiler</label>
                     <input asp-for="FechaDesde" type="date" class="form-control" />
                     <span asp-validation-for="FechaDesde" class="text-danger"></span>
                 </div>
-                <div class="form-group">
+                <div class="form-group col-md-4">
+                    <label asp-for="SociosId" class="control-label">Socio</label>
+                    <select asp-for="SociosId" class="form-control" asp-items="ViewBag.SociosId"></select>
+                </div>
+                <div class="form-group col-md-12">
                     <label asp-for="Observacion" class="control-label">Observación</label>
                     <input asp-for="Observacion" class="form-control" />
                     <span asp-validation-for="Observacion" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="SociosId" class="control-label">Socio</label>
-                    <select asp-for="SociosId" class="form-control" asp-items="ViewBag.SociosId"></select>
+                <div class="form-group col-md-12">
+                    <h3 style="color:blue;">Seleccionar productos</h3>
+                    <label for="productos">
+                        Seleccionar nuevo para agregrar mas productos: 
+                    </label>
+                    <div class="btn btn-success" id="btnNuevoProducto">Nuevo</div>
+                    <table id="mytable" class="table table-bordered table-hover">
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Quitar</th>
+                        </tr>
+                        <tr>
+                            <td><input type="text" class="form-control" name="Producto[]" /> </td>
+                            <td><input type="text" class="form-control" name="Cantida[]" /> </td>
+                            <td><input type="text" class="form-control" name="Precio[]" /> </td>
+                            <td class="text-center">
+                                @*<div class="btn btn-danger">Quitar</div>*@
+                            </td>
+                        </tr>
+                    </table>
                 </div>
-                <h3 style="color:blue;">Seleccionar productos</h3>
-                <label for="productos">
-                    Seleccionar nuevo pra agregrar mas productos
-                </label>
-                <div class="btn btn-success" id="btnNuevoProducto">Nuevo</div>
-                <table id="mytable" class="table table-bordered table-hover">
-                    <tr>
-                        <th>Producto</th>
-                        <th>Cantidad</th>
-                        <th>Precio Unitario</th>
-                        <th>Quitar</th>
-                    </tr>
-                    <tr>
-                        <td><input type="text" class="form-control" name="Producto[]" /> </td>
-                        <td><input type="text" class="form-control" name="Cantida[]" /> </td>
-                        <td><input type="text" class="form-control" name="Precio[]" /> </td>
-                        <td class="text-center">
-                            <div class="btn btn-danger">Quitar</div>
-                        </td>
-                    </tr>
-                </table>
                 <div class="col-md-12">
                     <input type="submit" value="Guardar" class="btn btn-primary" />
                     <a asp-action="Index" style="float:right;" class="btn btn-info">Cancelar</a>
@@ -53,8 +55,6 @@
             </form>
         </div>
     </div>
-    <input type="button" onclick="verValores()" value="Valores tabla" class="btn btn-primary" />
-
 </body>
 </html>
 @section Scripts {
@@ -62,6 +62,7 @@
 }
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script>
+
     $(document).on('ready', funcPrincipal);
 
     function funcPrincipal() {
@@ -83,7 +84,7 @@
                 $('<td>')
                     .append
                     (
-                    $('<input>').attr('type', 'text').addClass('form.contrl')
+                    $('<input>').attr('type', 'text').addClass('form.contrl').attr('name', 'Producto[]')
                     )
                 )
                 .append
@@ -91,7 +92,7 @@
                 $('<td>')
                     .append
                     (
-                    $('<input>').attr('type', 'text').addClass('form.contrl')
+                    $('<input>').attr('type', 'text').addClass('form.contrl').attr('name', 'Cantida[]')
                     )
                 )
                 .append
@@ -99,7 +100,7 @@
                 $('<td>')
                     .append
                     (
-                    $('<input>').attr('type', 'text').addClass('form.contrl')
+                    $('<input>').attr('type', 'text').addClass('form.contrl').attr('name', 'Precio[]')
                     )
                 )
                 .append
@@ -112,47 +113,14 @@
                 )
             )
     };
-    //LLenar la tabla con los valores seleccionados
-    //$(document).ready(function () {
-    //    //obtenemos el valor de los input
-    //    $('#adicionar').click(function () {
-    //        var NombreProducto = document.getElementById("NombreProducto").value;
-    //        var Cantidad = document.getElementById("Cantidad").value;
-    //        var Precio = document.getElementById("Precio").value;
-    //        var i = 1; //contador para asignar id al boton que borrara la fila
-    //        var fila = '<tr id="row' + i + '"><td>' + NombreProducto + '</td><td>' + Cantidad + '</td><td>' + Precio + '</td><td><button type="button" name="remove" id="' + i + '" class="btn btn-danger btn_remove">Quitar</button></td></tr>'; //esto seria lo que contendria la fila
 
-    //        i = i + 1;
-
-    //        $('#mytable tr:first').after(fila);
-    //        $("#adicionados").text(""); //esta instruccion limpia el div adicioandos para que no se vayan acumulando
-    //        var nFilas = $("#mytable tr").length;
-    //        $("#adicionados").append(nFilas - 1);
-    //        //le resto 1 para no contar la fila del header
-    //        document.getElementById("Cantidad").value = "";
-    //        document.getElementById("Precio").value = "";
-    //        document.getElementById("NombreProducto").value = "";
-    //        document.getElementById("NombreProducto").focus();
-    //    });
-    //    $(document).on('click', '.btn_remove', function () {
-    //        var button_id = $(this).attr("id");
-    //        //cuando da click obtenemos el id del boton
-    //        $('#row' + button_id + '').remove(); //borra la fila
-    //        //limpia el para que vuelva a contar las filas de la tabla
-    //        $("#adicionados").text("");
-    //        var nFilas = $("#mytable tr").length;
-    //        $("#adicionados").append(nFilas - 1);
-    //    });
-    //});
-    //function verValores() {
-    //    //var Row = document.getElementById("mytable").innerText;
-    //    var Row = document.getElementById("mytable");
-    //    var Cells = Row.getElementsByTagName("td");
-    //    alert(Cells[1].innerText);
-    //};
-    //var tbl = $('table#mytable tr').get().map(function (row) {
-    //    return $(row).find('td').get().map(function (cell) {
-    //        return $(cell).html();
-    //    });
-    //});
+    function getdata() {
+        var producto = document.getElementsByName("Producto").value;
+        console.log(producto)
+    }
+    var tbl = $('table#mytable tr').get().map(function (row) {
+        return $(row).find('td').get().map(function (cell) {
+            return $(cell).html();
+        });
+    });
 </script>
