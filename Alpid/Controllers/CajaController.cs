@@ -40,9 +40,8 @@ namespace Alpid.Controllers
                 ViewData["FechaHastaFilter"] = fechaHasta.ToShortDateString();
 
                 var caja = from s in _context.Caja select s ;
-                //where((s.FechaMovimiento >= fechaDesde) && (s.FechaMovimiento <= fechaHasta))
-                //caja = caja.Where(s => s.FechaMovimiento >= fechaDesde);
-                //caja = caja.Where(s => s.FechaMovimiento <= fechaHasta);
+                caja = caja.Where(s => s.FechaMovimiento >= fechaDesde);
+                caja = caja.Where(s => s.FechaMovimiento <= fechaHasta);
                 caja = caja.OrderByDescending(s => s.FechaMovimiento);
 
                 ViewData["Message"] = valor;

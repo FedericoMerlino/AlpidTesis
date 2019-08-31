@@ -12,7 +12,6 @@ namespace Alpid.Models
         [Key]
         public int ProductosAlquilerID { get; set; }
 
-
         public string Valor { get; set; }
 
         public string cantidad { get; set; }
@@ -21,7 +20,7 @@ namespace Alpid.Models
 
         public Productos Productos { get; set; }
 
-        public Alquiler AlquilerID { get; set; }
+        public int AlquilerID { get; set; }
 
         public ICollection<Alquiler> Alquiler { get; set; }
 

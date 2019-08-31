@@ -86,16 +86,24 @@ namespace Alpid.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CuotasID,Estado,Observacion,Importe,FechaDesde,FechaHasta,SociosID")] Cuotas cuotas)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var importe = _context.Caja.Select(c => c.CajaId);
-                
-                _context.Add(cuotas);
-                await _context.SaveChangesAsync();
+                if (ModelState.IsValid)
+                {
+                    var importe = _context.Caja.Select(c => c.CajaId);
+
+                    _context.Add(cuotas);
+                    await _context.SaveChangesAsync();
+                }
+                var valor = 1;
+                return RedirectToAction("Index", "Cuotas", new { valor });
             }
-
-            return RedirectToAction(nameof(Index));
-
+            catch (Exception e)
+            {
+                Console.Write(e);
+                var valor = 2;
+                return RedirectToAction("Index", "Cuotas", new { valor });
+            }
             //return RedirectToAction("PagoCuota", "Caja", new { ID = cuotas.CuotasID, debe = cuotas.Importe});
         }
     }

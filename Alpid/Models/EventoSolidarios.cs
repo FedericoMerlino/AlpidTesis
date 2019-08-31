@@ -10,21 +10,26 @@ namespace Alpid.Models
     public class EventoSolidarios
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int EventoSolidarioID { get; set; }
 
-        public int Cantidad { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int ItemEventoSolidarioID { get; set; }
+
+        public int? Cantidad { get; set; }
 
         [Required(ErrorMessage = "Favor de ingresar un concepto")]
-        public int Concepto { get; set; }
+        public string Concepto { get; set; }
 
         [Column(TypeName = "decimal(18, 2)")]
-        public decimal Ingreso { get; set; }
+        public decimal? Ingreso { get; set; }
 
         [Column(TypeName = "decimal(18, 2)")]
-        public decimal Salida { get; set; }
+        public decimal? Salida { get; set; }
 
         [Column(TypeName = "decimal(18, 2)")]
-        public decimal Total { get; set; }
+        public decimal? Total { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
         public DateTime Fecha { get; set; }

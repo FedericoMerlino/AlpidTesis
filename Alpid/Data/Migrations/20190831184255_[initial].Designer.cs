@@ -4,14 +4,16 @@ using Alpid.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Alpid.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190831184255_[initial]")]
+    partial class initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -135,20 +137,19 @@ namespace Alpid.Migrations
 
                     b.Property<int>("ItemEventoSolidarioID");
 
-                    b.Property<int?>("Cantidad");
+                    b.Property<int>("Cantidad");
 
-                    b.Property<string>("Concepto")
-                        .IsRequired();
+                    b.Property<int>("Concepto");
 
                     b.Property<DateTime>("Fecha");
 
-                    b.Property<decimal?>("Ingreso")
+                    b.Property<decimal>("Ingreso")
                         .HasColumnType("decimal(18, 2)");
 
-                    b.Property<decimal?>("Salida")
+                    b.Property<decimal>("Salida")
                         .HasColumnType("decimal(18, 2)");
 
-                    b.Property<decimal?>("Total")
+                    b.Property<decimal>("Total")
                         .HasColumnType("decimal(18, 2)");
 
                     b.HasKey("EventoSolidarioID", "ItemEventoSolidarioID");

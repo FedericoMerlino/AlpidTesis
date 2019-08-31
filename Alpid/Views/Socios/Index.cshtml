@@ -128,7 +128,7 @@
                                 </td>
                                 <td>
                                     <a asp-action="Edit" class='btn btn-info' asp-route-id="@item.SociosID">Editar</a> |
-                                    <a asp-action="Delete" class='btn btn-danger' asp-route-id="@item.SociosID">Borrar</a> 
+                                    <a asp-action="Delete" class='btn btn-danger' asp-route-id="@item.SociosID">Borrar</a>
                                 </td>
                             </tr>
                         }
@@ -176,7 +176,8 @@
     </div>
 </body>
 </html>
-
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<link rel="stylesheet" type="text/css" href="dist/sweetalert.css">
 <script>
     //cambia el valor de los radiobutton de estados para luego pasarle la info que se requiere al controlador
     function validarcheck() {
@@ -190,5 +191,26 @@
                 document.getElementById('FechasGrilla').value = 'eliminados';
             }
         });
-    }
+    };
+
+      var valor = "@ViewData["Message"]";
+    //si funciona todo correcto
+    if (valor == 1) {
+        swal({
+            title: "Felicidades!!",
+            text: "La operación se realizo con éxito",
+            icon: "success",
+            button: "Aceptar",
+        });
+    } else {
+        //si se produce algún error
+        if (valor == 2) {
+            swal({
+                title: "Error!!",
+                text: "No se pudo realizar la operación",
+                icon: "error",
+                button: "Aceptar",
+            });
+        };
+    };
 </script>

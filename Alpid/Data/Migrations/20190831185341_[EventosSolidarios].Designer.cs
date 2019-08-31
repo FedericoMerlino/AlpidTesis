@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Alpid.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190823220806_[initial]")]
-    partial class initial
+    [Migration("20190831185341_[EventosSolidarios]")]
+    partial class EventosSolidarios
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -33,11 +33,15 @@ namespace Alpid.Migrations
 
                     b.Property<string>("Observacion");
 
+                    b.Property<int?>("ProductosAlquilerID");
+
                     b.Property<int?>("ProductosPoductosID");
 
                     b.Property<int>("SociosId");
 
                     b.HasKey("AlquilerID");
+
+                    b.HasIndex("ProductosAlquilerID");
 
                     b.HasIndex("ProductosPoductosID");
 
@@ -129,26 +133,27 @@ namespace Alpid.Migrations
 
             modelBuilder.Entity("Alpid.Models.EventoSolidarios", b =>
                 {
-                    b.Property<int>("EventoSolidarioID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<int>("EventoSolidarioID");
 
-                    b.Property<int>("Cantidad");
+                    b.Property<int>("ItemEventoSolidarioID");
 
-                    b.Property<int>("Concepto");
+                    b.Property<int?>("Cantidad");
+
+                    b.Property<string>("Concepto")
+                        .IsRequired();
 
                     b.Property<DateTime>("Fecha");
 
-                    b.Property<decimal>("Ingreso")
+                    b.Property<decimal?>("Ingreso")
                         .HasColumnType("decimal(18, 2)");
 
-                    b.Property<decimal>("Salida")
+                    b.Property<decimal?>("Salida")
                         .HasColumnType("decimal(18, 2)");
 
-                    b.Property<decimal>("Total")
+                    b.Property<decimal?>("Total")
                         .HasColumnType("decimal(18, 2)");
 
-                    b.HasKey("EventoSolidarioID");
+                    b.HasKey("EventoSolidarioID", "ItemEventoSolidarioID");
 
                     b.ToTable("EventoSolidarios");
                 });
@@ -182,6 +187,27 @@ namespace Alpid.Migrations
                     b.HasIndex("ProveedoresID");
 
                     b.ToTable("Productos");
+                });
+
+            modelBuilder.Entity("Alpid.Models.ProductosAlquiler", b =>
+                {
+                    b.Property<int>("ProductosAlquilerID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AlquilerID");
+
+                    b.Property<int>("ProductosID");
+
+                    b.Property<string>("Valor");
+
+                    b.Property<string>("cantidad");
+
+                    b.HasKey("ProductosAlquilerID");
+
+                    b.HasIndex("ProductosID");
+
+                    b.ToTable("ProductosAlquiler");
                 });
 
             modelBuilder.Entity("Alpid.Models.Proveedores", b =>
@@ -251,23 +277,15 @@ namespace Alpid.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken();
+                    b.Property<string>("ConcurrencyStamp");
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(256);
+                    b.Property<string>("Name");
 
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256);
+                    b.Property<string>("NormalizedName");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AspNetRoles");
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -280,14 +298,11 @@ namespace Alpid.Migrations
 
                     b.Property<string>("ClaimValue");
 
-                    b.Property<string>("RoleId")
-                        .IsRequired();
+                    b.Property<string>("RoleId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetRoleClaims");
+                    b.ToTable("RoleClaims");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
@@ -297,11 +312,9 @@ namespace Alpid.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken();
+                    b.Property<string>("ConcurrencyStamp");
 
-                    b.Property<string>("Email")
-                        .HasMaxLength(256);
+                    b.Property<string>("Email");
 
                     b.Property<bool>("EmailConfirmed");
 
@@ -309,11 +322,9 @@ namespace Alpid.Migrations
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
 
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256);
+                    b.Property<string>("NormalizedEmail");
 
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256);
+                    b.Property<string>("NormalizedUserName");
 
                     b.Property<string>("PasswordHash");
 
@@ -325,20 +336,11 @@ namespace Alpid.Migrations
 
                     b.Property<bool>("TwoFactorEnabled");
 
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256);
+                    b.Property<string>("UserName");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("NormalizedEmail")
-                        .HasName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -351,68 +353,63 @@ namespace Alpid.Migrations
 
                     b.Property<string>("ClaimValue");
 
-                    b.Property<string>("UserId")
-                        .IsRequired();
+                    b.Property<string>("UserId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserClaims");
+                    b.ToTable("UserClaims");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.Property<string>("LoginProvider")
-                        .HasMaxLength(128);
-
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128);
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("LoginProvider");
 
                     b.Property<string>("ProviderDisplayName");
 
-                    b.Property<string>("UserId")
-                        .IsRequired();
+                    b.Property<string>("UserId");
 
-                    b.HasKey("LoginProvider", "ProviderKey");
+                    b.HasKey("ProviderKey");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserLogins");
+                    b.ToTable("UserLogins");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserId")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("RoleId");
 
-                    b.HasKey("UserId", "RoleId");
+                    b.HasKey("UserId");
 
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetUserRoles");
+                    b.ToTable("UserRoles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserId")
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<string>("LoginProvider")
-                        .HasMaxLength(128);
+                    b.Property<string>("LoginProvider");
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(128);
+                    b.Property<string>("Name");
 
                     b.Property<string>("Value");
 
-                    b.HasKey("UserId", "LoginProvider", "Name");
+                    b.HasKey("UserId");
 
-                    b.ToTable("AspNetUserTokens");
+                    b.ToTable("UserTokens");
                 });
 
             modelBuilder.Entity("Alpid.Models.Alquiler", b =>
                 {
+                    b.HasOne("Alpid.Models.ProductosAlquiler")
+                        .WithMany("Alquiler")
+                        .HasForeignKey("ProductosAlquilerID");
+
                     b.HasOne("Alpid.Models.Productos")
                         .WithMany("Alquiler")
                         .HasForeignKey("ProductosPoductosID");
@@ -449,48 +446,11 @@ namespace Alpid.Migrations
                         .HasForeignKey("ProveedoresID");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Alpid.Models.ProductosAlquiler", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
+                    b.HasOne("Alpid.Models.Productos", "Productos")
                         .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
-                        .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("ProductosID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

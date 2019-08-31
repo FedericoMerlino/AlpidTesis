@@ -8,21 +8,27 @@ namespace Alpid.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<EventoSolidarios>().HasKey(ba => new { ba.EventoSolidarioID, ba.ItemEventoSolidarioID });
+            modelBuilder.Entity<IdentityUserLogin<string>>().HasKey(ba => new { ba.ProviderKey });
+            modelBuilder.Entity<IdentityUserRole<string>>().HasKey(ba => new { ba.UserId });
+            modelBuilder.Entity<IdentityUserToken<string>>().HasKey(ba => new { ba.UserId });
         }
 
-        protected override void OnModelCreating(ModelBuilder builder)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+      : base(options)
         {
-            base.OnModelCreating(builder);
+            //Database.EnsureCreated();
         }
+
 
         public DbSet<Alquiler> Alquiler { get; set; }
         public DbSet<Caja> Caja { get; set; }
         public DbSet<CuotaPrecio> CuotaPrecio { get; set; }
         public DbSet<Cuotas> Cuotas { get; set; }
         public DbSet<Proveedores> Proveedores { get; set; }
+        public DbSet<ProductosAlquiler> ProductosAlquiler { get; set; }
         public DbSet<Socios> Socios { get; set; }
         public DbSet<Productos> Productos { get; set; }
         public DbSet<EventoSolidarios> EventoSolidarios { get; set; }

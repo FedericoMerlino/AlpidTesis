@@ -67,29 +67,29 @@
                 <tbody>
                     @foreach (var item in Model)
                     {
-                    <tr>
-                        <td>
-                           @Html.DisplayFor(modelItem => item.Socios.RazonSocial)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Estado)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Observacion)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Importe)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.FechaDesde)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.FechaHasta)
-                        </td>
-                        <td>
-                            <a asp-action="Details" class="btn btn-info" asp-route-id="@item.CuotasID">Ver</a> 
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Socios.RazonSocial)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Estado)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Observacion)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Importe)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaDesde)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaHasta)
+                            </td>
+                            <td>
+                                <a asp-action="Details" class="btn btn-info" asp-route-id="@item.CuotasID">Ver</a>
+                            </td>
+                        </tr>
                     }
                 </tbody>
             </table>
@@ -97,3 +97,27 @@
     </div>
 </body>
 </html>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<link rel="stylesheet" type="text/css" href="dist/sweetalert.css">
+<script>
+     var valor = "@ViewData["Message"]";
+    //si funciona todo correcto
+    if (valor == 1) {
+        swal({
+            title: "Felicidades!!",
+            text: "La operación se realizo con éxito",
+            icon: "success",
+            button: "Aceptar",
+        });
+    } else {
+        //si se produce algún error
+        if (valor == 2) {
+            swal({
+                title: "Error!!",
+                text: "No se pudo realizar la operación",
+                icon: "error",
+                button: "Aceptar",
+            });
+        };
+    };
+</script>
