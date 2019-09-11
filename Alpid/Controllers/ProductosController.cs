@@ -22,7 +22,8 @@ namespace Alpid.Controllers
         }
 
         // GET: Productos
-        public async Task<IActionResult> Index(string currentFilter, string searchString, int? page, string filtroFecha, string DateFilter)
+        public async Task<IActionResult> Index(string currentFilter, string searchString, int? page,
+                                               string filtroFecha, string DateFilter, int valor)
         {
             var bandera = true;
 
@@ -30,7 +31,6 @@ namespace Alpid.Controllers
             {
                 page = 1;
                 bandera = false;
-
             }
             else
             {
@@ -54,6 +54,7 @@ namespace Alpid.Controllers
             {
                 producto = producto.Where(s => s.FechaBaja != null);
             }
+            ViewData["Message"] = valor;
 
             int pageSize = 15;
             return View(await Paginacion<Productos>.CreateAsync(producto.AsNoTracking().OrderByDescending(x => x.FechaAlta).Include(x => x.Proveedores), page ?? 1, pageSize));
@@ -62,235 +63,227 @@ namespace Alpid.Controllers
         // GET: Productos/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
+                var productos = await _context.Productos.Include(p => p.Proveedores).FirstOrDefaultAsync(m => m.PoductosID == id);
+                return View(productos);
             }
-
-            var productos = await _context.Productos.Include(p => p.Proveedores)
-                                                    .FirstOrDefaultAsync(m => m.PoductosID == id);
-            if (productos == null)
+            catch (Exception e)
             {
-                return NotFound();
+                Console.Write(e);
+                var valor = 2;
+                return RedirectToAction("Index", "Productos", new { valor });
             }
-
-            return View(productos);
         }
 
         // GET: Productos/Create
-        public IActionResult Create()
+        public IActionResult Create(int valor, string NombreAlta)
         {
-            //Busca los proveedores que no esten dados de baja
-            var proveedor = from s in _context.Proveedores select s;
-            proveedor = proveedor.Where(s => s.FechaBaja == null);
-            ViewData["ProveedoresID"] = new SelectList(proveedor, "ProveedoresId", "RazonSocial");
-            return View();
+            try
+            {
+                ViewData["Message"] = valor;
+                ViewData["NombreError"] = NombreAlta;
+
+                //Busca los proveedores que no esten dados de baja
+                var proveedor = from s in _context.Proveedores select s;
+                proveedor = proveedor.Where(s => s.FechaBaja == null);
+                ViewData["ProveedoresID"] = new SelectList(proveedor, "ProveedoresId", "RazonSocial");
+                return View();
+            }
+            catch (Exception e)
+            {
+                Console.Write(e);
+                valor = 2;
+                return RedirectToAction("Index", "Productos", new { valor });
+            }
         }
 
         // POST: Productos/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("PoductosID,Nombre,Cantidad,ProductosTipo,FechaAlta,PrecioAlquiler,ProveedoresID")] Productos productos)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(productos);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["ProveedoresID"] = new SelectList(_context.Proveedores, "ProveedoresId", "RazonSocial", productos.ProveedoresID);
+                int valor;
+                var NombreAlta = productos.Nombre;
+                var Verificar = (from s in _context.Productos where s.Nombre == NombreAlta select s.Nombre).Count();
 
-            return View(productos);
+                if (Verificar == 0)
+                {
+                    _context.Add(productos);
+                    await _context.SaveChangesAsync();
+
+                    ViewData["ProveedoresID"] = new SelectList(_context.Proveedores, "ProveedoresId", "RazonSocial", productos.ProveedoresID);
+                     valor = 1;
+                    return RedirectToAction("Index", "Productos", new { valor });
+                }
+                else
+                {
+                    valor = 3;
+                    return RedirectToAction("Create", "Productos", new { valor, NombreAlta });
+                }
+            }
+            catch (Exception e)
+            {
+                Console.Write(e);
+                var valor = 2;
+                return RedirectToAction("Index", "Productos", new { valor });
+            }
         }
 
         // GET: Productos/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
+                var productos = await _context.Productos.FindAsync(id);
+                ViewData["ProveedoresID"] = new SelectList(_context.Proveedores, "ProveedoresId", "RazonSocial", productos.ProveedoresID);
+                return View(productos);
             }
-
-            var productos = await _context.Productos.FindAsync(id);
-            if (productos == null)
+            catch (Exception e)
             {
-                return NotFound();
+                Console.Write(e);
+                var valor = 2;
+                return RedirectToAction("Index", "Productos", new { valor });
             }
-            ViewData["ProveedoresID"] = new SelectList(_context.Proveedores, "ProveedoresId", "RazonSocial", productos.ProveedoresID);
-            return View(productos);
         }
 
         // POST: Productos/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("PoductosID,Nombre,Cantidad,ProductosTipo,FechaAlta,PrecioAlquiler,ProveedoresID")] Productos productos)
         {
-            if (id != productos.PoductosID)
+            try
             {
-                return NotFound();
-            }
+                _context.Update(productos);
+                await _context.SaveChangesAsync();
+                ViewData["ProveedoresID"] = new SelectList(_context.Proveedores, "ProveedoresId", "RazonSocial", productos.ProveedoresID);
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(productos);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProductosExists(productos.PoductosID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                var valor = 1;
+                return RedirectToAction("Index", "Productos", new { valor });
             }
-            ViewData["ProveedoresID"] = new SelectList(_context.Proveedores, "ProveedoresId", "RazonSocial", productos.ProveedoresID);
-            return View(productos);
+            catch (Exception e)
+            {
+                Console.Write(e);
+                var valor = 2;
+                return RedirectToAction("Index", "Productos", new { valor });
+            }
         }
 
         // GET: Productos/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
-            }
+                var productos = await _context.Productos.FindAsync(id);
 
-            var productos = await _context.Productos.FindAsync(id);
-            if (productos == null)
-            {
-                return NotFound();
+                ViewData["ProveedoresID"] = new SelectList(_context.Proveedores, "ProveedoresId", "RazonSocial", productos.ProveedoresID);
+                return View(productos);
             }
-            ViewData["ProveedoresID"] = new SelectList(_context.Proveedores, "ProveedoresId", "RazonSocial", productos.ProveedoresID);
-            return View(productos);
+            catch (Exception e)
+            {
+                Console.Write(e);
+                var valor = 2;
+                return RedirectToAction("Index", "Productos", new { valor });
+            }
         }
 
         //// POST: Productos/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id, [Bind("PoductosID,Nombre,Cantidad,ProductosTipo,FechaAlta,PrecioAlquiler,ProveedoresID,FechaBaja,MotivoBaja")] Productos productos)
         {
-            if (id != productos.PoductosID)
+            try
             {
-                return NotFound();
-            }
+                _context.Update(productos);
+                await _context.SaveChangesAsync();
+                ViewData["ProveedoresID"] = new SelectList(_context.Proveedores, "ProveedoresId", "RazonSocial", productos.ProveedoresID);
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(productos);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProductosExists(productos.PoductosID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                var valor = 1;
+                return RedirectToAction("Index", "Productos", new { valor });
             }
-            ViewData["ProveedoresID"] = new SelectList(_context.Proveedores, "ProveedoresId", "RazonSocial", productos.ProveedoresID);
-            return View(productos);
+            catch (Exception e)
+            {
+                Console.Write(e);
+                var valor = 2;
+                return RedirectToAction("Index", "Productos", new { valor });
+            }
         }
 
         // GET: Productos/Active/5
         public async Task<IActionResult> Active(int? id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
-            }
+                var productos = await _context.Productos.FindAsync(id);
 
-            var productos = await _context.Productos.FindAsync(id);
-            if (productos == null)
-            {
-                return NotFound();
+                ViewData["ProveedoresID"] = new SelectList(_context.Proveedores, "ProveedoresId", "RazonSocial", productos.ProveedoresID);
+                return View(productos);
             }
-            ViewData["ProveedoresID"] = new SelectList(_context.Proveedores, "ProveedoresId", "RazonSocial", productos.ProveedoresID);
-            return View(productos);
+            catch (Exception e)
+            {
+                Console.Write(e);
+                var valor = 2;
+                return RedirectToAction("Index", "Productos", new { valor });
+            }
         }
 
         //// POST: Productos/Active/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Active(int id, [Bind("PoductosID,Nombre,Cantidad,ProductosTipo,FechaAlta,PrecioAlquiler,ProveedoresID,FechaBaja,MotivoBaja")] Productos productos)
         {
-            if (id != productos.PoductosID)
+            try
             {
-                return NotFound();
-            }
+                _context.Update(productos);
+                await _context.SaveChangesAsync();
+                ViewData["ProveedoresID"] = new SelectList(_context.Proveedores, "ProveedoresId", "RazonSocial", productos.ProveedoresID);
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(productos);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProductosExists(productos.PoductosID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                var valor = 1;
+                return RedirectToAction("Index", "Productos", new { valor });
             }
-            ViewData["ProveedoresID"] = new SelectList(_context.Proveedores, "ProveedoresId", "RazonSocial", productos.ProveedoresID);
-            return View(productos);
+            catch (Exception e)
+            {
+                Console.Write(e);
+                var valor = 2;
+                return RedirectToAction("Index", "Productos", new { valor });
+            }
         }
 
         // GET: Productos/DeletePhysical/5
         public async Task<IActionResult> DeletePhysical(int? id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
-            }
+                var productos = await _context.Productos
+                    .Include(p => p.Proveedores)
+                    .FirstOrDefaultAsync(m => m.PoductosID == id);
 
-            var productos = await _context.Productos
-                .Include(p => p.Proveedores)
-                .FirstOrDefaultAsync(m => m.PoductosID == id);
-            if (productos == null)
+                return View(productos);
+            }
+            catch (Exception e)
             {
-                return NotFound();
+                Console.Write(e);
+                var valor = 2;
+                return RedirectToAction("Index", "Productos", new { valor });
             }
-
-            return View(productos);
         }
 
         // POST: Productos/DeletePhysical/5
         [HttpPost, ActionName("DeletePhysical")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var productos = await _context.Productos.FindAsync(id);
-            _context.Productos.Remove(productos);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool ProductosExists(int id)
-        {
-            return _context.Productos.Any(e => e.PoductosID == id);
+            try
+            {
+                var productos = await _context.Productos.FindAsync(id);
+                _context.Productos.Remove(productos);
+                await _context.SaveChangesAsync();
+                var valor = 1;
+                return RedirectToAction("Index", "Productos", new { valor });
+            }
+            catch (Exception e)
+            {
+                Console.Write(e);
+                var valor = 2;
+                return RedirectToAction("Index", "Productos", new { valor });
+            }
         }
     }
 }

@@ -23,12 +23,12 @@ namespace Alpid.Controllers
 
         // GET: Cuotas
         public async Task<IActionResult> Index(string currentFilter, string searchString, int? page, string filtroFecha,
-                                                string DateFilter)
+                                                string DateFilter,int valor)
         {
 
             var ultimoid = _context.CuotaPrecio.Max(c => c.CuotaPrecioID);
-            var valor = _context.CuotaPrecio.SingleOrDefault(c => c.CuotaPrecioID == ultimoid);
-            ViewData["precio"] = valor.Importe;
+            var UltimoValor = _context.CuotaPrecio.SingleOrDefault(c => c.CuotaPrecioID == ultimoid);
+            ViewData["precio"] = UltimoValor.Importe;
 
             //return View(await applicationDbContext.ToListAsync());
 
@@ -48,37 +48,47 @@ namespace Alpid.Controllers
                 cuota = cuota.Where(s => s.Socios.RazonSocial.Contains(searchString));
             }
             int pageSize = 15;
+
+            ViewData["Message"] = valor;
+
             return View(await Paginacion<Cuotas>.CreateAsync(cuota.AsNoTracking().Include(c => c.Socios), page ?? 1, pageSize));
         }
 
         // GET: Cuotas/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
+                var cuotas = await _context.Cuotas.Include(c => c.Socios)
+                                                  .FirstOrDefaultAsync(m => m.CuotasID == id);
+                return View(cuotas);
             }
-
-            var cuotas = await _context.Cuotas
-                .Include(c => c.Socios)
-                .FirstOrDefaultAsync(m => m.CuotasID == id);
-            if (cuotas == null)
+            catch (Exception e)
             {
-                return NotFound();
+                Console.Write(e);
+                var valor = 2;
+                return RedirectToAction("Index", "Socios", new { valor });
             }
-
-            return View(cuotas);
         }
 
         // GET: Cuotas/Create
         public IActionResult Create()
         {
-            var ultimoid = _context.CuotaPrecio.Max(c => c.CuotaPrecioID);
-            var valor = _context.CuotaPrecio.SingleOrDefault(c => c.CuotaPrecioID == ultimoid);
-            ViewData["precio"] = valor.Importe;
+            try
+            {
+                var ultimoid = _context.CuotaPrecio.Max(c => c.CuotaPrecioID);
+                var valor = _context.CuotaPrecio.SingleOrDefault(c => c.CuotaPrecioID == ultimoid);
+                ViewData["precio"] = valor.Importe;
 
-            ViewData["SociosID"] = new SelectList(_context.Set<Socios>(), "SociosID", "RazonSocial");
-            return View();
+                ViewData["SociosID"] = new SelectList(_context.Set<Socios>(), "SociosID", "RazonSocial");
+                return View();
+            }
+            catch (Exception e)
+            {
+                Console.Write(e);
+                var valor = 2;
+                return RedirectToAction("Index", "Socios", new { valor });
+            }
         }
 
         // POST: Cuotas/Create
@@ -88,13 +98,10 @@ namespace Alpid.Controllers
         {
             try
             {
-                if (ModelState.IsValid)
-                {
-                    var importe = _context.Caja.Select(c => c.CajaId);
+                var importe = _context.Caja.Select(c => c.CajaId);
 
-                    _context.Add(cuotas);
-                    await _context.SaveChangesAsync();
-                }
+                _context.Add(cuotas);
+                await _context.SaveChangesAsync();
                 var valor = 1;
                 return RedirectToAction("Index", "Cuotas", new { valor });
             }
@@ -104,7 +111,6 @@ namespace Alpid.Controllers
                 var valor = 2;
                 return RedirectToAction("Index", "Cuotas", new { valor });
             }
-            //return RedirectToAction("PagoCuota", "Caja", new { ID = cuotas.CuotasID, debe = cuotas.Importe});
         }
     }
 }

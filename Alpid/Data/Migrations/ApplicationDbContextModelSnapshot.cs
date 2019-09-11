@@ -135,20 +135,19 @@ namespace Alpid.Migrations
 
                     b.Property<int>("ItemEventoSolidarioID");
 
-                    b.Property<int?>("Cantidad");
+                    b.Property<int>("Cantidad");
 
-                    b.Property<string>("Concepto")
-                        .IsRequired();
+                    b.Property<int>("Concepto");
 
                     b.Property<DateTime>("Fecha");
 
-                    b.Property<decimal?>("Ingreso")
+                    b.Property<decimal>("Ingreso")
                         .HasColumnType("decimal(18, 2)");
 
-                    b.Property<decimal?>("Salida")
+                    b.Property<decimal>("Salida")
                         .HasColumnType("decimal(18, 2)");
 
-                    b.Property<decimal?>("Total")
+                    b.Property<decimal>("Total")
                         .HasColumnType("decimal(18, 2)");
 
                     b.HasKey("EventoSolidarioID", "ItemEventoSolidarioID");
@@ -193,7 +192,7 @@ namespace Alpid.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("AlquilerID");
+                    b.Property<int?>("AlquilerID1");
 
                     b.Property<int>("ProductosID");
 
@@ -202,6 +201,8 @@ namespace Alpid.Migrations
                     b.Property<string>("cantidad");
 
                     b.HasKey("ProductosAlquilerID");
+
+                    b.HasIndex("AlquilerID1");
 
                     b.HasIndex("ProductosID");
 
@@ -446,6 +447,10 @@ namespace Alpid.Migrations
 
             modelBuilder.Entity("Alpid.Models.ProductosAlquiler", b =>
                 {
+                    b.HasOne("Alpid.Models.Alquiler", "AlquilerID")
+                        .WithMany()
+                        .HasForeignKey("AlquilerID1");
+
                     b.HasOne("Alpid.Models.Productos", "Productos")
                         .WithMany()
                         .HasForeignKey("ProductosID")

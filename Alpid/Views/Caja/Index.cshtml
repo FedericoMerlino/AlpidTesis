@@ -15,7 +15,14 @@
     <div class="form-group">
         <p>
             <a asp-action="CreateIngreso" class="btn btn-primary">Ingresar Dinero</a>
-            <a asp-action="CreateRetire" class="btn btn-danger">Retirar Dinero</a>
+            @if (@ViewData["ValorParaBoton"].Equals(0))
+            {
+                <a asp-action="CreateRetire" class="btn btn-danger" style="display:none;">Retirar Dinero</a>
+            }
+            else
+            {
+                <a asp-action="CreateRetire" class="btn btn-danger">Retirar Dinero</a>
+            }
         </p>
     </div>
     <div>

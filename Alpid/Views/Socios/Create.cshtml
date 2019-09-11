@@ -48,8 +48,33 @@
             </form>
         </div>
     </div>
- </body>
+</body>
 </html>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<link rel="stylesheet" type="text/css" href="dist/sweetalert.css">
+<script>
+      var valor = "@ViewData["Message"]";
+    //si funciona todo correcto
+    if (valor == 1) {
+        swal({
+            title: "Felicidades!!",
+            text: "La operación se realizo con éxito",
+            icon: "success",
+            button: "Aceptar",
+        });
+    } else {
+        //si se produce algún error
+        if (valor == 3) {
+            swal({
+                title: "Error!!",
+                text: "Ya existe un Socio con el CUIT que desea ingresar 'CUIT: @ViewData["CuitError"]'",
+                icon: "error",
+                button: "Aceptar",
+            });
+        };
+    };
+</script>
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

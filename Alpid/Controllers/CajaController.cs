@@ -39,11 +39,21 @@ namespace Alpid.Controllers
                 ViewData["FechaDesdeFilter"] = fechaDesde.ToShortDateString();
                 ViewData["FechaHastaFilter"] = fechaHasta.ToShortDateString();
 
-                var caja = from s in _context.Caja select s ;
+                var caja = from s in _context.Caja select s;
                 caja = caja.Where(s => s.FechaMovimiento >= fechaDesde);
                 caja = caja.Where(s => s.FechaMovimiento <= fechaHasta);
                 caja = caja.OrderByDescending(s => s.FechaMovimiento);
 
+                var cajaVacia = (from c in _context.Caja select c).Count();
+                if (cajaVacia == 0)
+                {
+                    ViewData["ValorParaBoton"] = cajaVacia;
+                }
+                else
+                {
+                    var Ultimacaja = (from s in _context.Caja orderby s.CajaId descending select s).FirstOrDefault().Total;
+                    ViewData["ValorParaBoton"] = Ultimacaja.ToString();
+                }
                 ViewData["Message"] = valor;
 
                 var applicationDbContext = caja;
@@ -57,28 +67,28 @@ namespace Alpid.Controllers
             }
         }
 
-        public String ListaCaja(DateTime fechaDesde, DateTime fechaHasta)
-        {
-            String dataFilter = "";
-            var caja = _context.Caja.OrderBy(p => p.AlquilerID).ToList();
-            var query = caja.Where(c => c.Debe == 100);//(c.FechaMovimiento >= fechaDesde) && (c.FechaMovimiento <= fechaHasta));
-            foreach (var item in query)
-            {
-                dataFilter += "<tr>" +
-                   "<td>" + item.FechaMovimiento + "</td>" +
-                   "<td>" + item.Observaciones + "</td>" +
-                   "<td>" + item.Debe + "</td>" +
-                    "<td>" + item.Haber + "</td>" +
-                   "<td>" + item.Total + "</td>" +
-               "</tr>";
-            }
-            return dataFilter;
-        }
+        //public String ListaCaja(DateTime fechaDesde, DateTime fechaHasta)
+        //{
+        //    String dataFilter = "";
+        //    var caja = _context.Caja.OrderBy(p => p.AlquilerID).ToList();
+        //    var query = caja.Where(c => c.Debe == 100);//(c.FechaMovimiento >= fechaDesde) && (c.FechaMovimiento <= fechaHasta));
+        //    foreach (var item in query)
+        //    {
+        //        dataFilter += "<tr>" +
+        //           "<td>" + item.FechaMovimiento + "</td>" +
+        //           "<td>" + item.Observaciones + "</td>" +
+        //           "<td>" + item.Debe + "</td>" +
+        //            "<td>" + item.Haber + "</td>" +
+        //           "<td>" + item.Total + "</td>" +
+        //       "</tr>";
+        //    }
+        //    return dataFilter;
+        //}
 
-        internal List<Caja> getCaja(DateTime fechaDesde, DateTime fechaHasta)
-        {
-            return _context.Caja.Where(c => (c.FechaMovimiento >= fechaDesde) && (c.FechaMovimiento <= fechaHasta)).ToList();
-        }
+        //internal List<Caja> getCaja(DateTime fechaDesde, DateTime fechaHasta)
+        //{
+        //    return _context.Caja.Where(c => (c.FechaMovimiento >= fechaDesde) && (c.FechaMovimiento <= fechaHasta)).ToList();
+        //}
 
         public IActionResult ViewAsPDFCaja()
         {
@@ -110,7 +120,7 @@ namespace Alpid.Controllers
                 return RedirectToAction("Index", "Caja", new { PAsarvalor });
             }
         }
-       
+
         //Retiro de dinero
         public IActionResult CreateRetire(int valor)
         {
@@ -136,32 +146,26 @@ namespace Alpid.Controllers
             try
             {
                 int valor;
-                if (ModelState.IsValid)
+                valor = 1;
+                //busca el ultimo id 
+                var db = _context.Caja.Include(c => c.Alquiler).Max(c => c.CajaId);
+                //busca el valor del total del ultimo id obtenido arriba
+                var UltimoValor = _context.Caja.SingleOrDefault(c => c.CajaId == db);
+                //Restar valor
+                caja.Total = UltimoValor.Total - caja.Haber;
+                //Obtener fecha y hora actual
+                caja.FechaMovimiento = DateTime.Now;
+                if (caja.Total < 0)
                 {
-                     valor = 1;
-                    //busca el ultimo id 
-                    var db = _context.Caja.Include(c => c.Alquiler)
-                                      .Max(c => c.CajaId);
-                    //busca el valor del total del ultimo id obtenido arriba
-                    var UltimoValor = _context.Caja.SingleOrDefault(c => c.CajaId == db);
-                    //Restar valor
-                    caja.Total = UltimoValor.Total - caja.Haber;
-                    //Obtener fecha y hora actual
-                    caja.FechaMovimiento = DateTime.Now;
-                    if (caja.Total < 0)
-                    {
-                        return RedirectToAction("CreateRetire", "Caja", new { valor });
-                    }
-                    else
-                    {
-                        _context.Add(caja);
-                        await _context.SaveChangesAsync();
-
-                        return RedirectToAction("Index", "Caja", new { valor });
-                    }
+                    return RedirectToAction("CreateRetire", "Caja", new { valor });
                 }
-                valor = 3;
-                return RedirectToAction("CreateRetire", "Caja", new { valor });
+                else
+                {
+                    _context.Add(caja);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("Index", "Caja", new { valor });
+                }
             }
             catch (Exception e)
             {
@@ -170,24 +174,34 @@ namespace Alpid.Controllers
                 return RedirectToAction("Index", "Caja", new { valor });
             }
         }
-        
+
         //ingreso de dinero
         public IActionResult CreateIngreso(int valor)
         {
             try
             {
-                var ultimoID = _context.Caja.Max(x => x.CajaId);
-                var ultimoPrecio = _context.Caja.SingleOrDefault(x => x.CajaId == ultimoID);
-                ViewData["TotalCaja"] = ultimoPrecio.Total;
-                ViewData["Message"] = valor;
+                var cajaVacia = (from c in _context.Caja select c).Count();
 
-                return View();
+                if (cajaVacia == 0)
+                {
+                    ViewData["TotalCaja"] = 0;
+                    return View();
+                }
+                else
+                {
+                    var ultimoID = _context.Caja.Max(x => x.CajaId);
+                    var ultimoPrecio = _context.Caja.SingleOrDefault(x => x.CajaId == ultimoID);
+                    ViewData["TotalCaja"] = ultimoPrecio.Total;
+                    ViewData["Message"] = valor;
+
+                    return View();
+                }
             }
             catch (Exception e)
             {
                 Console.Write(e);
-                var PAsarvalor = 2;
-                return RedirectToAction("Index", "Caja", new { PAsarvalor });
+                valor = 2;
+                return RedirectToAction("Index", "Caja", new { valor });
             }
         }
         //ingreso de dinero
@@ -196,13 +210,15 @@ namespace Alpid.Controllers
         {
             try
             {
-                int valor;
-                if (ModelState.IsValid)
+                var cajaVacia = (from c in _context.Caja select c).Count();
+
+                if (cajaVacia != 0)
                 {
+                    int valor;
+
                     valor = 1;
                     //busca el ultimo id 
-                    var db = _context.Caja.Include(c => c.Alquiler)
-                                  .Max(c => c.CajaId);
+                    var db = _context.Caja.Include(c => c.Alquiler).Max(c => c.CajaId);
                     //busca el valor del total del ultimo id obtenido arriba
                     var UltimoValor = _context.Caja.SingleOrDefault(c => c.CajaId == db);
                     //sumar valor
@@ -213,13 +229,18 @@ namespace Alpid.Controllers
                     await _context.SaveChangesAsync();
                     return RedirectToAction("Index", "Caja", new { valor });
                 }
-                valor = 3;
-                return RedirectToAction("CreateIngreso", "Caja", new { valor });
+                else
+                {
+                    _context.Add(caja);
+                    await _context.SaveChangesAsync();
+                    var valor = 1;
+                    return RedirectToAction("Index", "Caja", new { valor });
+
+                }
             }
             catch (Exception e)
             {
                 Console.Write(e);
-
                 var valor = 2;
                 return RedirectToAction("Index", "Caja", new { valor });
             }

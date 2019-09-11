@@ -75,8 +75,8 @@ namespace Alpid.Controllers
             catch (Exception e)
             {
                 Console.Write(e);
-                var PAsarvalor = 2;
-                return RedirectToAction("Index", "Proveedores", new { PAsarvalor });
+                var valor = 2;
+                return RedirectToAction("Index", "Proveedores", new { valor });
             }
         }
 
@@ -92,44 +92,47 @@ namespace Alpid.Controllers
         {
             try
             {
-                if (ModelState.IsValid)
+                int valor;
+
+                var cuitAlta = proveedores.Cuit;
+
+                var Verificar = (from s in _context.Proveedores where s.Cuit == cuitAlta select s.Cuit).Count();
+
+                if (Verificar == 0)
                 {
                     _context.Add(proveedores);
                     await _context.SaveChangesAsync();
 
-                    var valor = 1;
+                    valor = 1;
                     return RedirectToAction("Index", "Proveedores", new { valor });
                 }
-                var Pasarvalor = 2;
-                return RedirectToAction("Index", "Proveedores", new { Pasarvalor });
+                else
+                {
+                    valor = 3;
+                    return RedirectToAction("Create", "Socios", new { valor, cuitAlta });
+                }
             }
             catch (Exception e)
             {
                 Console.Write(e);
-                var PAsarvalor = 2;
-                return RedirectToAction("Index", "Proveedores", new { PAsarvalor });
+                var valor = 2;
+                return RedirectToAction("Index", "Proveedores", new { valor });
             }
         }
+
         // GET: Proveedores/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             try
             {
                 var proveedores = await _context.Proveedores.FindAsync(id);
-                if (proveedores == null)
-                {
-                    return NotFound();
-                }
                 return View(proveedores);
             }
             catch (Exception e)
             {
                 Console.Write(e);
-                var PAsarvalor = 2;
-                return RedirectToAction("Index", "Proveedores", new
-                {
-                    PAsarvalor
-                });
+                var valor = 2;
+                return RedirectToAction("Index", "Proveedores", new { valor });
             }
         }
 
@@ -148,8 +151,8 @@ namespace Alpid.Controllers
             catch (Exception e)
             {
                 Console.Write(e);
-                var PAsarvalor = 2;
-                return RedirectToAction("Index", "Proveedores", new { PAsarvalor });
+                var valor = 2;
+                return RedirectToAction("Index", "Proveedores", new { valor });
             }
         }
 
@@ -159,17 +162,13 @@ namespace Alpid.Controllers
             try
             {
                 var proveedores = await _context.Proveedores.FindAsync(id);
-                if (proveedores == null)
-                {
-                    return NotFound();
-                }
                 return View(proveedores);
             }
             catch (Exception e)
             {
                 Console.Write(e);
-                var PAsarvalor = 2;
-                return RedirectToAction("Index", "Proveedores", new { PAsarvalor });
+                var valor = 2;
+                return RedirectToAction("Index", "Proveedores", new { valor });
             }
         }
 
@@ -188,25 +187,25 @@ namespace Alpid.Controllers
             catch (Exception e)
             {
                 Console.Write(e);
-                var PAsarvalor = 2;
-                return RedirectToAction("Index", "Proveedores", new { PAsarvalor });
+                var valor = 2;
+                return RedirectToAction("Index", "Proveedores", new { valor });
             }
         }
 
         // GET: Proveedores/Active/5
         public async Task<IActionResult> Active(int? id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
+                var proveedores = await _context.Proveedores.FindAsync(id);
+                return View(proveedores);
             }
-
-            var proveedores = await _context.Proveedores.FindAsync(id);
-            if (proveedores == null)
+            catch (Exception e)
             {
-                return NotFound();
+                Console.Write(e);
+                var valor = 2;
+                return RedirectToAction("Index", "Proveedores", new { valor });
             }
-            return View(proveedores);
         }
 
         // POST: Proveedores/Active/5
@@ -224,14 +223,9 @@ namespace Alpid.Controllers
             catch (Exception e)
             {
                 Console.Write(e);
-                var PAsarvalor = 2;
-                return RedirectToAction("Index", "Proveedores", new { PAsarvalor });
+                var valor = 2;
+                return RedirectToAction("Index", "Proveedores", new { valor });
             }
-        }
-
-        private bool ProveedoresExists(int id)
-        {
-            return _context.Proveedores.Any(e => e.ProveedoresId == id);
         }
     }
 }
