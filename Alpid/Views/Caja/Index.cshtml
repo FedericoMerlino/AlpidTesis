@@ -26,7 +26,7 @@
         </p>
     </div>
     <div>
-        <a asp-action="ViewAsPDFCaja" class="btn btn-dark" style="float:right;">Reporte caja</a>
+        <a asp-action="ViewAsPDFCaja" class="btn btn-dark" style="float:right;" >Reporte caja</a>
     </div>
     <!--Buscar por fechas-->
     <form asp-action="Index" method="get">
@@ -65,6 +65,9 @@
                         <th>
                             Total
                         </th>
+                        <th>
+                            Acción
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -93,7 +96,7 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.Total)
                             </td>
-                            <td>
+                            <td >
                                 <a asp-action="Details" asp-route-id="@item.CajaId">Ver</a>
                             </td>
                         </tr>
@@ -110,19 +113,17 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
 
-
 <script>
-   
     $('#ponerFechaDesde').datepicker({
-        format: "dd-mm-yyyy",
+        format: "dd/mm/yyyy",
         language: "es",
     });
     $('#ponerFechaHasta').datepicker({
         format: "dd/mm/yyyy",
         language: "es",
     });
-    document.getElementById('ponerFechaDesde').value = '@ViewData["FechaHastaFilter"]';
-    document.getElementById('ponerFechaHasta').value = '@ViewData["FechaDesdeFilter"]';
+    document.getElementById('ponerFechaDesde').value = '@ViewData["FechaDesdeFilter"]';
+    document.getElementById('ponerFechaHasta').value = '@ViewData["FechaHastaFilter"]';
 
     var valor = "@ViewData["Message"]";
     //si funciona todo correcto

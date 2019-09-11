@@ -3,13 +3,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Alpid.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Alpid.Models;
-using Microsoft.AspNetCore.Authorization;
 using Rotativa.AspNetCore;
-using System.Collections.Generic;
-using Microsoft.VisualStudio.Web.CodeGeneration.Contracts.Messaging;
 
 namespace Alpid.Controllers
 {
@@ -40,8 +36,8 @@ namespace Alpid.Controllers
                 ViewData["FechaHastaFilter"] = fechaHasta.ToShortDateString();
 
                 var caja = from s in _context.Caja select s;
-                caja = caja.Where(s => s.FechaMovimiento >= fechaDesde);
-                caja = caja.Where(s => s.FechaMovimiento <= fechaHasta);
+                caja = caja.Where(s => Convert.ToDateTime(s.FechaMovimiento.ToShortDateString()) >= Convert.ToDateTime(fechaDesde.ToShortDateString()));
+                caja = caja.Where(s => Convert.ToDateTime(s.FechaMovimiento.ToShortDateString()) <= Convert.ToDateTime(fechaHasta.ToShortDateString()));
                 caja = caja.OrderByDescending(s => s.FechaMovimiento);
 
                 var cajaVacia = (from c in _context.Caja select c).Count();
@@ -52,7 +48,7 @@ namespace Alpid.Controllers
                 else
                 {
                     var Ultimacaja = (from s in _context.Caja orderby s.CajaId descending select s).FirstOrDefault().Total;
-                    ViewData["ValorParaBoton"] = Ultimacaja.ToString();
+                    ViewData["ValorParaBoton"] = Convert.ToInt32(Ultimacaja);
                 }
                 ViewData["Message"] = valor;
 
@@ -139,6 +135,7 @@ namespace Alpid.Controllers
                 return RedirectToAction("Index", "Caja", new { valor });
             }
         }
+
         //Retiro de dinero
         [HttpPost]
         public async Task<IActionResult> CreateRetire([Bind("CajaId,Debe,Haber,TipoMovimiento,Observaciones,Estado,FechaMovimiento,Total,CuotaID,AlquilerID,Usuario")] Caja caja)
@@ -163,7 +160,6 @@ namespace Alpid.Controllers
                 {
                     _context.Add(caja);
                     await _context.SaveChangesAsync();
-
                     return RedirectToAction("Index", "Caja", new { valor });
                 }
             }
@@ -231,6 +227,7 @@ namespace Alpid.Controllers
                 }
                 else
                 {
+                    caja.Total = caja.Debe;
                     _context.Add(caja);
                     await _context.SaveChangesAsync();
                     var valor = 1;
