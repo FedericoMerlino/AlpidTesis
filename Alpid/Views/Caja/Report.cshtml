@@ -6,7 +6,6 @@
 <head>
     <meta charset="utf-8">
     <title>Reporte caja</title>
-
 </head>
 <body>
     <header>
@@ -17,37 +16,37 @@
         </address>
         <span><img src="~/img/logoReporte.jpg" style="float:right;" /></span>
     </header><br />
-    <br /> <h3 style="text-align:center;">ALPID: Reporte de caja perteneceinte desde @ViewData["FechaDesdeFilter"] a @ViewData["FechaHastaFilter"]</h3>
-    <article style="padding-top:20%;">
-        <br />
-        <form class="form-group">
-            <table class="table table-responsive-sm" id="datos">
-                <thead>
-                    <tr>
-                        <th>
-                            Fecha Movimiento
-                        </th>
-                        <th>
-                            Observaciones
-                        </th>
-                        <th>
-                            Ingreso
-                        </th>
-                        <th>
-                            Salida
-                        </th>
-                        <th>
-                            Total
-                        </th>
-                    </tr>
-                </thead>
-                <tbody id="ListaCaja"> </tbody>
-            </table>
-        </form>
-    </article>
-    <aside>
-      
-    </aside>
+    <div style="padding-top:10%;">
+        <br /> <h3 style="text-align:center;">ALPID: Reporte de caja perteneceinte desde @ViewData["FechaDesdeFilter"] a @ViewData["FechaHastaFilter"]</h3>
+        <article>
+            <br />
+            <form class="form-group">
+                <table class="table table-responsive-sm" id="datos">
+                    <thead>
+                        <tr>
+                            <th>
+                                Fecha Movimiento
+                            </th>
+                            <th>
+                                Observaciones
+                            </th>
+                            <th>
+                                Ingreso
+                            </th>
+                            <th>
+                                Salida
+                            </th>
+                            <th>
+                                Total
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="ListaCaja"> </tbody>
+                </table>
+            </form>
+        </article>
+    </div>
+    
 </body>
 </html>
 <script>
@@ -61,7 +60,7 @@
                 { valor },
                 (response) => {
 
-                    $("#ListaCaja").html(response);
+                    $("#dataFilter").html(response);
                 });
         };
     };

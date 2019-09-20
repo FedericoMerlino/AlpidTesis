@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Alpid.Models;
 using Rotativa.AspNetCore;
+using System.Collections.Generic;
 
 namespace Alpid.Controllers
 {
@@ -63,28 +64,28 @@ namespace Alpid.Controllers
             }
         }
 
-        //public String ListaCaja(DateTime fechaDesde, DateTime fechaHasta)
-        //{
-        //    String dataFilter = "";
-        //    var caja = _context.Caja.OrderBy(p => p.AlquilerID).ToList();
-        //    var query = caja.Where(c => c.Debe == 100);//(c.FechaMovimiento >= fechaDesde) && (c.FechaMovimiento <= fechaHasta));
-        //    foreach (var item in query)
-        //    {
-        //        dataFilter += "<tr>" +
-        //           "<td>" + item.FechaMovimiento + "</td>" +
-        //           "<td>" + item.Observaciones + "</td>" +
-        //           "<td>" + item.Debe + "</td>" +
-        //            "<td>" + item.Haber + "</td>" +
-        //           "<td>" + item.Total + "</td>" +
-        //       "</tr>";
-        //    }
-        //    return dataFilter;
-        //}
+        public String ListaCaja(DateTime fechaDesde, DateTime fechaHasta)
+        {
+            String dataFilter = "";
+            var caja = _context.Caja.OrderBy(p => p.AlquilerID).ToList();
+            var query = caja.Where(c => c.Debe == 100);//(c.FechaMovimiento >= fechaDesde) && (c.FechaMovimiento <= fechaHasta));
+            foreach (var item in query)
+            {
+                dataFilter += "<tr>" +
+                   "<td>" + item.FechaMovimiento + "</td>" +
+                   "<td>" + item.Observaciones + "</td>" +
+                   "<td>" + item.Debe + "</td>" +
+                    "<td>" + item.Haber + "</td>" +
+                   "<td>" + item.Total + "</td>" +
+               "</tr>";
+            }
+            return dataFilter;
+        }
 
-        //internal List<Caja> getCaja(DateTime fechaDesde, DateTime fechaHasta)
-        //{
-        //    return _context.Caja.Where(c => (c.FechaMovimiento >= fechaDesde) && (c.FechaMovimiento <= fechaHasta)).ToList();
-        //}
+        internal List<Caja> getCaja(DateTime fechaDesde, DateTime fechaHasta)
+        {
+            return _context.Caja.Where(c => (c.FechaMovimiento >= fechaDesde) && (c.FechaMovimiento <= fechaHasta)).ToList();
+        }
 
         public IActionResult ViewAsPDFCaja()
         {

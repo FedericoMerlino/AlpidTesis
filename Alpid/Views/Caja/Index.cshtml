@@ -14,10 +14,10 @@
     <h1>Caja Alpid</h1>
     <div class="form-group">
         <p>
-            <a asp-action="CreateIngreso" class="btn btn-primary">Ingresar Dinero</a>
+            <a asp-action="CreateIngreso" class="btn btn-primary">Ingreso</a>
             @if (@ViewData["ValorParaBoton"].Equals(0))
             {
-                <a asp-action="CreateRetire" class="btn btn-danger" style="display:none;">Retirar Dinero</a>
+                <a asp-action="CreateRetire" class="btn btn-danger" style="display:none;">Retiro</a>
             }
             else
             {
@@ -35,7 +35,6 @@
                 Fecha desde<input type="text" name="fechaDesde" id="ponerFechaDesde" />
                 Fecha hasta<input type="text" name="fechaHasta" id="ponerFechaHasta" />
                 <input type="submit" value="Buscar" class="btn btn-dark" />
-
             </p>
         </div>
     </form>
