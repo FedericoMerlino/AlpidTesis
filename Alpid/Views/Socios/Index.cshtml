@@ -4,43 +4,61 @@
 }
 
 <html>
-<body>
-    <h1>Socios Alpid</h1>
-    <!--Boton para crear nuevo socio-->
-    <p>
-        <a asp-action="Create" class='btn btn-success'>Crear Socio</a>
-    </p>
-    <!--busca en toda la tabla en la base de datos de socios-->
-    <form asp-action="Index" method="get">
-        <div class="form-actions no-color">
+<body style="background-color:ghostwhite;">
+    <h1 style="color:blue">Socios Alpid</h1>
+    <div>
+        <div style=" text-align:center;">
+            <h3>Filtros de búsqueda:</h3>
             <p>
-                Buscar: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
-                <input type="submit" value="Buscar" class="btn btn-dark" />
-                <a asp-action="Index" class="btn btn-info">Cancelar búsqueda </a>
+                <button class="btn btn-connect-google" type="button" data-toggle="collapse" href="#multiCollapseExample1" aria-expanded="false" aria-controls="multiCollapseExample1">Nombre/Cuit</button>
+                <button class="btn btn-connect-google" type="button" data-toggle="collapse" data-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2">Estado</button>
+                <button class="btn btn-connect-google" type="button" data-toggle="collapse" data-target=".multi-collapse" aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2">Todos</button>
             </p>
         </div>
-    </form>
-    <!--diferentes funcionalidades dentro de la grilla-->
-    <div class="input-group-append" style="padding-top:30px">
-        <div class="form-group">
-            <h2 style="initial-letter:inherit; font-family: Homer Simpson; color:#0932ff;"> Grilla socios </h2>
-            <form asp-action="Index" method="get">
-                <div class="form-actions no-color">
-                    <h5 style="initial-letter:inherit; font-family: Homer Simpson, cursive; padding-right:10px">
-                        Estados:
-                        <label style="padding-left:10px"><input type="radio" name="Coordinar" id="cbox1" onclick="validarcheck()" checked="checked"> Activos</label>
-                        <label style="padding-left:10px"><input type="radio" name="Coordinar" id="cbox2" onclick="validarcheck()"> Eliminados</label>
-                        <!--Se utiliza para pasar la info al controlador sobre que estado se desea buscar-->
-                        <input type="text" id="FechasGrilla" name="filtroFecha" value="@ViewData["DateFilter"]" style="display:none;" />
-                        <input type="submit" value="Buscar" class="btn btn-dark" />
-                    </h5>
-
+        <div>
+            <div class="row">
+                <div class="col">
+                    <div class="collapse multi-collapse" id="multiCollapseExample1">
+                        <div class="card card-body">
+                            <form asp-action="Index" method="get">
+                                <div class="form-actions no-color">
+                                    <p>
+                                        <!--busca en toda la tabla en la base de datos de socios-->
+                                        Busqueda por cuit o por nombre: <br />
+                                        <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                                        <input type="submit" value="Buscar" class="btn btn-dark" />
+                                        <a asp-action="Index" class="btn btn-info">Cancelar búsqueda </a>
+                                    </p>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-            </form>
+                <div class="col">
+                    <div class="collapse multi-collapse" id="multiCollapseExample2">
+                        <div class="card card-body">
+                            <form asp-action="Index" method="get">
+                                <div class="form-actions no-color">
+                                    <h5 style="initial-letter:inherit; padding-right:10px">
+                                        Estados: <br /><br />
+                                        <label style="padding-left:10px"><input type="radio" name="Coordinar" id="cbox1" onclick="validarcheck()" checked="checked"> Activos</label>
+                                        <label style="padding-left:10px"><input type="radio" name="Coordinar" id="cbox2" onclick="validarcheck()"> Eliminados</label>
+                                        <!--Se utiliza para pasar la info al controlador sobre que estado se desea buscar-->
+                                        <input type="text" id="FechasGrilla" name="filtroFecha" value="@ViewData["DateFilter"]" style="display:none;" />
+                                        <input type="submit" value="Buscar" class="btn btn-dark" />
+                                    </h5>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <!--Busca solamente la info que se muestra en la grilla-->
-    <div>
+    <div style="padding-bottom:5%; padding-top:5%;">
+        <!--Boton para crear nuevo socio-->
+        <a asp-action="Create" class='btn btn-success' style="Float: left;">Crear Socio</a>
+        <!--Busca solamente la info que se muestra en la grilla-->
         <i class="fa fa-search fa-2x" style="Float: right; padding-left:10px; padding-top:2px;"></i>
         <input id="searchTerm" type="text" onkeyup="doSearch()" class="form-control" placeholder="Buscar" style=" width:200px; Float: right; " />
     </div>
@@ -176,8 +194,9 @@
     </div>
 </body>
 </html>
+
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-<link rel="stylesheet" type="text/css" href="dist/sweetalert.css">
+
 <script>
     //cambia el valor de los radiobutton de estados para luego pasarle la info que se requiere al controlador
     function validarcheck() {
