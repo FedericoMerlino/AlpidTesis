@@ -4,14 +4,8 @@
     ViewData["Title"] = "Caja";
 }
 <html>
-<head>
-
-</head>
-<body>
-    <header>
-        <link href="~/css/cssKanze/style.min.css" rel="stylesheet" />
-    </header>
-    <h1>Caja Alpid</h1>
+<body style="background-color:ghostwhite;">
+    <h1 style="color:blue">Caja Alpid</h1>
     <div class="form-group">
         <p>
             <a asp-action="CreateIngreso" class="btn btn-primary">Ingreso</a>
@@ -26,20 +20,21 @@
         </p>
     </div>
     <div>
-        <a asp-action="ViewAsPDFCaja" class="btn btn-dark" style="float:right;" >Reporte caja</a>
+        <a asp-action="ViewAsPDFCaja" class="btn btn-dark" style="float:right;">Reporte caja</a>
     </div>
-    <!--Buscar por fechas-->
-    <form asp-action="Index" method="get">
-        <div class="form-actions no-color">
-            <p>
-                Fecha desde<input type="text" name="fechaDesde" id="ponerFechaDesde" />
-                Fecha hasta<input type="text" name="fechaHasta" id="ponerFechaHasta" />
-                <input type="submit" value="Buscar" class="btn btn-dark" />
-            </p>
-        </div>
-    </form>
+   
     <!--Busca solamente la info que se muestra en la grilla-->
-    <div>
+    <div style="padding-bottom:5%; padding-top:1%;" class="form-group">
+        <!--Buscar por fechas-->
+        <form asp-action="Index" method="get">
+            <div class="form-actions no-color">
+                <p>
+                    Fecha desde <input type="text" name="fechaDesde" id="ponerFechaDesde" />
+                    Fecha hasta <input type="text" name="fechaHasta" id="ponerFechaHasta" />
+                    <button type="submit" class="btn btn-labeled btn-dark"><span class="btn-label"><i class="glyphicon glyphicon-search"></i></span> Buscar</button>
+                </p>
+            </div>
+        </form>
         <i class="fa fa-search fa-2x" style="Float: right; padding-left:10px; padding-top:2px;"></i>
         <input id="searchTerm" type="text" onkeyup="doSearch()" class="form-control" placeholder="Buscar" style=" width:200px; Float: right; " />
     </div>
@@ -95,7 +90,7 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.Total)
                             </td>
-                            <td >
+                            <td>
                                 <a asp-action="Details" asp-route-id="@item.CajaId">Ver</a>
                             </td>
                         </tr>
