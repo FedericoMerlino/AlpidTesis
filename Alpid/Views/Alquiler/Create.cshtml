@@ -3,64 +3,62 @@
 @{
     ViewData["Title"] = "Nuevo alquiler";
 }
-<html>
-<body style="background-color:ghostwhite;">
-    <h1>Nuevo alquiler</h1>
-    <hr />
-    <div class="row">
-        <div class="col-md-8">
-            <form asp-action="Create" name="formCrearProducto">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group col-md-4">
-                    <label asp-for="FechaDesde" class="control-label">Fecha alquiler</label>
-                    <input asp-for="FechaDesde" type="date" class="form-control" />
-                    <span asp-validation-for="FechaDesde" class="text-danger"></span>
-                </div>
-                <div class="form-group col-md-4">
-                    <label asp-for="SociosId" class="control-label">Socio</label>
-                    <select asp-for="SociosId" class="form-control" asp-items="ViewBag.SociosId"></select>
-                </div>
-                <div class="form-group col-md-12">
-                    <label asp-for="Observacion" class="control-label">Observación</label>
-                    <input asp-for="Observacion" class="form-control" />
-                    <span asp-validation-for="Observacion" class="text-danger"></span>
-                </div>
-                <div class="form-group col-md-12">
-                    <h3 style="color:blue;">Seleccionar productos</h3>
-                    <label for="productos">
-                        Seleccionar nuevo para agregrar mas productos: 
-                    </label>
-                    <div class="btn btn-success" id="btnNuevoProducto">Nuevo</div>
-                    <table id="mytable" class="table table-bordered table-hover">
-                        <tr>
-                            <th>Producto</th>
-                            <th>Cantidad</th>
-                            <th>Precio Unitario</th>
-                            <th>Quitar</th>
-                        </tr>
-                        <tr>
-                            <td><input type="text" class="form-control" name="Producto[]" /> </td>
-                            <td><input type="text" class="form-control" name="Cantida[]" /> </td>
-                            <td><input type="text" class="form-control" name="Precio[]" /> </td>
-                            <td class="text-center">
-                                @*<div class="btn btn-danger">Quitar</div>*@
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="col-md-12">
-                    <input type="submit" value="Guardar" class="btn btn-primary" />
-                    <a asp-action="Index" style="float:right;" class="btn btn-info">Cancelar</a>
-                </div>
-            </form>
-        </div>
+
+<h1>Nuevo alquiler</h1>
+<hr />
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Create" name="formCrearProducto">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group col-md-4">
+                <label asp-for="FechaDesde" class="control-label">Fecha alquiler</label>
+                <input asp-for="FechaDesde" type="date" class="form-control" />
+                <span asp-validation-for="FechaDesde" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-4">
+                <label asp-for="SociosId" class="control-label">Socio</label>
+                <select asp-for="SociosId" class="form-control" asp-items="ViewBag.SociosId"></select>
+            </div>
+            <div class="form-group col-md-12">
+                <label asp-for="Observacion" class="control-label">Observación</label>
+                <input asp-for="Observacion" class="form-control" />
+                <span asp-validation-for="Observacion" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-12">
+                <h3 style="color:blue;">Seleccionar productos</h3>
+                <label for="productos">
+                    Seleccionar nuevo para agregrar mas productos:
+                </label>
+                <div class="btn btn-success" id="btnNuevoProducto">Nuevo</div>
+                <table id="mytable" class="table table-bordered table-hover">
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario</th>
+                        <th>Quitar</th>
+                    </tr>
+                    <tr>
+                        <td><input type="text" class="form-control" name="Producto[]" /> </td>
+                        <td><input type="text" class="form-control" name="Cantida[]" /> </td>
+                        <td><input type="text" class="form-control" name="Precio[]" /> </td>
+                        <td class="text-center">
+                            @*<div class="btn btn-danger">Quitar</div>*@
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-md-12">
+                <input type="submit" value="Guardar" class="btn btn-primary" />
+                <a asp-action="Index" style="float:right;" class="btn btn-info">Cancelar</a>
+            </div>
+        </form>
     </div>
-</body>
-</html>
+</div>
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
 <script>
 
     $(document).on('ready', funcPrincipal);
@@ -78,39 +76,39 @@
         $("#mytable")
             .append
             (
-            $('<tr>')
-                .append
-                (
-                $('<td>')
+                $('<tr>')
                     .append
                     (
-                    $('<input>').attr('type', 'text').addClass('form.contrl').attr('name', 'Producto[]')
+                        $('<td>')
+                            .append
+                            (
+                                $('<input>').attr('type', 'text').addClass('form.contrl').attr('name', 'Producto[]')
+                            )
                     )
-                )
-                .append
-                (
-                $('<td>')
                     .append
                     (
-                    $('<input>').attr('type', 'text').addClass('form.contrl').attr('name', 'Cantida[]')
+                        $('<td>')
+                            .append
+                            (
+                                $('<input>').attr('type', 'text').addClass('form.contrl').attr('name', 'Cantida[]')
+                            )
                     )
-                )
-                .append
-                (
-                $('<td>')
                     .append
                     (
-                    $('<input>').attr('type', 'text').addClass('form.contrl').attr('name', 'Precio[]')
+                        $('<td>')
+                            .append
+                            (
+                                $('<input>').attr('type', 'text').addClass('form.contrl').attr('name', 'Precio[]')
+                            )
                     )
-                )
-                .append
-                (
-                $('<td>').addClass('text-center')
                     .append
                     (
-                    $('<div>').addClass('btn btn-danger').text('Quitar')
+                        $('<td>').addClass('text-center')
+                            .append
+                            (
+                                $('<div>').addClass('btn btn-danger').text('Quitar')
+                            )
                     )
-                )
             )
     };
 

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Alpid.Migrations
 {
-    public partial class initial : Migration
+    public partial class inicial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -26,18 +26,18 @@ namespace Alpid.Migrations
                 name: "EventoSolidarios",
                 columns: table => new
                 {
-                    EventoSolidarioID = table.Column<int>(nullable: false),
-                    ItemEventoSolidarioID = table.Column<int>(nullable: false),
-                    Cantidad = table.Column<int>(nullable: false),
-                    Concepto = table.Column<int>(nullable: false),
-                    Ingreso = table.Column<decimal>(type: "decimal(18, 2)", nullable: false),
-                    Salida = table.Column<decimal>(type: "decimal(18, 2)", nullable: false),
-                    Total = table.Column<decimal>(type: "decimal(18, 2)", nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Cantidad = table.Column<int>(nullable: true),
+                    Concepto = table.Column<string>(nullable: false),
+                    Ingreso = table.Column<decimal>(type: "decimal(18, 2)", nullable: true),
+                    Salida = table.Column<decimal>(type: "decimal(18, 2)", nullable: true),
+                    Total = table.Column<decimal>(type: "decimal(18, 2)", nullable: true),
                     Fecha = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EventoSolidarios", x => new { x.EventoSolidarioID, x.ItemEventoSolidarioID });
+                    table.PrimaryKey("PK_EventoSolidarios", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(

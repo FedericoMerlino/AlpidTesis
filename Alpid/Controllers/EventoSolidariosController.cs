@@ -34,7 +34,7 @@ namespace Alpid.Controllers
             }
 
             var eventoSolidarios = await _context.EventoSolidarios
-                .FirstOrDefaultAsync(m => m.EventoSolidarioID == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (eventoSolidarios == null)
             {
                 return NotFound();
@@ -52,7 +52,7 @@ namespace Alpid.Controllers
         {
             if (ModelState.IsValid)
             {
-                var ultimoId = _context.EventoSolidarios.Max(x => x.EventoSolidarioID);
+                var ultimoId = _context.EventoSolidarios.Max(x => x.Id);
                 var item = 1;
 
                 while (item != 4)
@@ -78,7 +78,7 @@ namespace Alpid.Controllers
         {
             if (ModelState.IsValid)
             {
-                var ultimoId = _context.EventoSolidarios.Max(x => x.EventoSolidarioID);
+                var ultimoId = _context.EventoSolidarios.Max(x => x.Id);
                 var item = 1;
 
                 while (item != 4)
@@ -119,7 +119,7 @@ namespace Alpid.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("EventoSolidarioID,Cantidad,Concepto,Ingreso,Salida,Total,Fecha")] EventoSolidarios eventoSolidarios)
         {
-            if (id != eventoSolidarios.EventoSolidarioID)
+            if (id != eventoSolidarios.Id)
             {
                 return NotFound();
             }
@@ -133,7 +133,7 @@ namespace Alpid.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EventoSolidariosExists(eventoSolidarios.EventoSolidarioID))
+                    if (!EventoSolidariosExists(eventoSolidarios.Id))
                     {
                         return NotFound();
                     }
@@ -156,7 +156,7 @@ namespace Alpid.Controllers
             }
 
             var eventoSolidarios = await _context.EventoSolidarios
-                .FirstOrDefaultAsync(m => m.EventoSolidarioID == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (eventoSolidarios == null)
             {
                 return NotFound();
@@ -178,7 +178,7 @@ namespace Alpid.Controllers
 
         private bool EventoSolidariosExists(int id)
         {
-            return _context.EventoSolidarios.Any(e => e.EventoSolidarioID == id);
+            return _context.EventoSolidarios.Any(e => e.Id == id);
         }
     }
 }

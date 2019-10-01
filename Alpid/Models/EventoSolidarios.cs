@@ -10,12 +10,7 @@ namespace Alpid.Models
     public class EventoSolidarios
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int EventoSolidarioID { get; set; }
-
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int ItemEventoSolidarioID { get; set; }
+        public int Id { get; set; }
 
         public int? Cantidad { get; set; }
 

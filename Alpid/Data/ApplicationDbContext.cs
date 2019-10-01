@@ -10,7 +10,7 @@ namespace Alpid.Data
     {
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<EventoSolidarios>().HasKey(ba => new { ba.EventoSolidarioID, ba.ItemEventoSolidarioID });
+            modelBuilder.Entity<EventoSolidarios>().HasKey(ba => new { ba.Id });
             modelBuilder.Entity<IdentityUserLogin<string>>().HasKey(ba => new { ba.ProviderKey });
             modelBuilder.Entity<IdentityUserRole<string>>().HasKey(ba => new { ba.UserId });
             modelBuilder.Entity<IdentityUserToken<string>>().HasKey(ba => new { ba.UserId });
