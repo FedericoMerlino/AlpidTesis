@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Alpid.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class CuotasController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -25,11 +25,17 @@ namespace Alpid.Controllers
         public async Task<IActionResult> Index(string currentFilter, string searchString, int? page, string filtroFecha,
                                                 string DateFilter,int valor)
         {
+            var ValorParaCuota = (from s in _context.Cuotas select s).Count();
 
+            if (ValorParaCuota == 0)
+            {
+                ViewData["precio"] = "Debe cargar un valor";
+            }
+            else { 
             var ultimoid = _context.CuotaPrecio.Max(c => c.CuotaPrecioID);
             var UltimoValor = _context.CuotaPrecio.SingleOrDefault(c => c.CuotaPrecioID == ultimoid);
             ViewData["precio"] = UltimoValor.Importe;
-
+            }
             //return View(await applicationDbContext.ToListAsync());
 
             if (searchString != null)

@@ -4,11 +4,14 @@
 }
 
 <html>
+<head>
+
+</head>
 <body style="background-color:ghostwhite;">
     <h1 style="color:blue">Socios Alpid</h1>
     <p>
         <a class="btn btn-link" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-            Filtros
+            <i class="fa fa-angle-double-down"> Filtros</i>
         </a>
     </p>
     <div class="collapse" id="collapseExample">
@@ -20,7 +23,6 @@
                     <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
                 </div>
                 <div class="col-lg-3 col-med-4 col-sm-6 col-xs-12" style="padding-top:2%;">
-
                     <div class="form-actions no-color">
                         <label class="col-lg-12" style="color:darkblue">Estados: </label>
                         <div style="padding-left:15px;">
@@ -140,7 +142,6 @@
                 <label style="padding-bottom:5px; font-weight: bold;"> Referencias:</label> <br />
                 <input type="text" style="height:20px;width:20px;" disabled /> Activo
                 <input type="text" style="height:20px;width:20px;background-color:salmon;" disabled /> Eliminado
-
             </h5>
             <!--realiza la paginacion del lado del servidor-->
             <div style="float:right; padding-bottom: 30px;">
