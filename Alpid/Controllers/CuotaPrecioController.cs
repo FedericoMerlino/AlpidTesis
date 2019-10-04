@@ -56,16 +56,27 @@ namespace Alpid.Controllers
         {
             try
             {
-                //borra el registro viejo
-                var id = _context.CuotaPrecio.Max(x => x.CuotaPrecioID);
-                var cuotaPrecioViejo = await _context.CuotaPrecio.FindAsync(id);
-                _context.CuotaPrecio.Remove(cuotaPrecioViejo);
-                await _context.SaveChangesAsync();
+                var PrecioVacio = (from c in _context.CuotaPrecio select c).Count();
 
-                //Crear registro nuevo
-                _context.Add(cuotaPrecio);
-                await _context.SaveChangesAsync();
-                //vuelve a pantalla de cuotas
+                if (PrecioVacio == 0)
+                {
+                    //Crear registro nuevo
+                    _context.Add(cuotaPrecio);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    //borra el registro viejo
+                    var id = _context.CuotaPrecio.Max(x => x.CuotaPrecioID);
+                    var cuotaPrecioViejo = await _context.CuotaPrecio.FindAsync(id);
+                    _context.CuotaPrecio.Remove(cuotaPrecioViejo);
+                    await _context.SaveChangesAsync();
+
+                    //Crear registro nuevo
+                    _context.Add(cuotaPrecio);
+                    await _context.SaveChangesAsync();
+                    //vuelve a pantalla de cuotas
+                }
                 var valor = 1;
                 return RedirectToAction("Index", "Cuotas", new { valor });
             }

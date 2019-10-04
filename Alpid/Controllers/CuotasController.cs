@@ -25,7 +25,7 @@ namespace Alpid.Controllers
         public async Task<IActionResult> Index(string currentFilter, string searchString, int? page, string filtroFecha,
                                                 string DateFilter,int valor)
         {
-            var ValorParaCuota = (from s in _context.Cuotas select s).Count();
+            var ValorParaCuota = (from s in _context.CuotaPrecio select s).Count();
 
             if (ValorParaCuota == 0)
             {

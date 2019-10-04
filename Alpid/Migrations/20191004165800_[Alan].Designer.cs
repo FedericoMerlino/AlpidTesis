@@ -4,14 +4,16 @@ using Alpid.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Alpid.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191004165800_[Alan]")]
+    partial class Alan
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -142,13 +144,8 @@ namespace Alpid.Migrations
 
                     b.Property<DateTime>("Fecha");
 
-                    b.Property<int>("IdItemEvento");
-
                     b.Property<decimal?>("Ingreso")
                         .HasColumnType("decimal(18, 2)");
-
-                    b.Property<string>("NombreEvento")
-                        .IsRequired();
 
                     b.Property<decimal?>("Salida")
                         .HasColumnType("decimal(18, 2)");

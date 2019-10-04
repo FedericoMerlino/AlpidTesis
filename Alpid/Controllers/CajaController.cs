@@ -7,10 +7,11 @@ using Microsoft.EntityFrameworkCore;
 using Alpid.Models;
 using Rotativa.AspNetCore;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Alpid.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class CajaController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -229,11 +230,11 @@ namespace Alpid.Controllers
                 else
                 {
                     caja.Total = caja.Debe;
+                    caja.FechaMovimiento = DateTime.Now;
                     _context.Add(caja);
                     await _context.SaveChangesAsync();
                     var valor = 1;
                     return RedirectToAction("Index", "Caja", new { valor });
-
                 }
             }
             catch (Exception e)

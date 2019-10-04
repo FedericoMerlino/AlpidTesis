@@ -14,7 +14,6 @@ namespace Alpid.Models
 
         [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
         [Required(ErrorMessage = "Debe ingresar una fecha")]
-
         public DateTime FechaDesde { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]

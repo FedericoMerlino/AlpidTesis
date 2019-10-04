@@ -16,7 +16,7 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="Debe" class="control-label">Ingreso Dinero</label>
-                    <input asp-for="Debe" id="txtDinero" type="text" class="form-control" required />
+                    <input asp-for="Debe" id="txtDinero" type="number" step=".01" class="form-control" required />
                     <span asp-validation-for="Debe.Value" class="text-danger"></span>
 
                 </div>

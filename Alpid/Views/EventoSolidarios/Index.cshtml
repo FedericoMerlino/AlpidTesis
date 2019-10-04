@@ -5,12 +5,12 @@
 }
 <html>
 <body>
-    <h1>Eventos solidarios</h1>
-    <p>
+    <h1 style="color:blue">Eventos solidarios</h1>
+    <div style="padding-bottom:3%; padding-top:1%;">
+        <!--Boton para crear nuevo evento-->
         <a asp-action="Create" class="btn btn-success">Nuevo evento</a>
-    </p>
-    <!--Busca solamente la info que se muestra en la grilla-->
-    <div>
+        <!--Busca solamente la info que se muestra en la grilla-->
+
         <i class="fa fa-search fa-2x" style="Float: right; padding-left:10px; padding-top:2px;"></i>
         <input id="searchTerm" type="text" onkeyup="doSearch()" class="form-control" placeholder="Buscar" style=" width:200px; Float: right; " />
     </div>
@@ -24,16 +24,13 @@
                             Fecha
                         </th>
                         <th>
-                            Cantidad
+                            Nombre Evento
                         </th>
                         <th>
-                            Concepto
+                            Ingreso Total
                         </th>
                         <th>
-                            Ingreso
-                        </th>
-                        <th>
-                            Salida
+                            Salida Total
                         </th>
                         <th>
                             Total
@@ -49,22 +46,28 @@
                                 @Html.DisplayFor(modelItem => item.Fecha)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Cantidad)
+                                @Html.DisplayFor(modelItem => item.NombreEvento)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Concepto)
+                                @if (item.Ingreso != null)
+                                {
+                                    <span>$ </span> @Html.DisplayFor(modelItem => item.Ingreso)
+                                }
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Ingreso)
+                                @if (item.Salida != null)
+                                {
+                                    <span>$ </span> @Html.DisplayFor(modelItem => item.Salida)
+                                }
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Salida)
+                                @if (item.Total != null)
+                                {
+                                    <span>$ </span> @Html.DisplayFor(modelItem => item.Total)
+                                }
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Total)
-                            </td>
-                            <td>
-                                <a asp-action="Details" asp-route-id="@item.Id">Ver</a> |
+                                <a asp-action="Details" class="btn btn-info" asp-route-id="@item.Id">Ver</a>
                             </td>
                         </tr>
                     }

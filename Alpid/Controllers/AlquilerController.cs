@@ -67,7 +67,7 @@ namespace Alpid.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AlquilerID,Fecha,Observacion,Valor,ProductosID,SociosId")] Alquiler alquiler)
+        public async Task<IActionResult> Create([Bind("AlquilerID,FechaDesde,Observacion,SociosId")] Alquiler alquiler)
         {
             if (ModelState.IsValid)
             {

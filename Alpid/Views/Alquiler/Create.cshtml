@@ -3,122 +3,76 @@
 @{
     ViewData["Title"] = "Nuevo alquiler";
 }
-
-<h1>Nuevo alquiler</h1>
-<hr />
-<div class="row">
-    <div class="col-md-8">
-        <form asp-action="Create" name="formCrearProducto">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group col-md-4">
-                <label asp-for="FechaDesde" class="control-label">Fecha alquiler</label>
-                <input asp-for="FechaDesde" type="date" class="form-control" />
-                <span asp-validation-for="FechaDesde" class="text-danger"></span>
-            </div>
-            <div class="form-group col-md-4">
-                <label asp-for="SociosId" class="control-label">Socio</label>
-                <select asp-for="SociosId" class="form-control" asp-items="ViewBag.SociosId"></select>
-            </div>
-            <div class="form-group col-md-12">
-                <label asp-for="Observacion" class="control-label">Observación</label>
-                <input asp-for="Observacion" class="form-control" />
-                <span asp-validation-for="Observacion" class="text-danger"></span>
-            </div>
-            <div class="form-group col-md-12">
-                <h3 style="color:blue;">Seleccionar productos</h3>
-                <label for="productos">
-                    Seleccionar nuevo para agregrar mas productos:
-                </label>
-                <div class="btn btn-success" id="btnNuevoProducto">Nuevo</div>
-                <table id="mytable" class="table table-bordered table-hover">
-                    <tr>
-                        <th>Producto</th>
-                        <th>Cantidad</th>
-                        <th>Precio Unitario</th>
-                        <th>Quitar</th>
-                    </tr>
-                    <tr>
-                        <td><input type="text" class="form-control" name="Producto[]" /> </td>
-                        <td><input type="text" class="form-control" name="Cantida[]" /> </td>
-                        <td><input type="text" class="form-control" name="Precio[]" /> </td>
-                        <td class="text-center">
-                            @*<div class="btn btn-danger">Quitar</div>*@
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <div class="col-md-12">
-                <input type="submit" value="Guardar" class="btn btn-primary" />
-                <a asp-action="Index" style="float:right;" class="btn btn-info">Cancelar</a>
-            </div>
-        </form>
+<html>
+<body style="background-color:ghostwhite;">
+    <h1 style="color:blue">Nuevo alquiler</h1>
+    <hr />
+    <div class="row">
+        <div class="col-md-8">
+            <form asp-action="Create" name="formCrearProducto">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group col-md-4">
+                    <label asp-for="FechaDesde" class="control-label">Fecha desde</label>
+                    <input asp-for="FechaDesde" id="FechaAlquiler" type="date" class="form-control" />
+                    <span asp-validation-for="FechaDesde" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="FechaHasta" class="control-label">Fecha hasta</label>
+                    <input asp-for="FechaHasta" id="FechaAlquiler" type="date" class="form-control" />
+                    <span asp-validation-for="FechaHasta" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="SociosId" class="control-label">Socio</label>
+                    <select asp-for="SociosId" class="form-control" asp-items="ViewBag.SociosId"></select>
+                </div>
+                <div class="form-group col-md-12">
+                    <label asp-for="Observacion" class="control-label">Observación</label>
+                    <input asp-for="Observacion" class="form-control" />
+                    <span asp-validation-for="Observacion" class="text-danger"></span>
+                </div>
+                <br />
+                <div class="form-group col-md-4">
+                    <input type="submit" onclick="AddProducts();" value="Seleccionar elemento ortopédico" class="btn btn-primary" />
+                </div>
+            </form>
+            <form asp-action="AddProduct" id="AddProductForm" style="display: none;">
+                <div class="form-group col-md-12">
+                    <h3 style="color:blue;">Seleccionar productos</h3>
+                    <div class="form-group col-md-3">
+                        <label asp-for="Observacion" class="control-label">Observación</label>
+                        <input asp-for="Observacion" class="form-control" />
+                        <span asp-validation-for="Observacion" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label asp-for="Observacion" class="control-label">Observación</label>
+                        <input asp-for="Observacion" class="form-control" />
+                        <span asp-validation-for="Observacion" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label asp-for="Observacion" class="control-label">Observación</label>
+                        <input asp-for="Observacion" class="form-control" />
+                        <span asp-validation-for="Observacion" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label asp-for="Observacion" class="control-label" style="color:ghostwhite;"></label>
+                        <input type="submit" value="Guardar" class="form-control btn btn-primary" />
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
+</body>
+</html>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+<script src="~/lib/lightbox/js/lightbox.min.js"></script>
 
 <script>
-
-    $(document).on('ready', funcPrincipal);
-
-    function funcPrincipal() {
-        $("#btnNuevoProducto").on('click', funcNuevoProducto);
-        $("body").on('click', ".btn-danger", funcEliminarFila);
-    }
-
-    function funcEliminarFila() {
-        $(this).parent().parent().fadeOut("slow", function () { $(this).remove(); });
-    }
-
-    function funcNuevoProducto() {
-        $("#mytable")
-            .append
-            (
-                $('<tr>')
-                    .append
-                    (
-                        $('<td>')
-                            .append
-                            (
-                                $('<input>').attr('type', 'text').addClass('form.contrl').attr('name', 'Producto[]')
-                            )
-                    )
-                    .append
-                    (
-                        $('<td>')
-                            .append
-                            (
-                                $('<input>').attr('type', 'text').addClass('form.contrl').attr('name', 'Cantida[]')
-                            )
-                    )
-                    .append
-                    (
-                        $('<td>')
-                            .append
-                            (
-                                $('<input>').attr('type', 'text').addClass('form.contrl').attr('name', 'Precio[]')
-                            )
-                    )
-                    .append
-                    (
-                        $('<td>').addClass('text-center')
-                            .append
-                            (
-                                $('<div>').addClass('btn btn-danger').text('Quitar')
-                            )
-                    )
-            )
+    function AddProducts() {
+        var formulario = document.getElementById('AddProductForm');
+        formulario.style.display = 'block';
     };
-
-    function getdata() {
-        var producto = document.getElementsByName("Producto").value;
-        console.log(producto)
-    }
-    var tbl = $('table#mytable tr').get().map(function (row) {
-        return $(row).find('td').get().map(function (cell) {
-            return $(cell).html();
-        });
-    });
 </script>
+

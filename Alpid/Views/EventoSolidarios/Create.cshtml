@@ -4,91 +4,60 @@
     ViewData["Title"] = "Nuevo evento soliario";
 }
 <html>
-<body>
-    <h1>Nuevo evento soliario</h1>
+<body style="background-color:ghostwhite;">
+    <h1 style="color:blue">Nuevo evento soliario</h1>
     <hr />
     <div class="row">
         <div class="col-md-9">
             <form asp-action="Create" id="AddAssociate">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group col-md-4">
-                    <label asp-for="Fecha" class="control-label"></label>
-                    <input asp-for="Fecha" class="form-control" />
+                <div class="form-group col-md-12" style="padding-right:0%;">
+                    <label asp-for="NombreEvento" class="control-label">Nombre Evento Solidario</label>
+                    <input asp-for="NombreEvento" id="Concepto" name="NombreEvento" class="form-control" />
+                    <span asp-validation-for="NombreEvento" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-12" style="padding-right:0%;">
+                    <label asp-for="Concepto" class="control-label">Concepto</label>
+                    <input asp-for="Concepto" id="Concepto" name="Concepto" class="form-control" />
+                    <span asp-validation-for="Concepto" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="Fecha" class="control-label">Fecha </label>
+                    <input asp-for="Fecha" type="date" class="form-control" />
                     <span asp-validation-for="Fecha" class="text-danger"></span>
                 </div>
-                <table id="mytable" class="table table-bordered table-hover">
-                    <tr>
-                        <th>Cantidad</th>
-                        <th>Concepto</th>
-                        <th>Ingreso</th>
-                        <th>Salida</th>
-                    </tr>
-                    <tr>
-                        <td><input asp-for="Cantidad" id="Cantidad" name="Cantidad" class="form-control" /></td>
-                        <td><input asp-for="Concepto" id="Concepto" name="Concepto" class="form-control" /></td>
-                        <td><input asp-for="Ingreso" id="Ingreso" name="Ingreso" class="form-control" /></td>
-                        <td><input asp-for="Salida" id="salida" name="Salida" class="form-control" /></td>
-                    </tr>
-                    <tr>
-                        <td><input asp-for="Cantidad" id="Cantidad" name="Cantidad" class="form-control" /></td>
-                        <td><input asp-for="Concepto" id="Concepto" name="Concepto" class="form-control" /></td>
-                        <td><input asp-for="Ingreso" id="Ingreso" name="Ingreso" class="form-control" /></td>
-                        <td><input asp-for="Salida" id="salida" name="Salida" class="form-control" /></td>
-                    </tr>
-                    <tr>
-                        <td><input asp-for="Cantidad" id="Cantidad" name="Cantidad" class="form-control" /></td>
-                        <td><input asp-for="Concepto" id="Concepto" name="Concepto" class="form-control" /></td>
-                        <td><input asp-for="Ingreso" id="Ingreso" name="Ingreso" class="form-control" /></td>
-                        <td><input asp-for="Salida" id="salida" name="Salida" class="form-control" /></td>
-                    </tr>
-                  
-                </table>
-                <div class="form-group">
-                    <input onclick="Guardar()" value="Create" class="btn btn-primary" />
+                <div class="form-group col-md-2">
+                    <label asp-for="Cantidad" class="control-label">Cantidad</label>
+                    <input asp-for="Cantidad" id="Cantidad" name="Cantidad" class="form-control" />
+                    <span asp-validation-for="Cantidad" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-2">
+                    <label asp-for="Ingreso" class="control-label">Ingreso dinero</label>
+                    <input asp-for="Ingreso" id="Ingreso" name="Ingreso" class="form-control" />
+                    <span asp-validation-for="Ingreso" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-2">
+                    <label asp-for="Salida" class="control-label">Salida Dinero</label>
+                    <input asp-for="Salida" id="salida" name="Salida" class="form-control" />
+                    <span asp-validation-for="Salida" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-2">
+                    <label asp-for="Salida" class="control-label" style="color:ghostwhite;">Salida Dinero</label>
+                    <input type="submit" value=" Guardar concepto" class="btn btn-primary" />
+                </div>
+                <div class="form-group col-md-2">
+                    <input asp-for="IdItemEvento" value="1" class="form-control" style="display:none"/>
                 </div>
             </form>
         </div>
     </div>
-
     <div>
-        <a asp-action="Index">Back to List</a>
+        <a asp-action="Index">REgresar</a>
     </div>
+
 </body>
 </html>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
-<script src="/lib/jquery/dist/jquery.js"></script>
-<script>
-    var $AddAssociate = $("#AddAssociate");
-
-    $AddAssociate.submit(function (e) {
-        e.preventDefault();
-
-        var rows = [];
-
-        rows.push({
-            CantidadDto: Cantidad,
-            ConceptoDto: Concepto,
-            IngresoDto: Ingreso,
-            //SalidaDto: Salida,
-        });
-
-        $.ajax({
-            type: 'POST',
-            URL: '/EventoSolidarios',
-            data: JSON.stringify(rows),
-            success: function (rows) {
-                console.log(rows);
-            }
-        });
-
-    });
-    //al apretar el Boton guardar
-    function Guardar() {
-
-        $AddAssociate.submit();
-
-    }
-
-</script>

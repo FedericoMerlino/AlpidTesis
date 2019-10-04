@@ -48,52 +48,16 @@ namespace Alpid.Controllers
         {
             return View();
         }
-        public ActionResult Crear(RowDtoEventosSolidarios[] filas)
-        {
-            if (ModelState.IsValid)
-            {
-                var ultimoId = _context.EventoSolidarios.Max(x => x.Id);
-                var item = 1;
 
-                while (item != 4)
-                {
-                    var valorID = ultimoId + 1;
-                    //eventoSolidarios.ItemEventoSolidarioID = item;
-                    _context.Add(filas);
-                    _context.SaveChangesAsync();
-
-                    item++;
-                }
-
-                return RedirectToAction(nameof(Index));
-            }
-            return View(filas);
-        }
         // POST: EventoSolidarios/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("EventoSolidarioID,ItemEventoSolidarioID,Cantidad,Concepto,Ingreso,Salida,Total,Fecha")] EventoSolidarios[] eventoSolidarios)
+        public async Task<IActionResult> Create([Bind("Id,NombreEvento,IdItemEvento,Cantidad,Concepto,Ingreso,Salida,Total,Fecha")] EventoSolidarios eventoSolidarios)
         {
-            if (ModelState.IsValid)
-            {
-                var ultimoId = _context.EventoSolidarios.Max(x => x.Id);
-                var item = 1;
+            _context.Add(eventoSolidarios);
+            await _context.SaveChangesAsync();
 
-                while (item != 4)
-                {
-                    var valorID = ultimoId + 1;
-                    //eventoSolidarios.ItemEventoSolidarioID = item;
-                    _context.Add(eventoSolidarios);
-                     _context.SaveChangesAsync();
-
-                    item ++;
-                }
-
-                return RedirectToAction(nameof(Index));
-            }
-            return View(eventoSolidarios);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: EventoSolidarios/Edit/5
