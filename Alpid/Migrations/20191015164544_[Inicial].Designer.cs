@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Alpid.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20191001203747_inicial")]
-    partial class inicial
+    [Migration("20191015164544_[Inicial]")]
+    partial class Inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -144,8 +144,15 @@ namespace Alpid.Migrations
 
                     b.Property<DateTime>("Fecha");
 
+                    b.Property<int>("IdEvento");
+
+                    b.Property<int>("IdItemEvento");
+
                     b.Property<decimal?>("Ingreso")
                         .HasColumnType("decimal(18, 2)");
+
+                    b.Property<string>("NombreEvento")
+                        .IsRequired();
 
                     b.Property<decimal?>("Salida")
                         .HasColumnType("decimal(18, 2)");

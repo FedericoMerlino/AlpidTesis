@@ -43,21 +43,82 @@ namespace Alpid.Controllers
             return View(eventoSolidarios);
         }
 
-        // GET: EventoSolidarios/Create
-        public IActionResult Create()
+        // GET: EventoSolidario s/Create
+        public async Task<IActionResult> Create(string Nombre, int idItem, int ID, decimal ValorTotal)
         {
-            return View();
+            ViewData["ValorID"] = idItem;
+            ViewData["NombreEvento"] = Nombre;
+            ViewData["IdEventoResultado"] = ID;
+            ViewData["ValorTotalResultado"] = ValorTotal;
+            return View(await _context.EventoSolidarios.ToListAsync());
         }
 
         // POST: EventoSolidarios/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,NombreEvento,IdItemEvento,Cantidad,Concepto,Ingreso,Salida,Total,Fecha")] EventoSolidarios eventoSolidarios)
+        public async Task<IActionResult> Create(int IdEvento, string NombreEvento, int IdItemEvento, int Cantidad, string Concepto,
+                                                decimal Ingreso, decimal Salida, DateTime Fecha, decimal Total)
         {
-            _context.Add(eventoSolidarios);
+            var evento = new EventoSolidarios();
+            var ID = 0;
+
+            evento.Fecha = Fecha;
+            evento.Cantidad = Cantidad;
+            evento.Concepto = Concepto;
+            evento.Ingreso = Ingreso;
+            evento.NombreEvento = NombreEvento;
+            evento.Salida = Salida;
+
+            if (IdItemEvento == 0)
+            {
+                evento.IdItemEvento = 1;
+            }
+            else
+            {
+                evento.IdItemEvento = IdItemEvento + 1;
+            }
+            var PrimerEvento = (from c in _context.EventoSolidarios select c).Count();
+
+            decimal? ValorTotal;
+
+            if (PrimerEvento == 0)
+            {
+                evento.IdEvento = 1;
+
+                ValorTotal = 0;
+                ValorTotal = ValorTotal + Ingreso;
+                ValorTotal = ValorTotal - Salida;
+                evento.Total = ValorTotal;
+            }
+            else
+            {
+                var UltimoIdbase = (from c in _context.EventoSolidarios select c.Id).Max();
+                var valoresBase = _context.EventoSolidarios.SingleOrDefault(x => x.Id == UltimoIdbase);
+
+                if (valoresBase.NombreEvento == NombreEvento)
+                {
+                    evento.IdEvento = IdEvento;
+                    ID = IdEvento;
+
+                }
+                else
+                {
+                    evento.IdEvento = valoresBase.IdEvento + 1;
+                    ID = valoresBase.IdEvento + 1;
+
+                }
+
+                ValorTotal = Total;
+                ValorTotal = ValorTotal + Ingreso;
+                ValorTotal = ValorTotal - Salida;
+                evento.Total = ValorTotal;
+            }
+            _context.Add(evento);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index));
+            var idItem = IdItemEvento + 1;
+            var Nombre = NombreEvento;
+
+            return RedirectToAction("Create", "EventoSolidarios", new { Nombre, idItem, ID, ValorTotal });
         }
 
         // GET: EventoSolidarios/Edit/5

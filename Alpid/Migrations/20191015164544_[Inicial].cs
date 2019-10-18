@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Alpid.Migrations
 {
-    public partial class inicial : Migration
+    public partial class Inicial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -28,6 +28,9 @@ namespace Alpid.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    IdEvento = table.Column<int>(nullable: false),
+                    NombreEvento = table.Column<string>(nullable: false),
+                    IdItemEvento = table.Column<int>(nullable: false),
                     Cantidad = table.Column<int>(nullable: true),
                     Concepto = table.Column<string>(nullable: false),
                     Ingreso = table.Column<decimal>(type: "decimal(18, 2)", nullable: true),

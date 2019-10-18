@@ -142,6 +142,8 @@ namespace Alpid.Migrations
 
                     b.Property<DateTime>("Fecha");
 
+                    b.Property<int>("IdEvento");
+
                     b.Property<int>("IdItemEvento");
 
                     b.Property<decimal?>("Ingreso")

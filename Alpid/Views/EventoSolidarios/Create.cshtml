@@ -1,4 +1,4 @@
-﻿@model Alpid.Models.EventoSolidarios
+﻿@model IEnumerable<Alpid.Models.EventoSolidarios>
 
 @{
     ViewData["Title"] = "Nuevo evento soliario";
@@ -12,50 +12,133 @@
             <form asp-action="Create" id="AddAssociate">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group col-md-12" style="padding-right:0%;">
-                    <label asp-for="NombreEvento" class="control-label">Nombre Evento Solidario</label>
-                    <input asp-for="NombreEvento" id="Concepto" name="NombreEvento" class="form-control" />
-                    <span asp-validation-for="NombreEvento" class="text-danger"></span>
+                    <label class="control-label">Nombre Evento Solidario</label>
+                    @if (@ViewData["NombreEvento"] == null)
+                    {
+                        <input id="Concepto" name="NombreEvento" class="form-control" />
+                    }
+                    else
+                    {
+                        <input id="Concepto" value="@ViewData["NombreEvento"]" name="NombreEvento" class="form-control" readonly="readonly" />
+                    }
                 </div>
                 <div class="form-group col-md-12" style="padding-right:0%;">
-                    <label asp-for="Concepto" class="control-label">Concepto</label>
-                    <input asp-for="Concepto" id="Concepto" name="Concepto" class="form-control" />
-                    <span asp-validation-for="Concepto" class="text-danger"></span>
+                    <label class="control-label">Concepto</label>
+                    <input id="Concepto" name="Concepto" class="form-control" />
                 </div>
                 <div class="form-group col-md-3">
-                    <label asp-for="Fecha" class="control-label">Fecha </label>
-                    <input asp-for="Fecha" type="date" class="form-control" />
-                    <span asp-validation-for="Fecha" class="text-danger"></span>
+                    <label class="control-label">Fecha </label>
+                    <input type="date" name="Fecha" class="form-control" />
                 </div>
                 <div class="form-group col-md-2">
-                    <label asp-for="Cantidad" class="control-label">Cantidad</label>
-                    <input asp-for="Cantidad" id="Cantidad" name="Cantidad" class="form-control" />
-                    <span asp-validation-for="Cantidad" class="text-danger"></span>
-                </div>
-
-                <div class="form-group col-md-2">
-                    <label asp-for="Ingreso" class="control-label">Ingreso dinero</label>
-                    <input asp-for="Ingreso" id="Ingreso" name="Ingreso" class="form-control" />
-                    <span asp-validation-for="Ingreso" class="text-danger"></span>
+                    <label class="control-label">Cantidad</label>
+                    <input id="Cantidad" name="Cantidad" class="form-control" />
                 </div>
                 <div class="form-group col-md-2">
-                    <label asp-for="Salida" class="control-label">Salida Dinero</label>
-                    <input asp-for="Salida" id="salida" name="Salida" class="form-control" />
-                    <span asp-validation-for="Salida" class="text-danger"></span>
+                    <label class="control-label">Ingreso dinero</label>
+                    <input id="Ingreso" name="Ingreso" class="form-control" />
                 </div>
                 <div class="form-group col-md-2">
-                    <label asp-for="Salida" class="control-label" style="color:ghostwhite;">Salida Dinero</label>
-                    <input type="submit" value=" Guardar concepto" class="btn btn-primary" />
+                    <label class="control-label">Salida Dinero</label>
+                    <input id="salida" name="Salida" class="form-control" />
+                </div>
+                <div class="form-group col-md-2" style="display:none">
+                    <input value="@ViewData["ValorTotalResultado"]" name="Total" class="form-control" />
+                </div>
+                <div class="form-group col-md-2" style="display:none">
+                    <input value="@ViewData["ValorID"]" name="IdItemEvento" class="form-control" />
+                </div>
+                <div class="form-group col-md-2" style="display:none">
+                    <input value="@ViewData["IdEventoResultado"]" name="IdEvento" class="form-control" />
                 </div>
                 <div class="form-group col-md-2">
-                    <input asp-for="IdItemEvento" value="1" class="form-control" style="display:none"/>
+                    <label class="control-label" style="color:ghostwhite;">fede</label>
+                    <input type="submit" value=" Guardar concepto" id="btnGuardar" class="btn btn-primary" />
                 </div>
             </form>
         </div>
     </div>
+    @if (@ViewData["IdEventoResultado"].Equals(0))
+    {
+    }
+    else
+    {
+        <hr />
+        <h1 style="padding-bottom:2%; padding-top:2%;">Nombre Evento:<span style="color:darkblue"> @ViewData["NombreEvento"]</span> </h1>
+        <div>
+            <form class="form-group">
+                <table class="table table-responsive-sm" id="datos">
+                    <thead>
+                        <tr>
+                            <th>
+                                Cantidad
+                            </th>
+                            <th>
+                                Concepto
+                            </th>
+                            <th>
+                                Ingreso
+                            </th>
+                            <th>
+                                Salida
+                            </th>
+                            <th>
+                                Total
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            if (item.IdEvento.Equals(@ViewData["IdEventoResultado"]))
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Cantidad)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Concepto)
+                                    </td>
+                                    <td>
+                                        @if (item.Ingreso != null)
+                                        {
+                                            <span>$ </span> @Html.DisplayFor(modelItem => item.Ingreso)
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.Salida != null)
+                                        {
+                                            <span>$ </span> @Html.DisplayFor(modelItem => item.Salida)
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.Total != null)
+                                        {
+                                            @if (item.Total >= 0)
+                                            {
+                                                <div style="color:#108a10;">
+                                                    <span>$ </span> @Html.DisplayFor(modelItem => item.Total)
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div style="color:red;">
+                                                    <span>$ </span> @Html.DisplayFor(modelItem => item.Total)
+                                                </div>
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    }
     <div>
-        <a asp-action="Index">REgresar</a>
+        <a asp-action="Index" class="btn btn-info">Regresar</a>
     </div>
-
 </body>
 </html>
 @section Scripts {

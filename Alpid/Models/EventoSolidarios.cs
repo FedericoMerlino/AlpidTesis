@@ -12,6 +12,8 @@ namespace Alpid.Models
         [Key]
         public int Id { get; set; }
 
+        public int IdEvento { get; set; }
+
         [Required(ErrorMessage = "Favor de ingresar un Nombre al evento solidario")]
         public string NombreEvento { get; set; }
 
