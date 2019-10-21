@@ -10,7 +10,7 @@ namespace Alpid.Models
     public class Productos
     {
         [Key]
-        public int PoductosID { get; set; }
+        public int ProductosID { get; set; }
 
         [Required(ErrorMessage ="Favor de ingresar un Nombre")]
         public string Nombre { get; set; }
@@ -28,9 +28,7 @@ namespace Alpid.Models
 
         public string MotivoBaja { get; set; }
 
-        [Column(TypeName = "decimal(18, 2)")]
-        public decimal PrecioAlquiler { get; set; }
-
+        [Required(ErrorMessage = "Favor de ingresar un Proveedor")]
         public int? ProveedoresID { get; set; }
 
         public Proveedores Proveedores { get; set; }

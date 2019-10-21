@@ -13,7 +13,7 @@
             {
             <form asp-action="Edit">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="PoductosID" />
+                <input type="hidden" asp-for="ProductosID" />
                 <div class="form-group">
                     <label asp-for="Nombre" class="control-label">Nombre</label>
                     <input asp-for="Nombre" class="form-control" />
@@ -29,11 +29,6 @@
                     <label asp-for="FechaAlta" class="control-label"> Fecha ingreso</label>
                     <input asp-for="FechaAlta" type="date" class="form-control" readonly="readonly" />
                     <span asp-validation-for="FechaAlta" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="PrecioAlquiler" class="control-label">Precio a alquilar</label>
-                    <input asp-for="PrecioAlquiler" class="form-control" />
-                    <span asp-validation-for="PrecioAlquiler" class="text-danger"></span>
                 </div>
                 <div class="form-group" style="display:none;">
                     <label asp-for="ProductosTipo" class="control-label"></label>
@@ -54,7 +49,7 @@
             {
                 <form asp-action="Edit">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input type="hidden" asp-for="PoductosID" />
+                    <input type="hidden" asp-for="ProductosID" />
                     <div class="form-group">
                         <label asp-for="Nombre" class="control-label">Nombre</label>
                         <input asp-for="Nombre" class="form-control" />

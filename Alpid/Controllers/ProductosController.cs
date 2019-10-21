@@ -65,7 +65,7 @@ namespace Alpid.Controllers
         {
             try
             {
-                var productos = await _context.Productos.Include(p => p.Proveedores).FirstOrDefaultAsync(m => m.PoductosID == id);
+                var productos = await _context.Productos.Include(p => p.Proveedores).FirstOrDefaultAsync(m => m.ProductosID == id);
                 return View(productos);
             }
             catch (Exception e)
@@ -100,7 +100,7 @@ namespace Alpid.Controllers
 
         // POST: Productos/Create
         [HttpPost]
-        public async Task<IActionResult> Create([Bind("PoductosID,Nombre,Cantidad,ProductosTipo,FechaAlta,PrecioAlquiler,ProveedoresID")] Productos productos)
+        public async Task<IActionResult> Create([Bind("ProductosID,Nombre,Cantidad,ProductosTipo,FechaAlta,PrecioAlquiler,ProveedoresID")] Productos productos)
         {
             try
             {
@@ -150,7 +150,7 @@ namespace Alpid.Controllers
 
         // POST: Productos/Edit/5
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, [Bind("PoductosID,Nombre,Cantidad,ProductosTipo,FechaAlta,PrecioAlquiler,ProveedoresID")] Productos productos)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductosID,Nombre,Cantidad,ProductosTipo,FechaAlta,PrecioAlquiler,ProveedoresID")] Productos productos)
         {
             try
             {
@@ -189,7 +189,7 @@ namespace Alpid.Controllers
 
         //// POST: Productos/Delete/5
         [HttpPost, ActionName("Delete")]
-        public async Task<IActionResult> Delete(int id, [Bind("PoductosID,Nombre,Cantidad,ProductosTipo,FechaAlta,PrecioAlquiler,ProveedoresID,FechaBaja,MotivoBaja")] Productos productos)
+        public async Task<IActionResult> Delete(int id, [Bind("ProductosID,Nombre,Cantidad,ProductosTipo,FechaAlta,PrecioAlquiler,ProveedoresID,FechaBaja,MotivoBaja")] Productos productos)
         {
             try
             {
@@ -228,7 +228,7 @@ namespace Alpid.Controllers
 
         //// POST: Productos/Active/5
         [HttpPost, ActionName("Delete")]
-        public async Task<IActionResult> Active(int id, [Bind("PoductosID,Nombre,Cantidad,ProductosTipo,FechaAlta,PrecioAlquiler,ProveedoresID,FechaBaja,MotivoBaja")] Productos productos)
+        public async Task<IActionResult> Active(int id, [Bind("ProductosID,Nombre,Cantidad,ProductosTipo,FechaAlta,PrecioAlquiler,ProveedoresID,FechaBaja,MotivoBaja")] Productos productos)
         {
             try
             {
@@ -254,7 +254,7 @@ namespace Alpid.Controllers
             {
                 var productos = await _context.Productos
                     .Include(p => p.Proveedores)
-                    .FirstOrDefaultAsync(m => m.PoductosID == id);
+                    .FirstOrDefaultAsync(m => m.ProductosID == id);
 
                 return View(productos);
             }

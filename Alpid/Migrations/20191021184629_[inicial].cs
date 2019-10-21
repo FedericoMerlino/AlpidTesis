@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Alpid.Migrations
 {
-    public partial class Inicial : Migration
+    public partial class inicial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -196,7 +196,7 @@ namespace Alpid.Migrations
                 name: "Productos",
                 columns: table => new
                 {
-                    PoductosID = table.Column<int>(nullable: false)
+                    ProductosID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Nombre = table.Column<string>(nullable: false),
                     Cantidad = table.Column<int>(nullable: false),
@@ -204,18 +204,17 @@ namespace Alpid.Migrations
                     FechaBaja = table.Column<DateTime>(nullable: true),
                     FechaAlta = table.Column<DateTime>(nullable: false),
                     MotivoBaja = table.Column<string>(nullable: true),
-                    PrecioAlquiler = table.Column<decimal>(type: "decimal(18, 2)", nullable: false),
-                    ProveedoresID = table.Column<int>(nullable: true)
+                    ProveedoresID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Productos", x => x.PoductosID);
+                    table.PrimaryKey("PK_Productos", x => x.ProductosID);
                     table.ForeignKey(
                         name: "FK_Productos_Proveedores_ProveedoresID",
                         column: x => x.ProveedoresID,
                         principalTable: "Proveedores",
                         principalColumn: "ProveedoresId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -243,55 +242,29 @@ namespace Alpid.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductosAlquiler",
-                columns: table => new
-                {
-                    ProductosAlquilerID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Valor = table.Column<string>(nullable: true),
-                    cantidad = table.Column<string>(nullable: true),
-                    ProductosID = table.Column<int>(nullable: false),
-                    AlquilerID = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductosAlquiler", x => x.ProductosAlquilerID);
-                    table.ForeignKey(
-                        name: "FK_ProductosAlquiler_Productos_ProductosID",
-                        column: x => x.ProductosID,
-                        principalTable: "Productos",
-                        principalColumn: "PoductosID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Alquiler",
                 columns: table => new
                 {
-                    AlquilerID = table.Column<int>(nullable: false)
+                    ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AlquilerID = table.Column<int>(nullable: false),
                     FechaDesde = table.Column<DateTime>(nullable: false),
                     FechaHasta = table.Column<DateTime>(nullable: false),
-                    Observacion = table.Column<string>(nullable: true),
+                    Observacion = table.Column<string>(nullable: false),
                     SociosId = table.Column<int>(nullable: false),
-                    ProductosAlquilerID = table.Column<int>(nullable: true),
-                    ProductosPoductosID = table.Column<int>(nullable: true)
+                    Valor = table.Column<decimal>(nullable: false),
+                    cantidad = table.Column<int>(nullable: false),
+                    ProductosID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Alquiler", x => x.AlquilerID);
+                    table.PrimaryKey("PK_Alquiler", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Alquiler_ProductosAlquiler_ProductosAlquilerID",
-                        column: x => x.ProductosAlquilerID,
-                        principalTable: "ProductosAlquiler",
-                        principalColumn: "ProductosAlquilerID",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Alquiler_Productos_ProductosPoductosID",
-                        column: x => x.ProductosPoductosID,
+                        name: "FK_Alquiler_Productos_ProductosID",
+                        column: x => x.ProductosID,
                         principalTable: "Productos",
-                        principalColumn: "PoductosID",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "ProductosID",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Alquiler_Socios_SociosId",
                         column: x => x.SociosId,
@@ -324,7 +297,7 @@ namespace Alpid.Migrations
                         name: "FK_Caja_Alquiler_AlquilerID",
                         column: x => x.AlquilerID,
                         principalTable: "Alquiler",
-                        principalColumn: "AlquilerID",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Caja_Cuotas_CuotasID",
@@ -335,14 +308,9 @@ namespace Alpid.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Alquiler_ProductosAlquilerID",
+                name: "IX_Alquiler_ProductosID",
                 table: "Alquiler",
-                column: "ProductosAlquilerID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Alquiler_ProductosPoductosID",
-                table: "Alquiler",
-                column: "ProductosPoductosID");
+                column: "ProductosID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Alquiler_SociosId",
@@ -368,11 +336,6 @@ namespace Alpid.Migrations
                 name: "IX_Productos_ProveedoresID",
                 table: "Productos",
                 column: "ProveedoresID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductosAlquiler_ProductosID",
-                table: "ProductosAlquiler",
-                column: "ProductosID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -414,13 +377,10 @@ namespace Alpid.Migrations
                 name: "Cuotas");
 
             migrationBuilder.DropTable(
-                name: "ProductosAlquiler");
+                name: "Productos");
 
             migrationBuilder.DropTable(
                 name: "Socios");
-
-            migrationBuilder.DropTable(
-                name: "Productos");
 
             migrationBuilder.DropTable(
                 name: "Proveedores");

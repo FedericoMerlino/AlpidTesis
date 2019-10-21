@@ -63,11 +63,6 @@
                     <span asp-validation-for="FechaAlta" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="PrecioAlquiler" class="control-label"> Precio a alquilar*</label>
-                    <input asp-for="PrecioAlquiler" class="form-control" required />
-                    <span asp-validation-for="PrecioAlquiler" class="text-danger"></span>
-                </div>
-                <div class="form-group">
                     <label asp-for="ProveedoresID" class="control-label">Proveedor</label>
                     <select asp-for="ProveedoresID" class="form-control" asp-items="ViewBag.ProveedoresID"></select>
                 </div>
@@ -98,11 +93,6 @@
                     <label asp-for="FechaAlta" class="control-label">Fecha ingreso</label>
                     <input asp-for="FechaAlta" type="date" id="fechaActualTercero" class="form-control" readonly="readonly" />
                     <span asp-validation-for="FechaAlta" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="PrecioAlquiler" class="control-label"> Precio</label>
-                    <input asp-for="PrecioAlquiler" class="form-control"  />
-                    <span asp-validation-for="PrecioAlquiler" class="text-danger"></span>
                 </div>
                 <div class="form-group" style="display:none">
                     <label asp-for="ProductosTipo" class="control-label"></label>

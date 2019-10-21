@@ -21,27 +21,30 @@ namespace Alpid.Migrations
 
             modelBuilder.Entity("Alpid.Models.Alquiler", b =>
                 {
-                    b.Property<int>("AlquilerID")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AlquilerID");
 
                     b.Property<DateTime>("FechaDesde");
 
                     b.Property<DateTime>("FechaHasta");
 
-                    b.Property<string>("Observacion");
+                    b.Property<string>("Observacion")
+                        .IsRequired();
 
-                    b.Property<int?>("ProductosAlquilerID");
-
-                    b.Property<int?>("ProductosPoductosID");
+                    b.Property<int>("ProductosID");
 
                     b.Property<int>("SociosId");
 
-                    b.HasKey("AlquilerID");
+                    b.Property<decimal>("Valor");
 
-                    b.HasIndex("ProductosAlquilerID");
+                    b.Property<int>("cantidad");
 
-                    b.HasIndex("ProductosPoductosID");
+                    b.HasKey("ID");
+
+                    b.HasIndex("ProductosID");
 
                     b.HasIndex("SociosId");
 
@@ -165,7 +168,7 @@ namespace Alpid.Migrations
 
             modelBuilder.Entity("Alpid.Models.Productos", b =>
                 {
-                    b.Property<int>("PoductosID")
+                    b.Property<int>("ProductosID")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -180,39 +183,16 @@ namespace Alpid.Migrations
                     b.Property<string>("Nombre")
                         .IsRequired();
 
-                    b.Property<decimal>("PrecioAlquiler")
-                        .HasColumnType("decimal(18, 2)");
-
                     b.Property<string>("ProductosTipo");
 
-                    b.Property<int?>("ProveedoresID");
+                    b.Property<int?>("ProveedoresID")
+                        .IsRequired();
 
-                    b.HasKey("PoductosID");
+                    b.HasKey("ProductosID");
 
                     b.HasIndex("ProveedoresID");
 
                     b.ToTable("Productos");
-                });
-
-            modelBuilder.Entity("Alpid.Models.ProductosAlquiler", b =>
-                {
-                    b.Property<int>("ProductosAlquilerID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("AlquilerID");
-
-                    b.Property<int>("ProductosID");
-
-                    b.Property<string>("Valor");
-
-                    b.Property<string>("cantidad");
-
-                    b.HasKey("ProductosAlquilerID");
-
-                    b.HasIndex("ProductosID");
-
-                    b.ToTable("ProductosAlquiler");
                 });
 
             modelBuilder.Entity("Alpid.Models.Proveedores", b =>
@@ -411,13 +391,10 @@ namespace Alpid.Migrations
 
             modelBuilder.Entity("Alpid.Models.Alquiler", b =>
                 {
-                    b.HasOne("Alpid.Models.ProductosAlquiler")
+                    b.HasOne("Alpid.Models.Productos", "Productos")
                         .WithMany("Alquiler")
-                        .HasForeignKey("ProductosAlquilerID");
-
-                    b.HasOne("Alpid.Models.Productos")
-                        .WithMany("Alquiler")
-                        .HasForeignKey("ProductosPoductosID");
+                        .HasForeignKey("ProductosID")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Alpid.Models.Socios", "Socios")
                         .WithMany("Alquiler")
@@ -448,14 +425,7 @@ namespace Alpid.Migrations
                 {
                     b.HasOne("Alpid.Models.Proveedores", "Proveedores")
                         .WithMany("Productos")
-                        .HasForeignKey("ProveedoresID");
-                });
-
-            modelBuilder.Entity("Alpid.Models.ProductosAlquiler", b =>
-                {
-                    b.HasOne("Alpid.Models.Productos", "Productos")
-                        .WithMany()
-                        .HasForeignKey("ProductosID")
+                        .HasForeignKey("ProveedoresID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
