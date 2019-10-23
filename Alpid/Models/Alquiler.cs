@@ -26,7 +26,7 @@ namespace Alpid.Models
         public string Observacion { get; set; }
 
         [Required(ErrorMessage = "Debe ingresar un Socio")]
-        public int SociosId { get; set; }
+        public int SociosID { get; set; }
 
         public Socios Socios { get; set; }
 

@@ -52,7 +52,7 @@ namespace Alpid.Controllers
         }
 
         // GET: Alquiler/Create
-        public async Task<IActionResult> Create(DateTime FechaDesde, DateTime FechaHasta,string Observacion,int SociosId,
+        public async Task<IActionResult> Create(DateTime FechaDesde, DateTime FechaHasta,string Observacion,int SociosID,
                                                 int IdAlquiler, int DeshabilitarCampos)
         {
             try
@@ -62,16 +62,23 @@ namespace Alpid.Controllers
                 producto = producto.Where(s => s.FechaBaja == null && s.ProductosTipo == "DeAlquiler");
                 ViewData["ProductosID"] = new SelectList(producto, "ProductosID", "Nombre");
 
-
-                //Busca los socios que no esten dados de baja
-                var socio = from s in _context.Socios select s;
-                socio = socio.Where(s => s.FechaBaja == null);
-                ViewData["SociosId"] = new SelectList(socio, "SociosID", "RazonSocial");
-
-                ViewData["FechaDesde"] = FechaDesde;
-                ViewData["FechaHasta"] = FechaHasta;
+                if (DeshabilitarCampos == 1)
+                {
+                    //Busca el socio que se cargo anteriormente
+                    var socio = from s in _context.Socios select s;
+                    socio = socio.Where(s => s.SociosID == SociosID);
+                    ViewData["SociosId"] = new SelectList(socio, "SociosID", "RazonSocial");
+                }
+                else
+                {
+                    //Busca los socios que no esten dados de baja
+                    var socio = from s in _context.Socios select s;
+                    socio = socio.Where(s => s.FechaBaja == null);
+                    ViewData["SociosId"] = new SelectList(socio, "SociosID", "RazonSocial");
+                }
+                ViewData["FechaDesde"] = FechaDesde.Year + "-" + FechaDesde.Month + "-" + FechaDesde.Day;
+                ViewData["FechaHasta"] = FechaHasta.Year + "-" + FechaHasta.Month + "-" + FechaHasta.Day;
                 ViewData["Observacion"] = Observacion;
-                ViewData["SociosId"] = SociosId;
                 ViewData["DeshabilitarCampos"] = DeshabilitarCampos;
                 ViewData["IdAlquiler"] = IdAlquiler;
 
@@ -86,29 +93,37 @@ namespace Alpid.Controllers
 
         // POST: Alquiler/Create
         [HttpPost]
-        public async Task<IActionResult> Create(DateTime FechaDesde, DateTime FechaHasta, string Observacion, int SociosId, int ProductosID,
+        public async Task<IActionResult> Create(DateTime FechaDesde, DateTime FechaHasta, string Observacion, int SociosID, int ProductosID,
                                                 int cantidad, decimal Valor, int AlquilerID)
         {
             try
             {
                 var Add = new Alquiler();
 
-                if (AlquilerID == 0)
-                {
-                    var UltimoIdbase = (from c in _context.Alquiler select c.AlquilerID).Max();
-                    var valoresBase = _context.Alquiler.SingleOrDefault(x => x.AlquilerID == UltimoIdbase);
+                var Base = (from c in _context.Alquiler select c).Count();
 
-                    Add.AlquilerID = valoresBase.AlquilerID + 1;
+                if (Base == 0)
+                {
+                    Add.AlquilerID = 1;
                 }
                 else
                 {
-                    Add.AlquilerID = AlquilerID;
-                }
+                    if (AlquilerID == 0)
+                    {
+                        var UltimoIdbase = (from c in _context.Alquiler select c.AlquilerID).Max();
+                        var valoresBase = _context.Alquiler.SingleOrDefault(x => x.AlquilerID == UltimoIdbase);
 
+                        Add.AlquilerID = valoresBase.AlquilerID + 1;
+                    }
+                    else
+                    {
+                        Add.AlquilerID = AlquilerID;
+                    }
+                }
                 Add.FechaDesde = FechaDesde;
                 Add.FechaHasta = FechaHasta;
                 Add.Observacion = Observacion;
-                Add.SociosId = SociosId;
+                Add.SociosID = SociosID;
                 Add.cantidad = cantidad;
                 Add.ProductosID = ProductosID;
                 Add.Valor = Valor;
@@ -118,7 +133,7 @@ namespace Alpid.Controllers
                 _context.Add(Add);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction("Create", "Alquiler", new { FechaDesde, FechaHasta, Observacion, SociosId, DeshabilitarCampos });
+                return RedirectToAction("Create", "Alquiler", new { FechaDesde, FechaHasta, Observacion, SociosID, DeshabilitarCampos });
             }
             catch (Exception e)
             {
@@ -134,7 +149,7 @@ namespace Alpid.Controllers
             {
                 var alquiler = await _context.Alquiler.FindAsync(id);
 
-                ViewData["SociosId"] = new SelectList(_context.Socios, "SociosID", "RazonSocial", alquiler.SociosId);
+                ViewData["SociosId"] = new SelectList(_context.Socios, "SociosID", "RazonSocial", alquiler.SociosID);
                 return View(alquiler);
             }
             catch (Exception e)
@@ -160,7 +175,7 @@ namespace Alpid.Controllers
                 return RedirectToAction("Index", "Alquiler");
             }
 
-            ViewData["SociosId"] = new SelectList(_context.Socios, "SociosID", "RazonSocial", alquiler.SociosId);
+            ViewData["SociosId"] = new SelectList(_context.Socios, "SociosID", "RazonSocial", alquiler.SociosID);
             return View(alquiler);
         }
 

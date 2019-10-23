@@ -12,19 +12,19 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group col-md-4">
                     <label class="control-label">Fecha desde</label>
-                    <input name="FechaDesde" id="" type="date" class="form-control" />
+                    <input name="FechaDesde" value="@ViewData["FechaDesde"]" type="date" class="form-control" />
                 </div>
                 <div class="form-group col-md-4">
                     <label class="control-label">Fecha hasta</label>
-                    <input name="FechaHasta" type="date" class="form-control" />
+                    <input name="FechaHasta" value="@ViewData["FechaHasta"]" type="date" class="form-control" />
                 </div>
                 <div class="form-group col-md-4">
                     <label class="control-label">Socio</label>
-                    <select name="SociosId" class="form-control" asp-items="ViewBag.SociosId"></select>
+                    <select name="SociosID" class="form-control" asp-items="ViewBag.SociosID"></select>
                 </div>
                 <div class="form-group col-md-12">
                     <label class="control-label">Observación</label>
-                    <input name="Observacion" class="form-control" />
+                    <input name="Observacion" value="@ViewData["Observacion"]" class="form-control" />
                 </div>
                 <div class="form-group col-md-12">
                     <hr />
@@ -65,20 +65,14 @@
                                 Cantidad
                             </th>
                             <th>
-                                Concepto
+                                Producto
                             </th>
                             <th>
-                                Ingreso
+                                Precio
                             </th>
                             <th>
-                                Salida
+                                Acción
                             </th>
-                            <th>
-                                Total
-                            </th>
-                            @*<th>
-                                    Acción
-                                </th>*@
                         </tr>
                     </thead>
                     <tbody>
@@ -86,46 +80,20 @@
                         {
                             if (item.AlquilerID.Equals(@ViewData["IdAlquiler"]))
                             {
-                                @*<tr>
+                                <tr>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Cantidad)
+                                        @Html.DisplayFor(modelItem => item.cantidad)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Concepto)
+                                        @Html.DisplayFor(modelItem => item.ProductosID)
                                     </td>
                                     <td>
-                                        @if (item.Ingreso != null)
-                                        {
-                                            <span>$ </span> @Html.DisplayFor(modelItem => item.Ingreso)
-                                        }
+                                        <span>$ </span> @Html.DisplayFor(modelItem => item.Valor)
                                     </td>
                                     <td>
-                                        @if (item.Salida != null)
-                                        {
-                                            <span>$ </span> @Html.DisplayFor(modelItem => item.Salida)
-                                        }
+                                        @*<a asp-action="PhysicalDelete" class="btn btn-danger" asp-route-id="@item.Id">Quitar</a>*@
                                     </td>
-                                    <td>
-                                        @if (item.Total != null)
-                                        {
-                                            @if (item.Total >= 0)
-                                            {
-                                                <div style="color:#108a10;">
-                                                    <span>$ </span> @Html.DisplayFor(modelItem => item.Total)
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                <div style="color:red;">
-                                                    <span>$ </span> @Html.DisplayFor(modelItem => item.Total)
-                                                </div>
-                                            }
-                                        }
-                                    </td>*@
-                                    @*<td>
-                                            <a asp-action="PhysicalDelete" class="btn btn-danger" asp-route-id="@item.Id">Quitar</a>
-                                        </td>*@
-                                @*</tr>*@
+                                </tr>
                             }
                         }
                     </tbody>
@@ -133,8 +101,8 @@
             </form>
         </div>
     }
-    <div>
-        <a asp-action="Index" class="btn btn-info">Regresar</a>
+    <div style="padding-bottom:5%;">
+        <a asp-action="Index" class="btn btn-info" style="float:right;">Regresar</a>
     </div>
 </body>
 </html>
