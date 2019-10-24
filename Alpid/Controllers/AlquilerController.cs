@@ -22,14 +22,18 @@ namespace Alpid.Controllers
         }
 
         // GET: Alquiler
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? page)
         {
+            var applicationDbContext = _context.Alquiler.Include(a => a.Socios);
 
-            var applicationDbContext = _context.Alquiler
-                                       .Include(a => a.Socios)
-                                       .Include(a => a.Productos);
-            ;
-            return View(await applicationDbContext.ToListAsync());
+            var evento = (from e in _context.Alquiler select e);
+
+            //var evento = from e in _context.Alquiler group e by e.AlquilerID into g select g.Key;
+
+            int pageSize = 15;
+            return View(await Paginacion<Alquiler>.CreateAsync(evento.AsNoTracking(), page ?? 1, pageSize));
+
+            //return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Alquiler/Details/5
@@ -52,7 +56,7 @@ namespace Alpid.Controllers
         }
 
         // GET: Alquiler/Create
-        public async Task<IActionResult> Create(DateTime FechaDesde, DateTime FechaHasta,string Observacion,int SociosID,
+        public async Task<IActionResult> Create(DateTime FechaDesde, DateTime FechaHasta, string Observacion, int SociosID,
                                                 int IdAlquiler, int DeshabilitarCampos)
         {
             try
@@ -105,6 +109,7 @@ namespace Alpid.Controllers
                 if (Base == 0)
                 {
                     Add.AlquilerID = 1;
+                    AlquilerID = 1;
                 }
                 else
                 {
@@ -133,7 +138,7 @@ namespace Alpid.Controllers
                 _context.Add(Add);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction("Create", "Alquiler", new { FechaDesde, FechaHasta, Observacion, SociosID, DeshabilitarCampos });
+                return RedirectToAction("Create", "Alquiler", new { FechaDesde, FechaHasta, Observacion, SociosID, DeshabilitarCampos, AlquilerID });
             }
             catch (Exception e)
             {
