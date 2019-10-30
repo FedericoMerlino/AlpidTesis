@@ -4,7 +4,7 @@
     ViewData["Title"] = "Eventos solidarios";
 }
 <html>
-<body>
+<body style="background-color:ghostwhite;">
     <h1 style="color:blue">Eventos solidarios</h1>
     <div style="padding-bottom:3%; padding-top:1%;">
         <!--Boton para crear nuevo evento-->
@@ -67,7 +67,7 @@
                                 }
                             </td>
                             <td>
-                                <a asp-action="Details" class="btn btn-info" asp-route-id="@item.Id">Ver</a>
+                                <a asp-action="Details" class="btn btn-info" asp-route-id="@item.IdEvento">Ver</a>
                             </td>
                         </tr>
                     }

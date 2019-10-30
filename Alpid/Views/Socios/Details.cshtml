@@ -5,7 +5,7 @@
 }
 <html>
 <body style="background-color:ghostwhite;">
-    <h1>Informacion Socio "@Html.DisplayFor(model => model.RazonSocial)" </h1>
+    <h1 style="color:blue;">Informacion Socio "@Html.DisplayFor(model => model.RazonSocial)" </h1>
 
     <div>
         <hr />
@@ -61,7 +61,7 @@
         </dl>
     </div>
     <div>
-        <a asp-action="Index" class="btn btn-info">Regresar</a>
+        <a asp-action="Index" class="btn btn-info">Regresar</a> |
         <a asp-action="Active"  class='btn btn-primary' asp-route-id="@Model.SociosID">Reactivar</a>
     </div>
 </body>

@@ -85,9 +85,9 @@
                             <th>
                                 Total
                             </th>
-                            @*<th>
+                            <th>
                                 Acción
-                            </th>*@
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -131,9 +131,9 @@
                                             }
                                         }
                                     </td>
-                                    @*<td>
-                                        <a asp-action="PhysicalDelete" class="btn btn-danger" asp-route-id="@item.Id">Quitar</a>
-                                    </td>*@
+                                    <td>
+                                        <a asp-action="DeletePhysical" class="btn btn-danger" asp-route-id="@item.Id">Quitar</a>
+                                    </td>
                                 </tr>
                             }
                         }
@@ -142,11 +142,23 @@
             </form>
         </div>
     }
-<div>
-    <a asp-action="Index" class="btn btn-info" style="float:right;">Regresar</a>
-</div>
+    <div style="padding-bottom:5%;">
+        <a asp-action="Index" class="btn btn-info" style="float:right;">Regresar</a>
+    </div>
 </body>
 </html>
+<script>
+        var valor = "@ViewData["Message"]";
+        //si se produce algún error
+        if (valor == 2) {
+            swal({
+                title: "Error!!",
+                text: "No se pudo realizar la operación",
+                icon: "error",
+                button: "Aceptar",
+            });
+        };
+</script>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

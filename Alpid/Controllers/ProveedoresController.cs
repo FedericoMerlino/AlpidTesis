@@ -81,8 +81,11 @@ namespace Alpid.Controllers
         }
 
         // GET: Proveedores/Create
-        public IActionResult Create()
+        public IActionResult Create(int valor, string cuitAlta)
         {
+            ViewData["Message"] = valor;
+            ViewData["CuitError"] = cuitAlta;
+
             return View();
         }
 
@@ -109,7 +112,7 @@ namespace Alpid.Controllers
                 else
                 {
                     valor = 3;
-                    return RedirectToAction("Create", "Socios", new { valor, cuitAlta });
+                    return RedirectToAction("Create", "Proveedores", new { valor, cuitAlta });
                 }
             }
             catch (Exception e)

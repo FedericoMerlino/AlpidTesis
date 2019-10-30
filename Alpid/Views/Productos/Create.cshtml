@@ -41,7 +41,7 @@
                 </div>
                 <div class="col-md-12">
                     <input type="submit" value="Crear nuevo" class="btn btn-primary" />
-                    <a asp-action="Index" style="float:right;" class="btn btn-info">Cancelar</a>
+                    <a asp-action="Index" style="float:right;" class="btn btn-info">Regresar</a>
                 </div>
             </form>
             <!--si se selecciona el radiobutton alquiler-->
@@ -73,7 +73,7 @@
                 </div>
                 <div class="col-md-12">
                     <input type="submit" value="Guardar" class="btn btn-primary" />
-                    <a asp-action="Index" style="float:right;" class="btn btn-info">Cancelar</a>
+                    <a asp-action="Index" style="float:right;" class="btn btn-info">Regresar</a>
                 </div>
             </form>
             <!--si se selecciona el radiobutton Otros-->
@@ -101,14 +101,14 @@
                 </div>
                 <div class="col-md-12">
                     <input type="submit" value="Crear nuevo" class="btn btn-primary" />
-                    <a asp-action="Index" style="float:right;" class="btn btn-info">Cancelar</a>
+                    <a asp-action="Index" style="float:right;" class="btn btn-info">Regresar</a>
                 </div>
             </form>
         </div>
     </div>
     <!--volver a la grilla-->
     <div class="col-md-12" style="padding: 10px;" id="BotonCancelar">
-        <a asp-action="Index" class="btn btn-info">Cancelar</a>
+        <a asp-action="Index" class="btn btn-info">Regresar</a>
     </div>
 </body>
 </html>
@@ -124,7 +124,7 @@
                 document.getElementById('formMobiliarios').style.display = 'block';
                 //Quita el formulario de productos de alquiler
                 document.getElementById('formAlquiler').style.display = 'none';
-                //Quita el boton de cancelar que aparece al principio
+                //Quita el boton de Regresar que aparece al principio
                 document.getElementById('BotonCancelar').style.display = 'none';
                 //Quita el formulario de productos de otros
                 document.getElementById('formOtros').style.display = 'none';
@@ -136,7 +136,7 @@
                 document.getElementById('formAlquiler').style.display = 'block';
                 //Quita el formulario de productos mobiliarios
                 document.getElementById('formMobiliarios').style.display = 'none';
-                //Quita el boton de cancelar que aparece al principio
+                //Quita el boton de Regresar que aparece al principio
                 document.getElementById('BotonCancelar').style.display = 'none';
                 //Quita el formulario de productos de otros
                 document.getElementById('formOtros').style.display = 'none';
@@ -148,11 +148,22 @@
                 document.getElementById('formAlquiler').style.display = 'none';
                 //Quita el formulario de productos mobiliarios
                 document.getElementById('formMobiliarios').style.display = 'none';
-                //Quita el boton de cancelar que aparece al principio
+                //Quita el boton de Regresar que aparece al principio
                 document.getElementById('BotonCancelar').style.display = 'none';
                 //Quita el formulario de productos de otros
                 document.getElementById('formOtros').style.display = 'block';
             }
         });
     }
+
+      var valor = "@ViewData["Message"]";
+   // si ya existe el mismo nombre del producto
+        if (valor == 3) {
+            swal({
+                title: "Error!!",
+                text: "Ya existe un producto con el siguiente nombre: '@ViewData["CuitError"]'",
+                icon: "error",
+                button: "Aceptar",
+            });
+        };
 </script>

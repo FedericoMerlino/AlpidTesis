@@ -23,7 +23,7 @@ namespace Alpid.Controllers
 
         // GET: Cuotas
         public async Task<IActionResult> Index(string currentFilter, string searchString, int? page, string filtroFecha,
-                                                string DateFilter,int valor)
+                                                string DateFilter, int valor)
         {
             var ValorParaCuota = (from s in _context.CuotaPrecio select s).Count();
 
@@ -31,10 +31,11 @@ namespace Alpid.Controllers
             {
                 ViewData["precio"] = "Debe cargar un valor";
             }
-            else { 
-            var ultimoid = _context.CuotaPrecio.Max(c => c.CuotaPrecioID);
-            var UltimoValor = _context.CuotaPrecio.SingleOrDefault(c => c.CuotaPrecioID == ultimoid);
-            ViewData["precio"] = UltimoValor.Importe;
+            else
+            {
+                var ultimoid = _context.CuotaPrecio.Max(c => c.CuotaPrecioID);
+                var UltimoValor = _context.CuotaPrecio.SingleOrDefault(c => c.CuotaPrecioID == ultimoid);
+                ViewData["precio"] = UltimoValor.Importe;
             }
             //return View(await applicationDbContext.ToListAsync());
 
@@ -53,11 +54,15 @@ namespace Alpid.Controllers
             {
                 cuota = cuota.Where(s => s.Socios.RazonSocial.Contains(searchString));
             }
-            int pageSize = 15;
+            //else
+            //{
+            //     cuota = (from s in _context.Cuotas group s by s.SociosID into g select g).ToArrayAsync();
+            //}
 
+            int pageSize = 15;
             ViewData["Message"] = valor;
 
-            return View(await Paginacion<Cuotas>.CreateAsync(cuota.AsNoTracking().Include(c => c.Socios), page ?? 1, pageSize));
+            return View(await Paginacion<Cuotas>.CreateAsync(cuota.AsNoTracking().Include(c => c.Socios).OrderByDescending(x => x.FechaHasta), page ?? 1, pageSize));
         }
 
         // GET: Cuotas/Details/5
@@ -78,13 +83,16 @@ namespace Alpid.Controllers
         }
 
         // GET: Cuotas/Create
-        public IActionResult Create()
+        public IActionResult Create(int FechaValidacion, DateTime FechaHasta)
         {
             try
             {
                 var ultimoid = _context.CuotaPrecio.Max(c => c.CuotaPrecioID);
                 var valor = _context.CuotaPrecio.SingleOrDefault(c => c.CuotaPrecioID == ultimoid);
                 ViewData["precio"] = valor.Importe;
+
+                ViewData["FechaValidacion"] = FechaValidacion;
+                ViewData["FechaHasta"] = FechaHasta;
 
                 ViewData["SociosID"] = new SelectList(_context.Set<Socios>(), "SociosID", "RazonSocial");
                 return View();
@@ -99,14 +107,36 @@ namespace Alpid.Controllers
 
         // POST: Cuotas/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CuotasID,Estado,Observacion,Importe,FechaDesde,FechaHasta,SociosID")] Cuotas cuotas)
+        public async Task<IActionResult> Create(string Estado, string Observacion, decimal Importe, DateTime FechaDesde, DateTime FechaHasta, int SociosID)
         {
             try
             {
-                var importe = _context.Caja.Select(c => c.CajaId);
+                var add = new Cuotas();
 
-                _context.Add(cuotas);
+                add.Estado = Estado;
+                add.FechaDesde = FechaDesde;
+                add.FechaHasta = FechaHasta;
+                add.SociosID = SociosID;
+                add.Observacion = Observacion;
+
+                Importe = (from s in _context.CuotaPrecio select s.Importe).FirstOrDefault();
+
+                add.Importe = Importe;
+
+                var PrimerValor = (from c in _context.Cuotas where c.SociosID == SociosID select c).Count();
+                if (PrimerValor != 0)
+                {
+                    var obtenerUltimaFechaSocio = (from c in _context.Cuotas where c.SociosID == SociosID select c.FechaHasta).Max();
+
+                    if (obtenerUltimaFechaSocio >= FechaDesde)
+                    {
+                        var FechaValidacion = 4;
+                        return RedirectToAction("Create", "Cuotas", new { FechaValidacion, FechaHasta });
+                    }
+                }
+
+
+                _context.Add(add);
                 await _context.SaveChangesAsync();
                 var valor = 1;
                 return RedirectToAction("Index", "Cuotas", new { valor });

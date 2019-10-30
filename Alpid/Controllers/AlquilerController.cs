@@ -26,33 +26,44 @@ namespace Alpid.Controllers
         {
             var applicationDbContext = _context.Alquiler.Include(a => a.Socios);
 
+            //var evento = from e in _context.Alquiler group e by e.AlquilerID into g select g;
+
             var evento = (from e in _context.Alquiler select e);
 
-            //var evento = from e in _context.Alquiler group e by e.AlquilerID into g select g.Key;
 
             int pageSize = 15;
             return View(await Paginacion<Alquiler>.CreateAsync(evento.AsNoTracking(), page ?? 1, pageSize));
-
-            //return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Alquiler/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, int? page)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
-            }
+                var DetalleAlquiler = await _context.Alquiler.FirstOrDefaultAsync(m => m.AlquilerID == id);
 
-            var alquiler = await _context.Alquiler
-                .Include(a => a.Socios)
-                .FirstOrDefaultAsync(m => m.AlquilerID == id);
-            if (alquiler == null)
+                ViewData["FechaDesde"] = DetalleAlquiler.FechaDesde.Year + "-" + DetalleAlquiler.FechaDesde.Month + "-" + DetalleAlquiler.FechaDesde.Day;
+                ViewData["FechaHasta"] = DetalleAlquiler.FechaHasta.Year + "-" + DetalleAlquiler.FechaHasta.Month + "-" + DetalleAlquiler.FechaHasta.Day;
+                ViewData["Observacion"] = DetalleAlquiler.Observacion;
+
+                var socio = from s in _context.Socios select s;
+                socio = socio.Where(s => s.SociosID == DetalleAlquiler.SociosID);
+                ViewData["SociosId"] = new SelectList(socio, "SociosID", "RazonSocial");
+                //obtiene valor para mostran en pantalla
+                var alquiler = (from e in _context.Alquiler where e.AlquilerID == id select e);
+
+                ViewData["ProductosID"] = new SelectList(alquiler, "ProductosID", "Nombre");
+
+                int pageSize = 15;
+                return View(await Paginacion<Alquiler>.CreateAsync(alquiler.AsNoTracking(), page ?? 1, pageSize));
+
+            }
+            catch (Exception e)
             {
-                return NotFound();
+                Console.Write(e);
+                var valor = 2;
+                return RedirectToAction("Index", "EventoSolidarios", new { valor });
             }
-
-            return View(alquiler);
         }
 
         // GET: Alquiler/Create

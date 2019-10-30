@@ -100,7 +100,7 @@ namespace Alpid.Controllers
 
         // POST: Productos/Create
         [HttpPost]
-        public async Task<IActionResult> Create([Bind("ProductosID,Nombre,Cantidad,ProductosTipo,FechaAlta,PrecioAlquiler,ProveedoresID")] Productos productos)
+        public async Task<IActionResult> Create([Bind("ProductosID,Nombre,Cantidad,ProductosTipo,FechaAlta,ProveedoresID")] Productos productos)
         {
             try
             {
@@ -248,7 +248,7 @@ namespace Alpid.Controllers
         }
 
         // GET: Productos/DeletePhysical/5
-        public async Task<IActionResult> DeletePhysical(int? id)
+        public async Task<IActionResult> DeletePhysical(int id)
         {
             try
             {
