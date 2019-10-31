@@ -20,9 +20,11 @@ namespace Alpid.Models
         public decimal Importe { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
+        [Required(ErrorMessage ="Favor de ingresar una fecha")]
         public DateTime? FechaDesde { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
+        [Required(ErrorMessage = "Favor de ingresar una fecha")]
         public DateTime FechaHasta { get; set; }
 
         public int SociosID { get; set; }

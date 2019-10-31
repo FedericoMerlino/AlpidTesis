@@ -28,7 +28,6 @@ namespace Alpid.Models
 
         public string MotivoBaja { get; set; }
 
-        [Required(ErrorMessage = "Favor de ingresar un Proveedor")]
         public int? ProveedoresID { get; set; }
 
         public Proveedores Proveedores { get; set; }

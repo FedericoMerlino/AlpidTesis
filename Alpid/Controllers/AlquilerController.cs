@@ -68,7 +68,7 @@ namespace Alpid.Controllers
 
         // GET: Alquiler/Create
         public async Task<IActionResult> Create(DateTime FechaDesde, DateTime FechaHasta, string Observacion, int SociosID,
-                                                int IdAlquiler, int DeshabilitarCampos)
+                                                int IdAlquiler, int DeshabilitarCampos, string mensaje, int valorMensaje)
         {
             try
             {
@@ -96,6 +96,8 @@ namespace Alpid.Controllers
                 ViewData["Observacion"] = Observacion;
                 ViewData["DeshabilitarCampos"] = DeshabilitarCampos;
                 ViewData["IdAlquiler"] = IdAlquiler;
+                ViewData["errorCantProductos"] = mensaje;
+                ViewData["Message"] = valorMensaje;
 
                 return View(await _context.Alquiler.ToListAsync());
             }
@@ -146,10 +148,26 @@ namespace Alpid.Controllers
 
                 var DeshabilitarCampos = 1;
 
-                _context.Add(Add);
-                await _context.SaveChangesAsync();
+                var RestarProducto = _context.Productos.SingleOrDefault(x => x.ProductosID == ProductosID);
 
-                return RedirectToAction("Create", "Alquiler", new { FechaDesde, FechaHasta, Observacion, SociosID, DeshabilitarCampos, AlquilerID });
+                var CantActual = RestarProducto.Cantidad;
+                var cantGuardar = CantActual - cantidad;
+                if (cantGuardar < 0)
+                {
+                    var mensaje = ("Solo posee " + CantActual+" "+ RestarProducto.Nombre + " y quiere retirar " + cantidad).ToString();
+                    var valorMensaje = 5;
+                    return RedirectToAction("Create", "Alquiler", new { FechaDesde, FechaHasta, Observacion, SociosID, DeshabilitarCampos, AlquilerID, mensaje, valorMensaje });
+                }
+                else
+                {
+                    RestarProducto.Cantidad = cantGuardar;
+                    _context.Update(RestarProducto);
+
+                    _context.Add(Add);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("Create", "Alquiler", new { FechaDesde, FechaHasta, Observacion, SociosID, DeshabilitarCampos, AlquilerID });
+                }
             }
             catch (Exception e)
             {

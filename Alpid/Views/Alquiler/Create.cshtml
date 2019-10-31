@@ -8,15 +8,15 @@
     <hr />
     <div class="row">
         <div class="col-md-8">
-            <form asp-action="Create" name="formCrearProducto">
+            <form asp-action="Create" id="Create" name="formCrearProducto">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group col-md-4">
                     <label class="control-label">Fecha desde</label>
-                    <input name="FechaDesde" value="@ViewData["FechaDesde"]" type="date" class="form-control" />
+                    <input name="FechaDesde" id="FechaDesde" value="@ViewData["FechaDesde"]" type="date" class="form-control" />
                 </div>
                 <div class="form-group col-md-4">
                     <label class="control-label">Fecha hasta</label>
-                    <input name="FechaHasta" value="@ViewData["FechaHasta"]" type="date" class="form-control" />
+                    <input name="FechaHasta" id="FechaHasta" value="@ViewData["FechaHasta"]" type="date" class="form-control" />
                 </div>
                 <div class="form-group col-md-4">
                     <label class="control-label">Socio</label>
@@ -44,7 +44,7 @@
                 </div>
                 <div class="form-group col-md-2">
                     <label class="control-label" style="color:ghostwhite;">Observación</label>
-                    <input type="submit" value="Guardar" class="form-control btn btn-primary" />
+                    <input type="button" onclick="ValidarFecha()" value="Guardar" class="form-control btn btn-primary" />
                 </div>
             </form>
         </div>
@@ -106,11 +106,34 @@
     </div>
 </body>
 </html>
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
-<script src="~/lib/lightbox/js/lightbox.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<link rel="stylesheet" type="text/css" href="dist/sweetalert.css">
 <script>
+    var valor = "@ViewData["Message"]";
+
+     //si se produce algún error
+        if (valor == 5) {
+            swal({
+                title: "Error!!",
+                text:"@ViewData["errorCantProductos"]",
+                icon: "error",
+                button: "Aceptar",
+            });
+        };
+
+    // validar fechas
+     function ValidarFecha () {
+        var fechaDesde = document.getElementById("FechaDesde").value;
+        var fechaHasta = document.getElementById("FechaHasta").value;
+
+         if (fechaDesde > fechaHasta) {
+             alert("La fecha desde " + fechaDesde + " debe ser mayo a la fecha Hasta " + fechaHasta);
+         }
+         else {
+            $("#Create").submit();
+         };
+    };
+
     function AddProducts() {
         var formulario = document.getElementById('AddProductForm');
         formulario.style.display = 'block';
@@ -120,6 +143,7 @@
             $document.getElementsByName("").prop('disabled', true);
         }
     });
-
 </script>
-
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

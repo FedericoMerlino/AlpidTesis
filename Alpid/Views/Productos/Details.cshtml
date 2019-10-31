@@ -5,7 +5,7 @@
 }
 <html>
 <body style="background-color:ghostwhite;">
-    <h1>Informacion producto "@Html.DisplayFor(model => model.Nombre)" </h1>
+    <h1 style="color:blue;">Informacion producto "@Html.DisplayFor(model => model.Nombre)" </h1>
     <div>
         <hr />
         <dl class="row">
@@ -54,8 +54,8 @@
         </dl>
     </div>
     <div>
-        <a asp-action="Index" class="btn btn-info">Regresar</a>
-        <a asp-action="Active" class='btn btn-primary' asp-route-id="@Model.ProductosID">Reactivar</a> |
+        <a asp-action="Index" class="btn btn-info">Regresar</a> |
+        <a asp-action="Active" class='btn btn-primary' asp-route-id="@Model.ProductosID">Reactivar</a>
     </div>
 </body>
 </html>

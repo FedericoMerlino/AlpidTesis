@@ -193,6 +193,8 @@ namespace Alpid.Controllers
         {
             try
             {
+                productos.FechaBaja = DateTime.Now;
+
                 _context.Update(productos);
                 await _context.SaveChangesAsync();
                 ViewData["ProveedoresID"] = new SelectList(_context.Proveedores, "ProveedoresId", "RazonSocial", productos.ProveedoresID);
@@ -227,7 +229,6 @@ namespace Alpid.Controllers
         }
 
         //// POST: Productos/Active/5
-        [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> Active(int id, [Bind("ProductosID,Nombre,Cantidad,ProductosTipo,FechaAlta,PrecioAlquiler,ProveedoresID,FechaBaja,MotivoBaja")] Productos productos)
         {
             try

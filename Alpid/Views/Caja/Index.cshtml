@@ -26,12 +26,12 @@
     <!--Busca solamente la info que se muestra en la grilla-->
     <div style="padding-bottom:5%; padding-top:1%;" class="form-group">
         <!--Buscar por fechas-->
-        <form asp-action="Index" method="get">
+        <form asp-action="Index" id="Index">
             <div class="form-actions no-color">
                 <p>
                     Fecha desde <input type="text" name="fechaDesde" id="ponerFechaDesde" />
                     Fecha hasta <input type="text" name="fechaHasta" id="ponerFechaHasta" />
-                    <button type="submit" class="btn btn-labeled btn-dark"><span class="btn-label"><i class="glyphicon glyphicon-search"></i></span> Buscar</button>
+                    <button type="button" onclick="ValidarFecha()" class="btn btn-labeled btn-dark"><span class="btn-label"><i class="glyphicon glyphicon-search"></i></span> Buscar</button>
                 </p>
             </div>
         </form>
@@ -108,6 +108,18 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
 
 <script>
+      function ValidarFecha () {
+        var fechaDesde = document.getElementById("ponerFechaDesde").value;
+        var fechaHasta = document.getElementById("ponerFechaHasta").value;
+
+         if (fechaDesde > fechaHasta) {
+             alert("La fecha desde " + fechaDesde + " debe ser mayo a la fecha Hasta " + fechaHasta);
+         }
+         else {
+            $("#Index").submit();
+         };
+    };
+
     $('#ponerFechaDesde').datepicker({
         format: "dd/mm/yyyy",
         language: "es",

@@ -115,14 +115,23 @@ namespace Alpid.Controllers
                 }
                 else
                 {
-                    var obetnerUltimoIdItem = (from c in _context.EventoSolidarios where c.IdEvento == IdEvento select c.IdItemEvento).Max();
-                    if (obetnerUltimoIdItem == 0)
+                    var UltIdItem = (from c in _context.EventoSolidarios where c.IdEvento == IdEvento select c.IdItemEvento).Count();
+                    if (UltIdItem > 0)
                     {
-                        evento.IdItemEvento = 1;
+                        var obetnerUltimoIdItem = (from c in _context.EventoSolidarios where c.IdEvento == IdEvento select c.IdItemEvento).Max();
+
+                        if (obetnerUltimoIdItem == 0)
+                        {
+                            evento.IdItemEvento = 1;
+                        }
+                        else
+                        {
+                            evento.IdItemEvento = obetnerUltimoIdItem + 1;
+                        }
                     }
                     else
                     {
-                        evento.IdItemEvento = obetnerUltimoIdItem + 1;
+                        evento.IdItemEvento = 1;
                     }
                 }
                 //si es el primer evento de la base 
