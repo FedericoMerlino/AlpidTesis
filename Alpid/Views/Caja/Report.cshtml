@@ -17,7 +17,7 @@
         <span><img src="~/img/logoReporte.jpg" style="float:right;" /></span>
     </header><br />
     <div style="padding-top:10%;">
-        <br /> <h3 style="text-align:center;">ALPID: Reporte de caja perteneceinte desde @ViewData["FechaDesdeFilter"] a @ViewData["FechaHastaFilter"]</h3>
+        @*<br /> <h3 style="text-align:center;">ALPID: Reporte de caja perteneceinte desde @ViewData["FechaDesdeFilter"] a @ViewData["FechaHastaFilter"]</h3>*@
         <article>
             <br />
             <form class="form-group">
@@ -41,7 +41,16 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody id="ListaCaja"> </tbody>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr id="GrillaMostrar">
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FechaMovimiento)
+                                </td>
+                                </tr>
+                                }
+                        </tbody>
                 </table>
             </form>
         </article>
@@ -49,7 +58,7 @@
     
 </body>
 </html>
-<script>
+@*<script>
     class Caja {
         constructor() {
         }
@@ -65,4 +74,4 @@
         };
     };
 
-</script>
+</script>*@

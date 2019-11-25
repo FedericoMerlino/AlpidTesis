@@ -88,9 +88,13 @@ namespace Alpid.Controllers
             return _context.Caja.Where(c => (c.FechaMovimiento >= fechaDesde) && (c.FechaMovimiento <= fechaHasta)).ToList();
         }
 
-        public IActionResult ViewAsPDFCaja()
+        public async Task<IActionResult> Report(int? page)
         {
-            return new ViewAsPdf("Report");
+            var resultado = (from e in _context.Caja select e);
+
+            int pageSize = 15;
+            new ViewAsPdf("Report");
+            return View(await Paginacion<Caja>.CreateAsync(resultado, page ?? 1, pageSize));
         }
 
         // GET: Caja/Details/5
@@ -98,17 +102,10 @@ namespace Alpid.Controllers
         {
             try
             {
-                if (id == null)
-                {
-                    return NotFound();
-                }
                 var caja = await _context.Caja
                     .Include(c => c.Alquiler)
                     .FirstOrDefaultAsync(m => m.CajaId == id);
-                if (caja == null)
-                {
-                    return NotFound();
-                }
+
                 return View(caja);
             }
             catch (Exception e)

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Alpid.Data;
 using Alpid.Models;
+using System.Collections.Generic;
 
 namespace Alpid.Controllers
 {
@@ -17,30 +18,22 @@ namespace Alpid.Controllers
             _context = context;
         }
 
+        public class objetoEvento
+        {
+            public string nombre { get; set; }
+
+            public DateTime fecha { get; set; }
+        }
         // GET: EventoSolidarios
         public async Task<IActionResult> Index(int? page, int valor)
         {
             ViewData["Message"] = valor;
+            ViewData["Repetido"] = "Nombre";
 
-        //    var evento = _context.EventoSolidarios.GroupBy(c => new
-        //{
-        //    c.IdEvento,
-        //    c.IdItemEvento,
-        //})
-        //.Select(gcs => new 
-        //{
-        //    School = gcs.Key.IdEvento,
-        //    Friend = gcs.Key.IdItemEvento,
-        //}).ToAsyncEnumerable();
-            //var evento1 = (from e in _context.EventoSolidarios
-            //               orderby e.IdEvento, e.NombreEvento
-            //               select e);
+            var evento1 = (from e in _context.EventoSolidarios orderby e.IdEvento select new EventoSolidarios { NombreEvento = e.NombreEvento, Fecha = e.Fecha });
 
-            var evento = (from e in _context.EventoSolidarios select e);
-
-            //var evento = _context.EventoSolidarios.SingleOrDefault(x => x.IdEvento == 1);
             int pageSize = 15;
-            return View(await Paginacion<EventoSolidarios>.CreateAsync(evento.AsNoTracking(), page ?? 1, pageSize));
+            return View(await Paginacion<EventoSolidarios>.CreateAsync(evento1, page ?? 1, pageSize));
         }
 
         // GET: EventoSolidarios/Details/5
@@ -149,7 +142,8 @@ namespace Alpid.Controllers
                 else
                 {
                     //busca valores en la base
-                    var UltimoIdbase = (from c in _context.EventoSolidarios select c.Id).Max();
+                    var UltimoItemIdbase = (from c in _context.EventoSolidarios select c.IdEvento).Max();
+                    var UltimoIdbase = (from c in _context.EventoSolidarios where c.IdEvento == UltimoItemIdbase select c.Id).FirstOrDefault();
                     var valoresBase = _context.EventoSolidarios.SingleOrDefault(x => x.Id == UltimoIdbase);
 
                     //asigno el item del id 

@@ -26,45 +26,18 @@
                         <th>
                             Nombre Evento
                         </th>
-                        <th>
-                            Ingreso Total
-                        </th>
-                        <th>
-                            Salida Total
-                        </th>
-                        <th>
-                            Total
-                        </th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model)
                     {
-                        <tr>
+                        <tr id="GrillaMostrar">
                             <td>
                                 @Html.DisplayFor(modelItem => item.Fecha)
                             </td>
-                            <td>
+                            <td id="ValorNombre">
                                 @Html.DisplayFor(modelItem => item.NombreEvento)
-                            </td>
-                            <td>
-                                @if (item.Ingreso != null)
-                                {
-                                    <span>$ </span> @Html.DisplayFor(modelItem => item.Ingreso)
-                                }
-                            </td>
-                            <td>
-                                @if (item.Salida != null)
-                                {
-                                    <span>$ </span> @Html.DisplayFor(modelItem => item.Salida)
-                                }
-                            </td>
-                            <td>
-                                @if (item.Total != null)
-                                {
-                                    <span>$ </span> @Html.DisplayFor(modelItem => item.Total)
-                                }
                             </td>
                             <td>
                                 <a asp-action="Details" class="btn btn-info" asp-route-id="@item.IdEvento">Ver</a>
@@ -106,6 +79,18 @@
             </div>
         </form>
     </div>
-
 </body>
 </html>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+        var valor = "@ViewData["Message"]";
+        //si se produce algún error
+        if (valor == 2) {
+            swal({
+                title: "Error!!",
+                text: "No se pudo realizar la operación",
+                icon: "error",
+                button: "Aceptar",
+            });
+        };
+</script>
