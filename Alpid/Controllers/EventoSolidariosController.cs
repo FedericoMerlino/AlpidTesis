@@ -30,10 +30,10 @@ namespace Alpid.Controllers
             ViewData["Message"] = valor;
             ViewData["Repetido"] = "Nombre";
 
-            var evento1 = (from e in _context.EventoSolidarios orderby e.IdEvento select new EventoSolidarios { NombreEvento = e.NombreEvento, Fecha = e.Fecha });
+            var evento = (from e in _context.EventoSolidarios orderby e.IdEvento select new EventoSolidarios {IdEvento= e.IdEvento, NombreEvento = e.NombreEvento, Fecha = e.Fecha }).Distinct();
 
             int pageSize = 15;
-            return View(await Paginacion<EventoSolidarios>.CreateAsync(evento1, page ?? 1, pageSize));
+            return View(await Paginacion<EventoSolidarios>.CreateAsync(evento, page ?? 1, pageSize));
         }
 
         // GET: EventoSolidarios/Details/5
