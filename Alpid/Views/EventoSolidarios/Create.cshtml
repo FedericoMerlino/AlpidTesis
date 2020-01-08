@@ -28,7 +28,14 @@
                 </div>
                 <div class="form-group col-md-3">
                     <label class="control-label">Fecha </label>
-                    <input type="date" name="Fecha" class="form-control" />
+                    @if (@ViewData["NombreEvento"] == null)
+                    {
+                        <input type="date" name="Fecha" class="form-control" />
+                    }
+                    else
+                    {
+                        <input id="Concepto" value="@ViewData["Fecha"]" name="Fecha" class="form-control" readonly="readonly" />
+                    }
                 </div>
                 <div class="form-group col-md-2">
                     <label class="control-label">Cantidad</label>
@@ -140,7 +147,11 @@
                     </tbody>
                 </table>
             </form>
+            <div class="col-md-1 col-md-push-8" >
+                <input class="control-control"  id="ResultadoTotal" name="ResultadoTotal" value="$ @ViewData["ResultadoTotal"]" readonly="readonly" />
+            </div>
         </div>
+        <br />
     }
     <div style="padding-bottom:5%;">
         <a asp-action="Index" class="btn btn-info" style="float:right;">Regresar</a>

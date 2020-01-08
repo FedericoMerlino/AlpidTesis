@@ -18,19 +18,13 @@ namespace Alpid.Controllers
             _context = context;
         }
 
-        public class objetoEvento
-        {
-            public string nombre { get; set; }
-
-            public DateTime fecha { get; set; }
-        }
         // GET: EventoSolidarios
         public async Task<IActionResult> Index(int? page, int valor)
         {
             ViewData["Message"] = valor;
             ViewData["Repetido"] = "Nombre";
 
-            var evento = (from e in _context.EventoSolidarios orderby e.IdEvento select new EventoSolidarios {IdEvento= e.IdEvento, NombreEvento = e.NombreEvento, Fecha = e.Fecha }).Distinct();
+            var evento = (from e in _context.EventoSolidarios orderby e.IdEvento select new EventoSolidarios { IdEvento = e.IdEvento, NombreEvento = e.NombreEvento, Fecha = e.Fecha }).Distinct();
 
             int pageSize = 15;
             return View(await Paginacion<EventoSolidarios>.CreateAsync(evento, page ?? 1, pageSize));
@@ -62,14 +56,15 @@ namespace Alpid.Controllers
         }
 
         // GET: EventoSolidario s/Create
-        public async Task<IActionResult> Create(string Nombre, int idItem, int ID, decimal? ValorTotal)
+        public async Task<IActionResult> Create(string Nombre, int idItem, int ID, DateTime Fecha, decimal ResultadoTotal)
         {
             try
             {
                 ViewData["ValorID"] = idItem;
                 ViewData["NombreEvento"] = Nombre;
                 ViewData["IdEventoResultado"] = ID;
-                ViewData["ValorTotalResultado"] = ValorTotal;
+                ViewData["Fecha"] = Fecha.ToShortDateString();
+                ViewData["ResultadoTotal"] = ResultadoTotal;
                 return View(await _context.EventoSolidarios.ToListAsync());
             }
             catch (Exception e)
@@ -101,6 +96,8 @@ namespace Alpid.Controllers
                 evento.Ingreso = Ingreso;
                 evento.NombreEvento = NombreEvento;
                 evento.Salida = Salida;
+                evento.Total = Ingreso - Salida;
+
                 //asigno el numero de item del evento
                 if (IdItemEvento == 0)
                 {
@@ -131,11 +128,6 @@ namespace Alpid.Controllers
                 if (PrimerEvento == 0)
                 {
                     evento.IdEvento = 1;
-
-                    ValorTotal = 0;
-                    ValorTotal = ValorTotal + Ingreso;
-                    ValorTotal = ValorTotal - Salida;
-                    evento.Total = ValorTotal;
                     ID = 1;
                 }
                 //si no es el primer valor de la base
@@ -157,11 +149,6 @@ namespace Alpid.Controllers
                         evento.IdEvento = valoresBase.IdEvento + 1;
                         ID = valoresBase.IdEvento + 1;
                     }
-
-                    ValorTotal = Total;
-                    ValorTotal = ValorTotal + Ingreso;
-                    ValorTotal = ValorTotal - Salida;
-                    evento.Total = ValorTotal;
                 }
                 _context.Add(evento);
                 await _context.SaveChangesAsync();
@@ -169,7 +156,7 @@ namespace Alpid.Controllers
                 var idItem = IdItemEvento + 1;
                 var Nombre = NombreEvento;
 
-                return RedirectToAction("Create", "EventoSolidarios", new { Nombre, idItem, ID, ValorTotal });
+                return RedirectToAction("Create", "EventoSolidarios", new { Nombre, idItem, ID, Fecha });
             }
             catch (Exception e)
             {
@@ -186,9 +173,9 @@ namespace Alpid.Controllers
                 int idItem;
                 string Nombre;
                 int ID;
-                var ValorPrevio = Convert.ToDecimal(0);
-                string ValorAnteriorSuma;
-                string ValorSiguienteSuma;
+                //var ValorPrevio = Convert.ToDecimal(0);
+                //string ValorAnteriorSuma;
+                //string ValorSiguienteSuma;
                 // busco en la base
                 var Base = _context.EventoSolidarios.SingleOrDefault(x => x.Id == id);
                 Nombre = Base.NombreEvento;
@@ -202,82 +189,16 @@ namespace Alpid.Controllers
                 }
                 ID = Base.IdEvento;
 
-                // obtiene el item del evento mas grande
-                var UltimoItemId = (from s in _context.EventoSolidarios where s.IdEvento == Base.IdEvento select s.IdItemEvento).Max();
-                // si el item del evento es el mas grande 
-                // elimina el registro y busca el ultimo total del intem anterior
-                if (UltimoItemId == Base.IdItemEvento && UltimoItemId != 1)
-                {
-                    //busco el evento con el que estamos trabajando
-                    var valorItem = (from s in _context.EventoSolidarios orderby s.IdItemEvento descending where s.IdEvento == Base.IdEvento select s).FirstOrDefault();
-                    // guardo el ultimo itemid 
-                    var ultimoItemResto = valorItem.IdItemEvento - 1;
-                    // busco el total del ultimo itemid
-                    var ultimo = (from x in _context.EventoSolidarios where x.IdEvento == Base.IdEvento && x.IdItemEvento == ultimoItemResto select x.Total);
-                    ValorPrevio = Convert.ToDecimal(ultimo);
-                }
-                // si el item del eventoesta en el medio
-                if (UltimoItemId != Base.IdItemEvento && UltimoItemId != 1)
-                {
-                    //busco el evento con el que estamos trabajando
-                    var valorItem = (from s in _context.EventoSolidarios orderby s.IdItemEvento descending where s.IdEvento == Base.IdEvento select s).FirstOrDefault();
-                    // guardo el itemid anterior 
-                    var ItemIdAnterior = valorItem.IdItemEvento - 1;
-                    // guardo el itemid siguiente 
-                    var ItemISiguiente = valorItem.IdItemEvento + 1;
-
-                    // busco el total del ultimo itemid
-                    var ValorAnterior = (from x in _context.EventoSolidarios where x.IdEvento == Base.IdEvento && x.IdItemEvento == ItemIdAnterior select x.Total).FirstOrDefault();
-                    // busco el total del ultimo itemid
-                    var ValorSiguiente = (from x in _context.EventoSolidarios where x.IdEvento == Base.IdEvento && x.IdItemEvento == ItemISiguiente select x.Total).FirstOrDefault();
-
-                    if (ValorSiguiente == null)
-                    {
-                        ValorSiguienteSuma = (0).ToString();
-                    }
-                    else
-                    {
-                        ValorSiguienteSuma = ValorSiguiente.ToString();
-
-                    }
-
-                    if (ValorAnterior == null)
-                    {
-                        ValorAnteriorSuma = (0).ToString();
-                    }
-                    else
-                    {
-                        ValorAnteriorSuma = ValorAnterior.ToString();
-
-                    }
-                    ValorPrevio = Convert.ToDecimal(ValorAnteriorSuma) - Convert.ToDecimal(ValorSiguienteSuma);
-                }
-                // si solo existe un item
-                if (UltimoItemId == 1)
-                {
-                    // paso el valor en  0 porque no tiene registros
-                    ValorPrevio = 0;
-                }
-
-                var ValorTotal = ValorPrevio;
-                //actualizpo el precion total en la ultima fila
-                var IdActualizarValor = (from s in _context.EventoSolidarios where s.IdEvento == Base.IdEvento && s.IdItemEvento == (Base.IdItemEvento + 1) select s).SingleOrDefault();
-
-                if (IdActualizarValor != null)
-                {
-                    IdActualizarValor.Total = ValorTotal;
-
-                    _context.Update(IdActualizarValor);
-                    await _context.SaveChangesAsync();
-                }
-
+                
 
                 //Deleteo fila base segun el id
                 var evento = await _context.EventoSolidarios.FindAsync(id);
                 _context.EventoSolidarios.Remove(evento);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction("Create", "EventoSolidarios", new { Nombre, idItem, ID, ValorTotal });
+                var ResultadoTotal = (from x in _context.EventoSolidarios where x.IdEvento == Base.IdEvento select x.Total).Sum();
+
+                return RedirectToAction("Create", "EventoSolidarios", new { Nombre, idItem, ID, ResultadoTotal });
             }
             catch (Exception e)
             {

@@ -33,6 +33,15 @@ namespace Alpid.Models
         [Column(TypeName = "decimal(18, 2)")]
         public decimal? Total { get; set; }
 
+        [Column(TypeName = "decimal(18, 2)")]
+        public decimal? TotalIngreso { get; set; }
+
+        [Column(TypeName = "decimal(18, 2)")]
+        public decimal? TotalSalida { get; set; }
+
+        [Column(TypeName = "decimal(18, 2)")]
+        public decimal? ResultadoFinal { get; set; }
+
         [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
         [Required(ErrorMessage = "Favor de ingresar una fecha")]
         public DateTime Fecha { get; set; }

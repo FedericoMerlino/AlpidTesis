@@ -26,13 +26,14 @@ namespace Alpid.Controllers
         {
             var applicationDbContext = _context.Alquiler.Include(a => a.Socios);
 
-            //var evento = from e in _context.Alquiler group e by e.AlquilerID into g select g;
 
-            var evento = (from e in _context.Alquiler select e);
+            var alquiler = (from e in _context.Alquiler orderby e.AlquilerID
+                            select new Alquiler { AlquilerID = e.AlquilerID, FechaDesde = e.FechaDesde,
+                FechaHasta = e.FechaHasta, Valor= e.Valor, Socios = e.Socios, Observacion = e.Observacion  }).Distinct();
 
 
             int pageSize = 15;
-            return View(await Paginacion<Alquiler>.CreateAsync(evento.AsNoTracking(), page ?? 1, pageSize));
+            return View(await Paginacion<Alquiler>.CreateAsync(alquiler.AsNoTracking(), page ?? 1, pageSize));
         }
 
         // GET: Alquiler/Details/5
