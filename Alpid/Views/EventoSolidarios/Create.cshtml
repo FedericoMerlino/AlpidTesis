@@ -4,7 +4,7 @@
     ViewData["Title"] = "Nuevo evento soliario";
 }
 <html>
-<body style="background-color:ghostwhite;">
+<body style="background-color:ghostwhite; padding-bottom:5%;" >
     <h1 style="color:blue">Nuevo evento soliario</h1>
     <hr />
     <div class="row">
@@ -15,7 +15,7 @@
                     <label class="control-label">Nombre Evento Solidario</label>
                     @if (@ViewData["NombreEvento"] == null)
                     {
-                        <input id="Concepto" name="NombreEvento" class="form-control" />
+                        <input id="Concepto" name="NombreEvento" class="form-control" required />
                     }
                     else
                     {
@@ -24,30 +24,30 @@
                 </div>
                 <div class="form-group col-md-12" style="padding-right:0%;">
                     <label class="control-label">Concepto</label>
-                    <input id="Concepto" name="Concepto" class="form-control" />
+                    <input id="Concepto" name="Concepto" class="form-control" required />
                 </div>
                 <div class="form-group col-md-3">
                     <label class="control-label">Fecha </label>
                     @if (@ViewData["NombreEvento"] == null)
                     {
-                        <input type="date" name="Fecha" class="form-control" />
+                        <input type="date" name="Fecha" class="form-control" required />
                     }
                     else
                     {
-                        <input id="Concepto" value="@ViewData["Fecha"]" name="Fecha" class="form-control" readonly="readonly" />
+                        <input id="Fecha" value="@ViewData["Fecha"]" name="Fecha" class="form-control" readonly="readonly" />
                     }
                 </div>
                 <div class="form-group col-md-2">
                     <label class="control-label">Cantidad</label>
-                    <input id="Cantidad" name="Cantidad" class="form-control" />
+                    <input id="Cantidad" name="Cantidad" type="number" class="form-control" required />
                 </div>
                 <div class="form-group col-md-2">
                     <label class="control-label">Ingreso dinero</label>
-                    <input id="Ingreso" name="Ingreso" class="form-control" />
+                    <input id="Ingreso" name="Ingreso" type="number" step=".01" class="form-control" required />
                 </div>
                 <div class="form-group col-md-2">
                     <label class="control-label">Salida Dinero</label>
-                    <input id="salida" name="Salida" class="form-control" />
+                    <input id="salida" name="Salida" type="number" step=".01" class="form-control" required />
                 </div>
                 <div class="form-group col-md-2" style="display:none">
                     <input value="@ViewData["ValorTotalResultado"]" name="Total" class="form-control" />
@@ -147,24 +147,33 @@
                     </tbody>
                 </table>
             </form>
-            <div class="col-md-1 col-md-push-8" >
-                <input class="control-control"  id="ResultadoTotal" name="ResultadoTotal" value="$ @ViewData["ResultadoTotal"]" readonly="readonly" />
+            <div class="col-md-2 col-md-push-8">
+                Total: <input id="ResultadoTotal" name="ResultadoTotal" value="$ @ViewData["ResultadoTotal"]" class="form-control" readonly="readonly" />
             </div>
         </div>
         <br />
     }
     <div style="padding-bottom:5%;">
-        <a asp-action="Index" class="btn btn-info" style="float:right;">Regresar</a>
+        <a asp-action="Index" class="btn btn-info" style="float:left;">Regresar</a>
     </div>
 </body>
 </html>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
         var valor = "@ViewData["Message"]";
         //si se produce algún error
-        if (valor == 2) {
+    if (valor == 2) {
+        swal({
+            title: "Error!!",
+            text: "No se pudo realizar la operación",
+            icon: "error",
+            button: "Aceptar",
+        });
+    };
+       if (valor == 3) {
             swal({
                 title: "Error!!",
-                text: "No se pudo realizar la operación",
+                text: "Ya existe un evento con el mismo Nombre: @ViewData["NombreRepetido"] ",
                 icon: "error",
                 button: "Aceptar",
             });

@@ -1,59 +1,176 @@
-﻿@model Alpid.Models.EventoSolidarios
+﻿@model IEnumerable<Alpid.Models.EventoSolidarios>
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar evento solidario";
 }
 
-<h1>Edit</h1>
-
-<h4>Eventos Solidarios</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Cantidad" class="control-label"></label>
-                <input asp-for="Cantidad" class="form-control" />
-                <span asp-validation-for="Cantidad" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Concepto" class="control-label"></label>
-                <input asp-for="Concepto" class="form-control" />
-                <span asp-validation-for="Concepto" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Ingreso" class="control-label"></label>
-                <input asp-for="Ingreso" class="form-control" />
-                <span asp-validation-for="Ingreso" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Salida" class="control-label"></label>
-                <input asp-for="Salida" class="form-control" />
-                <span asp-validation-for="Salida" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Total" class="control-label"></label>
-                <input asp-for="Total" class="form-control" />
-                <span asp-validation-for="Total" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Fecha" class="control-label"></label>
-                <input asp-for="Fecha" class="form-control" />
-                <span asp-validation-for="Fecha" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+<html>
+<body style="background-color:ghostwhite;">
+    <h1 style="color:blue">Editar evento soliario</h1>
+    <hr />
+    <div class="row">
+        <div class="col-md-9">
+            <form asp-action="Create" id="AddAssociate">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group col-md-12" style="padding-right:0%;">
+                    <label class="control-label">Nombre Evento Solidario</label>
+                    @if (@ViewData["NombreEvento"] == null)
+                    {
+                        <input id="Concepto" name="NombreEvento" class="form-control" required />
+                    }
+                    else
+                    {
+                        <input id="Concepto" value="@ViewData["NombreEvento"]" name="NombreEvento" class="form-control" readonly="readonly" />
+                    }
+                </div>
+                <div class="form-group col-md-12" style="padding-right:0%;">
+                    <label class="control-label">Concepto</label>
+                    <input id="Concepto" name="Concepto" class="form-control" />
+                </div>
+                <div class="form-group col-md-3">
+                    <label class="control-label">Fecha </label>
+                    @if (@ViewData["NombreEvento"] == null)
+                    {
+                        <input type="date" name="Fecha" class="form-control" required />
+                    }
+                    else
+                    {
+                        <input id="Concepto" value="@ViewData["Fecha"]" name="Fecha" class="form-control" readonly="readonly" />
+                    }
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="control-label">Cantidad</label>
+                    <input id="Cantidad" name="Cantidad" type="number" class="form-control" required />
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="control-label">Ingreso dinero</label>
+                    <input id="Ingreso" name="Ingreso" type="number" step=".01" class="form-control" required />
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="control-label">Salida Dinero</label>
+                    <input id="salida" name="Salida" type="number" step=".01" class="form-control" required />
+                </div>
+                <div class="form-group col-md-2" style="display:none">
+                    <input value="@ViewData["ValorTotalResultado"]" name="Total" class="form-control" />
+                </div>
+                <div class="form-group col-md-2" style="display:none">
+                    <input value="@ViewData["ValorID"]" name="IdItemEvento" class="form-control" />
+                </div>
+                <div class="form-group col-md-2" style="display:none">
+                    <input value="@ViewData["IdEventoResultado"]" name="IdEvento" class="form-control" />
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="control-label" style="color:ghostwhite;">fede</label>
+                    <input type="submit" value=" Guardar concepto" id="btnGuardar" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
+    @if (@ViewData["IdEventoResultado"].Equals(0))
+    {
+    }
+    else
+    {
+        <hr />
+        <h1 style="padding-bottom:2%; padding-top:2%;">Nombre Evento:<span style="color:darkblue"> @ViewData["NombreEvento"]</span> </h1>
+        <div>
+            <form class="form-group">
+                <table class="table table-responsive-sm" id="datos">
+                    <thead>
+                        <tr>
+                            <th>
+                                Cantidad
+                            </th>
+                            <th>
+                                Concepto
+                            </th>
+                            <th>
+                                Ingreso
+                            </th>
+                            <th>
+                                Salida
+                            </th>
+                            <th>
+                                Total
+                            </th>
+                            <th>
+                                Acción
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            if (item.IdEvento.Equals(@ViewData["IdEventoResultado"]))
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Cantidad)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Concepto)
+                                    </td>
+                                    <td>
+                                        @if (item.Ingreso != null)
+                                        {
+                                            <span>$ </span> @Html.DisplayFor(modelItem => item.Ingreso)
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.Salida != null)
+                                        {
+                                            <span>$ </span> @Html.DisplayFor(modelItem => item.Salida)
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.Total != null)
+                                        {
+                                            @if (item.Total >= 0)
+                                            {
+                                                <div style="color:#108a10;">
+                                                    <span>$ </span> @Html.DisplayFor(modelItem => item.Total)
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div style="color:red;">
+                                                    <span>$ </span> @Html.DisplayFor(modelItem => item.Total)
+                                                </div>
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        <a asp-action="DeletePhysical" class="btn btn-danger" asp-route-id="@item.Id">Quitar</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </form>
+            <div class="col-md-2 col-md-push-7">
+                Total: <input id="ResultadoTotal" name="ResultadoTotal" value="$ @ViewData["ResultadoTotal"]" class="form-control" readonly="readonly" />
+            </div>
+        </div>
+        <br />
+    }
+    <div style="padding-bottom:5%;">
+        <a asp-action="Index" class="btn btn-info" style="float:right;">Regresar</a>
+    </div>
+</body>
+</html>
+<script>
+        var valor = "@ViewData["Message"]";
+        //si se produce algún error
+        if (valor == 2) {
+            swal({
+                title: "Error!!",
+                text: "No se pudo realizar la operación",
+                icon: "error",
+                button: "Aceptar",
+            });
+        };
+</script>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
