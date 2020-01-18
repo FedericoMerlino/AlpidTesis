@@ -8,23 +8,51 @@
     <hr />
     <div class="row">
         <div class="col-md-8">
-            <form asp-action="Create" id="Create" name="formCrearProducto">
+            <form asp-action="Create" id="Create">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group col-md-4">
                     <label class="control-label">Fecha desde</label>
-                    <input name="FechaDesde" id="FechaDesde" value="@ViewData["FechaDesde"]" type="date" class="form-control" />
+                    @if (@ViewData["Observacion"] == null)
+                    {
+                        <input id="FechaDesde" type="date" name="FechaDesde" class="form-control" required />
+                    }
+                    else
+                    {
+                        <input value="@ViewData["FechaDesde"]" name="FechaDesde" class="form-control" readonly="readonly" />
+                    }
                 </div>
                 <div class="form-group col-md-4">
                     <label class="control-label">Fecha hasta</label>
-                    <input name="FechaHasta" id="FechaHasta" value="@ViewData["FechaHasta"]" type="date" class="form-control" />
+                    @if (@ViewData["Observacion"] == null)
+                    {
+                        <input id="FechaHasta" type="date" name="FechaHasta" class="form-control" required />
+                    }
+                    else
+                    {
+                        <input value="@ViewData["FechaHasta"]" name="FechaHasta" class="form-control" readonly="readonly" />
+                    }
                 </div>
                 <div class="form-group col-md-4">
                     <label class="control-label">Socio</label>
-                    <select name="SociosID" class="form-control" asp-items="ViewBag.SociosID"></select>
+                    @if (@ViewData["Observacion"] == null)
+                    {
+                        <select name="SociosID" class="form-control" asp-items="ViewBag.SociosID"></select>
+                    }
+                    else
+                    {
+                        <select name="SociosID" class="form-control" asp-items="ViewBag.SociosID" readonly="readonly"></select>
+                    }
                 </div>
                 <div class="form-group col-md-12">
                     <label class="control-label">Observación</label>
-                    <textarea name="Observacion" rows="5" cols="30" value="@ViewData["Observacion"]" class="form-control"> </textarea>
+                    @if (@ViewData["Observacion"] == null)
+                    {
+                        <input id="Observacion" name="Observacion" rows="5" cols="30" class="form-control" required />
+                    }
+                    else
+                    {
+                        <input id="Observacion" name="Observacion" rows="5" cols="30" value="@ViewData["Observacion"]" class="form-control" readonly="readonly"/>
+                    }
                 </div>
                 <div class="form-group col-md-12">
                     <hr />
@@ -42,9 +70,19 @@
                     <label class="control-label">Precio</label>
                     <input name="Valor" class="form-control" />
                 </div>
+                <div class="form-group col-md-2" style="display:none">
+                    <input value="@ViewData["IdAlquiler"]" name="AlquilerID" class="form-control" />
+                </div>
                 <div class="form-group col-md-2">
                     <label class="control-label" style="color:ghostwhite;">Observación</label>
-                    <input type="button" onclick="ValidarFecha()" value="Guardar" class="form-control btn btn-primary" />
+                    @if (@ViewData["Observacion"] == null)
+                    {
+                        <input type="submit" onclick="ValidarFecha()" value="Guardar" class="form-control btn btn-primary" />
+                    }
+                    else
+                    {
+                        <input type="submit" value="Guardar" class="form-control btn btn-primary" />
+                    }
                 </div>
             </form>
         </div>
@@ -55,7 +93,7 @@
     else
     {
         <hr />
-        <h1 style="padding-bottom:2%; padding-top:2%;">Nombre Evento:<span style="color:darkblue"> @ViewData["NombreEvento"]</span> </h1>
+        <h1 style="padding-bottom:2%; padding-top:2%;">Productos Alquiler:<span style="color:darkblue"></span> </h1>
         <div>
             <form class="form-group">
                 <table class="table table-responsive-sm" id="datos">
@@ -85,7 +123,7 @@
                                         @Html.DisplayFor(modelItem => item.cantidad)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.ProductosID)
+                                        @Html.DisplayFor(modelItem => item.Productos.Nombre)
                                     </td>
                                     <td>
                                         <span>$ </span> @Html.DisplayFor(modelItem => item.Valor)
@@ -127,7 +165,7 @@
         var fechaHasta = document.getElementById("FechaHasta").value;
 
          if (fechaDesde > fechaHasta) {
-             alert("La fecha desde " + fechaDesde + " debe ser mayo a la fecha Hasta " + fechaHasta);
+             alert("La fecha desde " + fechaDesde + " debe ser mayor a la fecha Hasta " + fechaHasta);
          }
          else {
             $("#Create").submit();

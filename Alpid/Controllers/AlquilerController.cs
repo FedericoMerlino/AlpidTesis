@@ -29,7 +29,7 @@ namespace Alpid.Controllers
 
             var alquiler = (from e in _context.Alquiler orderby e.AlquilerID
                             select new Alquiler { AlquilerID = e.AlquilerID, FechaDesde = e.FechaDesde,
-                FechaHasta = e.FechaHasta, Valor= e.Valor, Socios = e.Socios, Observacion = e.Observacion  }).Distinct();
+                FechaHasta = e.FechaHasta, Socios = e.Socios, Observacion = e.Observacion  }).Distinct();
 
 
             int pageSize = 15;
@@ -43,8 +43,8 @@ namespace Alpid.Controllers
             {
                 var DetalleAlquiler = await _context.Alquiler.FirstOrDefaultAsync(m => m.AlquilerID == id);
 
-                ViewData["FechaDesde"] = DetalleAlquiler.FechaDesde.Year + "-" + DetalleAlquiler.FechaDesde.Month + "-" + DetalleAlquiler.FechaDesde.Day;
-                ViewData["FechaHasta"] = DetalleAlquiler.FechaHasta.Year + "-" + DetalleAlquiler.FechaHasta.Month + "-" + DetalleAlquiler.FechaHasta.Day;
+                ViewData["FechaDesde"] = DetalleAlquiler.FechaDesde.ToShortDateString();
+                ViewData["FechaHasta"] = DetalleAlquiler.FechaHasta.ToShortDateString();
                 ViewData["Observacion"] = DetalleAlquiler.Observacion;
 
                 var socio = from s in _context.Socios select s;
@@ -69,7 +69,7 @@ namespace Alpid.Controllers
 
         // GET: Alquiler/Create
         public async Task<IActionResult> Create(DateTime FechaDesde, DateTime FechaHasta, string Observacion, int SociosID,
-                                                int IdAlquiler, int DeshabilitarCampos, string mensaje, int valorMensaje)
+                                                int ID, int DeshabilitarCampos, string mensaje, int valorMensaje)
         {
             try
             {
@@ -92,15 +92,15 @@ namespace Alpid.Controllers
                     socio = socio.Where(s => s.FechaBaja == null);
                     ViewData["SociosId"] = new SelectList(socio, "SociosID", "RazonSocial");
                 }
-                ViewData["FechaDesde"] = FechaDesde.Year + "-" + FechaDesde.Month + "-" + FechaDesde.Day;
-                ViewData["FechaHasta"] = FechaHasta.Year + "-" + FechaHasta.Month + "-" + FechaHasta.Day;
+                ViewData["FechaDesde"] = FechaDesde.ToShortDateString();
+                ViewData["FechaHasta"] = FechaHasta.ToShortDateString();
                 ViewData["Observacion"] = Observacion;
                 ViewData["DeshabilitarCampos"] = DeshabilitarCampos;
-                ViewData["IdAlquiler"] = IdAlquiler;
+                ViewData["IdAlquiler"] = ID;
                 ViewData["errorCantProductos"] = mensaje;
                 ViewData["Message"] = valorMensaje;
 
-                return View(await _context.Alquiler.ToListAsync());
+                return View(await _context.Alquiler.Include(a => a.Productos).ToListAsync());
             }
             catch (Exception e)
             {
@@ -119,11 +119,12 @@ namespace Alpid.Controllers
                 var Add = new Alquiler();
 
                 var Base = (from c in _context.Alquiler select c).Count();
-
+                var ID = 0;
                 if (Base == 0)
                 {
                     Add.AlquilerID = 1;
                     AlquilerID = 1;
+                    ID = AlquilerID;
                 }
                 else
                 {
@@ -133,10 +134,12 @@ namespace Alpid.Controllers
                         var valoresBase = _context.Alquiler.SingleOrDefault(x => x.AlquilerID == UltimoIdbase);
 
                         Add.AlquilerID = valoresBase.AlquilerID + 1;
+                        ID= valoresBase.AlquilerID + 1;
                     }
                     else
                     {
                         Add.AlquilerID = AlquilerID;
+                        ID = AlquilerID;
                     }
                 }
                 Add.FechaDesde = FechaDesde;
@@ -157,7 +160,7 @@ namespace Alpid.Controllers
                 {
                     var mensaje = ("Solo posee " + CantActual+" "+ RestarProducto.Nombre + " y quiere retirar " + cantidad).ToString();
                     var valorMensaje = 5;
-                    return RedirectToAction("Create", "Alquiler", new { FechaDesde, FechaHasta, Observacion, SociosID, DeshabilitarCampos, AlquilerID, mensaje, valorMensaje });
+                    return RedirectToAction("Create", "Alquiler", new { FechaDesde, FechaHasta, Observacion, SociosID, DeshabilitarCampos, ID, mensaje, valorMensaje });
                 }
                 else
                 {
@@ -167,7 +170,7 @@ namespace Alpid.Controllers
                     _context.Add(Add);
                     await _context.SaveChangesAsync();
 
-                    return RedirectToAction("Create", "Alquiler", new { FechaDesde, FechaHasta, Observacion, SociosID, DeshabilitarCampos, AlquilerID });
+                    return RedirectToAction("Create", "Alquiler", new { FechaDesde, FechaHasta, Observacion, SociosID, DeshabilitarCampos, ID });
                 }
             }
             catch (Exception e)

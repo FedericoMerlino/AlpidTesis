@@ -12,11 +12,11 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group col-md-4">
                     <label class="control-label">Fecha desde</label>
-                    <input name="FechaDesde" value="@ViewData["FechaDesde"]" type="date" class="form-control" readonly="readonly" />
+                    <input value="@ViewData["FechaDesde"]" name="FechaDesde" class="form-control" readonly="readonly" />
                 </div>
                 <div class="form-group col-md-4">
                     <label class="control-label">Fecha hasta</label>
-                    <input name="FechaHasta" value="@ViewData["FechaHasta"]" type="date" class="form-control" readonly="readonly" />
+                    <input value="@ViewData["FechaHasta"]" name="FechaHasta" class="form-control" readonly="readonly" />
                 </div>
                 <div class="form-group col-md-4">
                     <label class="control-label">Socio</label>
@@ -24,8 +24,6 @@
                 </div>
                 <div class="form-group col-md-12">
                     <label class="control-label">Observación</label>
-                    <textarea name="Observacion" rows="5" cols="30" value="@ViewData["Observacion"]" class="form-control"  readonly="readonly" > </textarea>
-
                     <input name="Observacion" value="@ViewData["Observacion"]" class="form-control" readonly="readonly" />
                 </div>
             </form>
@@ -56,7 +54,7 @@
                                 @Html.DisplayFor(modelItem => item.cantidad)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Productos.Nombre)
+                                @Html.DisplayFor(modelItem => item.ProductosID)
                             </td>
                             <td>
                                 <span>$ </span> @Html.DisplayFor(modelItem => item.Valor)

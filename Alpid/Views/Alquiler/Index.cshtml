@@ -19,19 +19,16 @@
                 <thead>
                     <tr>
                         <th>
+                            Socio
+                        </th>
+                        <th>
                             Fecha Desde
                         </th>
                         <th>
                             Fecha Hasta
                         </th>
                         <th>
-                            Socio
-                        </th>
-                        <th>
                             Observación
-                        </th>
-                        <th>
-                            Valor
                         </th>
                         <th>Acción</th>
                     </tr>
@@ -39,28 +36,25 @@
                 <tbody>
                     @foreach (var item in Model)
                     {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.FechaDesde)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.FechaHasta)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Socios.RazonSocial)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Observacion)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Valor)
-                            </td>
-                            <td>
-                                @*<a asp-action="Edit" asp-route-id="@item.AlquilerID">Editar</a> |*@
-                                <a asp-action="Details" asp-route-id="@item.AlquilerID">ver</a> |
-                                @*<a asp-action="Delete" asp-route-id="@item.AlquilerID">Borrar</a>*@
-                            </td>
-                        </tr>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Socios.RazonSocial)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FechaDesde)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FechaHasta)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Observacion)
+                        </td>
+                        <td>
+                            @*<a asp-action="Edit" asp-route-id="@item.AlquilerID">Editar</a> |*@
+                            <a asp-action="Details" asp-route-id="@item.AlquilerID">ver</a> |
+                            @*<a asp-action="Delete" asp-route-id="@item.AlquilerID">Borrar</a>*@
+                        </td>
+                    </tr>
                     }
                 </tbody>
             </table>
@@ -99,3 +93,16 @@
     </div>
 </body>
 </html>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+        var valor = "@ViewData["Message"]";
+        //si se produce algún error
+        if (valor == 2) {
+            swal({
+                title: "Error!!",
+                text: "No se pudo realizar la operación",
+                icon: "error",
+                button: "Aceptar",
+            });
+        };
+</script>

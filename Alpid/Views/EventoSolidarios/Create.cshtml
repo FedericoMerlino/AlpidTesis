@@ -15,11 +15,11 @@
                     <label class="control-label">Nombre Evento Solidario</label>
                     @if (@ViewData["NombreEvento"] == null)
                     {
-                        <input id="Concepto" name="NombreEvento" class="form-control" required />
+                        <input id="NombreEvento" name="NombreEvento" class="form-control" required />
                     }
                     else
                     {
-                        <input id="Concepto" value="@ViewData["NombreEvento"]" name="NombreEvento" class="form-control" readonly="readonly" />
+                        <input id="NombreEvento" value="@ViewData["NombreEvento"]" name="NombreEvento" class="form-control" readonly="readonly" />
                     }
                 </div>
                 <div class="form-group col-md-12" style="padding-right:0%;">
