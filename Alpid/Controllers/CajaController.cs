@@ -8,6 +8,7 @@ using Alpid.Models;
 using Rotativa.AspNetCore;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace Alpid.Controllers
 {
@@ -20,6 +21,10 @@ namespace Alpid.Controllers
         {
             _context = context;
         }
+
+        public DateTime FechaDesdeFilterGloval;
+        public DateTime FechaHastaFilterGloval;
+
         // GET: Caja
         public async Task<IActionResult> Index(DateTime fechaDesde, DateTime fechaHasta,
                         string FechaDesdeFilter, string FechaHastaFilter, int valor)
@@ -37,6 +42,9 @@ namespace Alpid.Controllers
                 ViewData["FechaDesdeFilter"] = fechaDesde.ToShortDateString();
                 ViewData["FechaHastaFilter"] = fechaHasta.ToShortDateString();
 
+                HttpContext.Session.SetString("FechaDesdeFilterGloval", fechaDesde.ToShortDateString());
+                HttpContext.Session.SetString("FechaHastaFilterGloval", fechaHasta.ToShortDateString());
+
                 var caja = from s in _context.Caja select s;
                 caja = caja.Where(s => Convert.ToDateTime(s.FechaMovimiento.ToShortDateString()) >= Convert.ToDateTime(fechaDesde.ToShortDateString()));
                 caja = caja.Where(s => Convert.ToDateTime(s.FechaMovimiento.ToShortDateString()) <= Convert.ToDateTime(fechaHasta.ToShortDateString()));
@@ -46,11 +54,15 @@ namespace Alpid.Controllers
                 if (cajaVacia == 0)
                 {
                     ViewData["ValorParaBoton"] = cajaVacia;
+                    ViewData["TotalCaja"] = 0;
                 }
                 else
                 {
                     var Ultimacaja = (from s in _context.Caja orderby s.CajaId descending select s).FirstOrDefault().Total;
                     ViewData["ValorParaBoton"] = Convert.ToInt32(Ultimacaja);
+                    var ultimoID = _context.Caja.Max(x => x.CajaId);
+                    var ultimoPrecio = _context.Caja.SingleOrDefault(x => x.CajaId == ultimoID);
+                    ViewData["TotalCaja"] = ultimoPrecio.Total;
                 }
                 ViewData["Message"] = valor;
 
@@ -64,36 +76,16 @@ namespace Alpid.Controllers
                 return RedirectToAction("Index", "Caja", new { valor });
             }
         }
-
-        public String ListaCaja(DateTime fechaDesde, DateTime fechaHasta)
-        {
-            String dataFilter = "";
-            var caja = _context.Caja.OrderBy(p => p.AlquilerID).ToList();
-            var query = caja.Where(c => c.Debe == 100);//(c.FechaMovimiento >= fechaDesde) && (c.FechaMovimiento <= fechaHasta));
-            foreach (var item in query)
-            {
-                dataFilter += "<tr>" +
-                   "<td>" + item.FechaMovimiento + "</td>" +
-                   "<td>" + item.Observaciones + "</td>" +
-                   "<td>" + item.Debe + "</td>" +
-                    "<td>" + item.Haber + "</td>" +
-                   "<td>" + item.Total + "</td>" +
-               "</tr>";
-            }
-            return dataFilter;
-        }
-
-        internal List<Caja> getCaja(DateTime fechaDesde, DateTime fechaHasta)
-        {
-            return _context.Caja.Where(c => (c.FechaMovimiento >= fechaDesde) && (c.FechaMovimiento <= fechaHasta)).ToList();
-        }
-
+                     
         public async Task<IActionResult> Report(int? page)
         {
             var resultado = (from e in _context.Caja select e);
 
+            ViewData["FechaDesdeFilter"] = HttpContext.Session.GetString("FechaDesdeFilterGloval");
+            ViewData["FechaHastaFilter"] = HttpContext.Session.GetString("FechaHastaFilterGloval");
+
             int pageSize = 15;
-            new ViewAsPdf("Report");
+             //new ViewAsPdf("Report");
             return View(await Paginacion<Caja>.CreateAsync(resultado, page ?? 1, pageSize));
         }
 
