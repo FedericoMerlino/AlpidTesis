@@ -129,7 +129,7 @@
                                         <span>$ </span> @Html.DisplayFor(modelItem => item.Valor)
                                     </td>
                                     <td>
-                                        @*<a asp-action="PhysicalDelete" class="btn btn-danger" asp-route-id="@item.Id">Quitar</a>*@
+                                        <a asp-action="DeletePhysical" class="btn btn-danger" asp-route-id="@item.ID">Quitar</a>
                                     </td>
                                 </tr>
                             }

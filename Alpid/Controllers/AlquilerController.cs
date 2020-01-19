@@ -27,9 +27,16 @@ namespace Alpid.Controllers
             var applicationDbContext = _context.Alquiler.Include(a => a.Socios);
 
 
-            var alquiler = (from e in _context.Alquiler orderby e.AlquilerID
-                            select new Alquiler { AlquilerID = e.AlquilerID, FechaDesde = e.FechaDesde,
-                FechaHasta = e.FechaHasta, Socios = e.Socios, Observacion = e.Observacion  }).Distinct();
+            var alquiler = (from e in _context.Alquiler
+                            orderby e.AlquilerID
+                            select new Alquiler
+                            {
+                                AlquilerID = e.AlquilerID,
+                                FechaDesde = e.FechaDesde,
+                                FechaHasta = e.FechaHasta,
+                                Socios = e.Socios,
+                                Observacion = e.Observacion
+                            }).Distinct();
 
 
             int pageSize = 15;
@@ -56,7 +63,7 @@ namespace Alpid.Controllers
                 ViewData["ProductosID"] = new SelectList(alquiler, "ProductosID", "Nombre");
 
                 int pageSize = 15;
-                return View(await Paginacion<Alquiler>.CreateAsync(alquiler.AsNoTracking(), page ?? 1, pageSize));
+                return View(await Paginacion<Alquiler>.CreateAsync(alquiler.Include(a => a.Productos).AsNoTracking(), page ?? 1, pageSize));
 
             }
             catch (Exception e)
@@ -131,10 +138,10 @@ namespace Alpid.Controllers
                     if (AlquilerID == 0)
                     {
                         var UltimoIdbase = (from c in _context.Alquiler select c.AlquilerID).Max();
-                        var valoresBase = _context.Alquiler.SingleOrDefault(x => x.AlquilerID == UltimoIdbase);
+                        var valoresBase = _context.Alquiler.FirstOrDefault(x => x.AlquilerID == UltimoIdbase);
 
                         Add.AlquilerID = valoresBase.AlquilerID + 1;
-                        ID= valoresBase.AlquilerID + 1;
+                        ID = valoresBase.AlquilerID + 1;
                     }
                     else
                     {
@@ -158,7 +165,7 @@ namespace Alpid.Controllers
                 var cantGuardar = CantActual - cantidad;
                 if (cantGuardar < 0)
                 {
-                    var mensaje = ("Solo posee " + CantActual+" "+ RestarProducto.Nombre + " y quiere retirar " + cantidad).ToString();
+                    var mensaje = ("Solo posee " + CantActual + " " + RestarProducto.Nombre + " y quiere retirar " + cantidad).ToString();
                     var valorMensaje = 5;
                     return RedirectToAction("Create", "Alquiler", new { FechaDesde, FechaHasta, Observacion, SociosID, DeshabilitarCampos, ID, mensaje, valorMensaje });
                 }
@@ -181,14 +188,31 @@ namespace Alpid.Controllers
         }
 
         // GET: Alquiler/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id, int? page)
         {
             try
             {
-                var alquiler = await _context.Alquiler.FindAsync(id);
+                var DetalleAlquiler = await _context.Alquiler.FirstOrDefaultAsync(m => m.AlquilerID == id);
 
-                ViewData["SociosId"] = new SelectList(_context.Socios, "SociosID", "RazonSocial", alquiler.SociosID);
-                return View(alquiler);
+                ViewData["FechaDesde"] = DetalleAlquiler.FechaDesde.ToShortDateString();
+                ViewData["FechaHasta"] = DetalleAlquiler.FechaHasta.ToShortDateString();
+                ViewData["Observacion"] = DetalleAlquiler.Observacion;
+                ViewData["IdAlquiler"] = DetalleAlquiler.AlquilerID;
+
+
+                var socio = from s in _context.Socios select s;
+                socio = socio.Where(s => s.SociosID == DetalleAlquiler.SociosID);
+                ViewData["SociosId"] = new SelectList(socio, "SociosID", "RazonSocial");
+                //obtiene valor para mostran en pantalla
+                var alquiler = (from e in _context.Alquiler where e.AlquilerID == id select e);
+
+                //busca los productos que no esten dados de baja y solo sean de alquiler
+                var producto = from s in _context.Productos select s;
+                producto = producto.Where(s => s.FechaBaja == null && s.ProductosTipo == "DeAlquiler");
+                ViewData["ProductosID"] = new SelectList(producto, "ProductosID", "Nombre");
+
+                int pageSize = 15;
+                return View(await Paginacion<Alquiler>.CreateAsync(alquiler.Include(a => a.Productos).AsNoTracking(), page ?? 1, pageSize));
             }
             catch (Exception e)
             {
@@ -217,39 +241,46 @@ namespace Alpid.Controllers
             return View(alquiler);
         }
 
-        // GET: Alquiler/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> DeletePhysical(int id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
-            }
 
-            var alquiler = await _context.Alquiler
-                .Include(a => a.Socios)
-                .FirstOrDefaultAsync(m => m.AlquilerID == id);
-            if (alquiler == null)
+                // busco en la base
+                var Base = _context.Alquiler.SingleOrDefault(x => x.ID == id);
+                var producto = Base.ProductosID;
+                var Cantidad = Base.cantidad;
+
+                //lleno variables para pasar al front
+                var FechaDesde = Base.FechaDesde;
+                var FechaHasta = Base.FechaHasta;
+                var Observacion = Base.Observacion;
+                var SociosID = Base.SociosID;
+                var DeshabilitarCampos = 1;
+                var ID = Base.AlquilerID;
+
+                //Deleteo fila base segun el id
+                var evento = await _context.Alquiler.FindAsync(id);
+                _context.Alquiler.Remove(evento);
+                await _context.SaveChangesAsync();
+
+
+                var ObtenerProducto = await _context.Productos.FindAsync(producto);
+
+                ObtenerProducto.Cantidad = ObtenerProducto.Cantidad + Cantidad;
+
+                _context.Productos.Update(ObtenerProducto);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Create", "Alquiler", new { FechaDesde, FechaHasta, Observacion, SociosID, DeshabilitarCampos, ID });
+            }
+            catch (Exception e)
             {
-                return NotFound();
+                Console.Write(e);
+                var valor = 2;
+                return RedirectToAction("Index", "EventoSolidarios", new { valor });
             }
-
-            return View(alquiler);
         }
 
-        // POST: Alquiler/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var alquiler = await _context.Alquiler.FindAsync(id);
-            _context.Alquiler.Remove(alquiler);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool AlquilerExists(int id)
-        {
-            return _context.Alquiler.Any(e => e.AlquilerID == id);
-        }
     }
 }

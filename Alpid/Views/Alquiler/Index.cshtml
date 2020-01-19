@@ -36,25 +36,25 @@
                 <tbody>
                     @foreach (var item in Model)
                     {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Socios.RazonSocial)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.FechaDesde)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.FechaHasta)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Observacion)
-                        </td>
-                        <td>
-                            @*<a asp-action="Edit" asp-route-id="@item.AlquilerID">Editar</a> |*@
-                            <a asp-action="Details" asp-route-id="@item.AlquilerID">ver</a> |
-                            @*<a asp-action="Delete" asp-route-id="@item.AlquilerID">Borrar</a>*@
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Socios.RazonSocial)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaDesde)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaHasta)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Observacion)
+                            </td>
+                            <td>
+                                <a asp-action="Details" class="btn btn-info" asp-route-id="@item.AlquilerID">ver</a> |
+                                <a asp-action="Edit" class="btn btn-dark" asp-route-id="@item.AlquilerID">Editar</a>
+                                @*<a asp-action="Delete" asp-route-id="@item.AlquilerID">Borrar</a>*@
+                            </td>
+                        </tr>
                     }
                 </tbody>
             </table>
