@@ -6,9 +6,11 @@ using Microsoft.EntityFrameworkCore;
 using Alpid.Data;
 using Alpid.Models;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Alpid.Controllers
 {
+    [Authorize]
     public class EventoSolidariosController : Controller
     {
         private readonly ApplicationDbContext _context;

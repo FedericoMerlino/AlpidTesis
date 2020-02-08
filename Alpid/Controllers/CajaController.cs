@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Alpid.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class CajaController : Controller
     {
         private readonly ApplicationDbContext _context;

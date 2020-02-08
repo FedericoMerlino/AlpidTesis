@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Alpid.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class ProductosController : Controller
     {
         private readonly ApplicationDbContext _context;
