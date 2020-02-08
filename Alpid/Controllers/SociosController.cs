@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Alpid.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class SociosController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -19,8 +19,8 @@ namespace Alpid.Controllers
         {
             _context = context;
         }
-        public string ActivosGloval;
-        public string EliminadosGloval;
+        public string ActivosGloval = null;
+        public string EliminadosGloval = null;
 
         // GET: Socios
         public async Task<IActionResult> Index(string currentFilter, string searchString, int? page, string filtroFecha,
@@ -82,26 +82,28 @@ namespace Alpid.Controllers
             var Eliminados = HttpContext.Session.GetString("EliminadosGloval");
             int pageSize = 15;
 
-            ViewData["SociosActivos"] = Activos;
-
-            if (Activos != null)
-            {
-                var resultado = (from e in _context.Socios
-                                 where e.FechaBaja == null
-                                 select e);
-
-                //new ViewAsPdf("Report");
-                return View(await Paginacion<Socios>.CreateAsync(resultado, page ?? 1, pageSize));
-            }
-            if (Eliminados != null)
+            if (Eliminados != null && Eliminados != "vaciarEliminados")
             {
                 var resultado = (from e in _context.Socios
                                  where e.FechaBaja != null
                                  select e);
+                ViewData["SociosEliminados"] = 1;
+                HttpContext.Session.SetString("EliminadosGloval", "vaciarEliminados");
 
-                //new ViewAsPdf("Report");
                 return View(await Paginacion<Socios>.CreateAsync(resultado, page ?? 1, pageSize));
             }
+            if (Activos != null && Activos != "vaciarActivos")
+            {
+                var resultado = (from e in _context.Socios
+                                 where e.FechaBaja == null
+                                 select e);
+                ViewData["SociosEliminados"] = 0;
+
+                HttpContext.Session.SetString("ActivosGloval", "vaciarActivos");
+
+                return View(await Paginacion<Socios>.CreateAsync(resultado, page ?? 1, pageSize));
+            }
+           
             var valor = 3;
             return RedirectToAction("Index", "Socios", new { valor });
 

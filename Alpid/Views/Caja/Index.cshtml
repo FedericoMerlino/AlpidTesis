@@ -20,7 +20,7 @@
         </p>
     </div>
     <div>
-        <a asp-action="Report" class="btn btn-dark" style="float:right;">Reporte caja</a>
+        <a onclick="VerReporte()" class ="btn btn-dark" style="float:right;">Reporte caja</a>
     </div>
 
     <!--Busca solamente la info que se muestra en la grilla-->
@@ -154,5 +154,11 @@
                 button: "Aceptar",
             });
         };
+    };
+
+     function VerReporte(){
+
+             window.open('Caja/Report');
+             window.location.href= '@Url.Action("Index", "Caja")';
     };
 </script>

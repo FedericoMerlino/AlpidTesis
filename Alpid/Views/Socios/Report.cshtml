@@ -20,13 +20,13 @@
         <span><img src="~/img/logoReporte.jpg" style="float:right;" /></span>
     </header><br />
     <div style="padding-top:10%;">
-        @if (@ViewData["SociosActivos"].Equals(null))
+        @if (@ViewData["SociosEliminados"].Equals(1))
         {
-            <br /> <h3 style="text-align:center;">ALPID: Reporte de Socios Eliminados </h3>
+            <br /> <h3 style="text-align:center;">ALPID: Reporte de Socios Activos  </h3>
         }
         else
         {
-            <br /> <h3 style="text-align:center;">ALPID: Reporte de Socios Activos </h3>
+            <br /> <h3 style="text-align:center;">ALPID: Reporte de Socios Eliminados </h3>
         }
         <article>
             <br />
