@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Alpid.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class EventoSolidariosController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -92,7 +92,7 @@ namespace Alpid.Controllers
                 var verificarNombre = (from c in _context.EventoSolidarios where NombreEvento == c.NombreEvento select c).Count();
 
 
-                if (verificarNombre > 0)
+                if (verificarNombre > 0 && IdEvento < 0)
                 {
                     var valor = 3;
                     var NombreRepetido = NombreEvento;

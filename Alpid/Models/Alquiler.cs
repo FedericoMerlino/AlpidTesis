@@ -33,6 +33,8 @@ namespace Alpid.Models
         [Required(ErrorMessage = "Debe ingresar un Precio")]
         public decimal Valor { get; set; }
 
+        public decimal ValorTotal { get; set; }
+
         [Required(ErrorMessage = "Debe ingresar una cantidad")]
         public int cantidad { get; set; }
 

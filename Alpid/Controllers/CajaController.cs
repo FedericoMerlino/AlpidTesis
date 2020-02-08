@@ -79,10 +79,14 @@ namespace Alpid.Controllers
                      
         public async Task<IActionResult> Report(int? page)
         {
-            var resultado = (from e in _context.Caja select e);
+            var fechaDesde =  HttpContext.Session.GetString("FechaDesdeFilterGloval");
+            var fechaHasta = HttpContext.Session.GetString("FechaHastaFilterGloval");
+            ViewData["FechaDesdeFilter"] = fechaDesde;
+            ViewData["FechaHastaFilter"] = fechaHasta;
 
-            ViewData["FechaDesdeFilter"] = HttpContext.Session.GetString("FechaDesdeFilterGloval");
-            ViewData["FechaHastaFilter"] = HttpContext.Session.GetString("FechaHastaFilterGloval");
+            var resultado = (from e in _context.Caja where e.FechaMovimiento >= Convert.ToDateTime(fechaDesde) 
+                             && e.FechaMovimiento <= Convert.ToDateTime(fechaHasta)  select e);
+
 
             int pageSize = 15;
              //new ViewAsPdf("Report");

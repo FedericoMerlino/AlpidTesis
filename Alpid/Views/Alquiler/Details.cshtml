@@ -64,10 +64,14 @@
                     }
                 </tbody>
             </table>
+            <div class="col-md-2 col-md-push-8">
+                Total: <input id="ResultadoTotal" name="ResultadoTotal" value="$ @ViewData["ResultadoTotal"]" class="form-control" readonly="readonly" />
+            </div>
+            <br />
         </form>
     </div>
-    <div style="padding-bottom:5%;">
-        <a asp-action="Index" class="btn btn-info" style="float:left;">Regresar</a>
+    <div style="padding:5%;">
+        <a asp-action="Index" class="btn btn-info" style="float:right;">Regresar</a>
     </div>
 </body>
 </html>
