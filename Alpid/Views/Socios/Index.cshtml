@@ -9,6 +9,9 @@
 </head>
 <body style="background-color:ghostwhite;">
     <h1 style="color:blue">Socios Alpid</h1>
+    <div>
+        <a class="btn btn-dark" onclick="VerReporte()" style="float:right;">Reporte caja</a>
+    </div>
     <p>
         <a class="btn btn-link" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
             <i class="fa fa-angle-double-down"> Filtros</i>
@@ -211,4 +214,13 @@
             });
         };
     };
+
+    function VerReporte(){
+
+             window.open('Socios/Report');
+
+             window.location.href= '@Url.Action("Index", "Socios")';
+
+    };
+
 </script>

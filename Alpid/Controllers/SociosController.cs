@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Alpid.Data;
 using Alpid.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace Alpid.Controllers
 {
@@ -18,6 +19,8 @@ namespace Alpid.Controllers
         {
             _context = context;
         }
+        public string ActivosGloval;
+        public string EliminadosGloval;
 
         // GET: Socios
         public async Task<IActionResult> Index(string currentFilter, string searchString, int? page, string filtroFecha,
@@ -49,11 +52,17 @@ namespace Alpid.Controllers
 
                 if (filtroFecha == null && bandera == true)
                 {
+                    //activos
                     socio = socio.Where(s => s.FechaBaja == null);
+                    HttpContext.Session.SetString("ActivosGloval", "Activos");
+
                 }
                 if (filtroFecha != null && bandera == true)
                 {
+                    //eliminados
                     socio = socio.Where(s => s.FechaBaja != null);
+                    HttpContext.Session.SetString("EliminadosGloval", "Eliminados");
+
                 }
                 ViewData["Message"] = valor;
 
@@ -66,6 +75,36 @@ namespace Alpid.Controllers
                 valor = 2;
                 return RedirectToAction("Index", "Socios", new { valor });
             }
+        }
+        public async Task<IActionResult> Report(int? page)
+        {
+            var Activos = HttpContext.Session.GetString("ActivosGloval");
+            var Eliminados = HttpContext.Session.GetString("EliminadosGloval");
+            int pageSize = 15;
+
+            ViewData["SociosActivos"] = Activos;
+
+            if (Activos != null)
+            {
+                var resultado = (from e in _context.Socios
+                                 where e.FechaBaja == null
+                                 select e);
+
+                //new ViewAsPdf("Report");
+                return View(await Paginacion<Socios>.CreateAsync(resultado, page ?? 1, pageSize));
+            }
+            if (Eliminados != null)
+            {
+                var resultado = (from e in _context.Socios
+                                 where e.FechaBaja != null
+                                 select e);
+
+                //new ViewAsPdf("Report");
+                return View(await Paginacion<Socios>.CreateAsync(resultado, page ?? 1, pageSize));
+            }
+            var valor = 3;
+            return RedirectToAction("Index", "Socios", new { valor });
+
         }
 
         // GET: Socios/Details/5
