@@ -60,6 +60,19 @@ namespace Alpid.Controllers
             }
         }
 
+        public async Task<IActionResult> Report(int? page)
+        {
+           
+            int pageSize = 15;
+
+            var evento = (from e in _context.EventoSolidarios
+                          orderby e.IdEvento
+                          select new EventoSolidarios { IdEvento = e.IdEvento, NombreEvento = e.NombreEvento,Fecha = e.Fecha}).Distinct();
+
+            return View(await Paginacion<EventoSolidarios>.CreateAsync(evento, page ?? 1, pageSize));
+
+        }
+
         // GET: EventoSolidario s/Create
         public async Task<IActionResult> Create(int valor,string NombreRepetido, string Nombre, int idItem, int ID, DateTime Fecha, decimal ResultadoTotal)
         {

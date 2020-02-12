@@ -1,13 +1,12 @@
-﻿@model IEnumerable<Alpid.Models.Alquiler>
+﻿@model IEnumerable<Alpid.Models.EventoSolidarios>
 @{
     Layout = null;
 }
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Reporte caja</title>
+    <title>Reporte Eventos Solidarios</title>
 </head>
-
 <body style="background-color:ghostwhite;">
     <header>
         <input type="button" name="imprimir" value="Imprimir" onclick="window.print();">
@@ -21,7 +20,7 @@
         <span><img src="~/img/logoReporte.jpg" style="float:right;" /></span>
     </header><br />
     <div style="padding-top:10%;">
-        <br /> <h3 style="text-align:center;">ALPID: Reporte de caja perteneceinte desde @ViewData["FechaDesdeFilter"] a @ViewData["FechaHastaFilter"]</h3>
+        <br /> <h3 style="text-align:center;">ALPID: Reporte de Eventos solidarios</h3>
         <article>
             <br />
             <form class="form-group">
@@ -29,73 +28,29 @@
                     <thead>
                         <tr>
                             <th>
-                                Fecha Movimiento
+                                Fecha
                             </th>
                             <th>
-                                Observaciones
-                            </th>
-                            <th>
-                                Ingreso
-                            </th>
-                            <th>
-                                Salida
-                            </th>
-                            <th>
-                                Total
+                                Nombre Evento
                             </th>
                         </tr>
                     </thead>
-                    @*<tbody>
+                    <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.FechaMovimiento)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Observaciones)
-                                </td>
-                                <td style="color:#49d292;">
-                                    @if (item.Debe != null)
-                                    {
-                                        <label>$</label> @Html.DisplayFor(modelItem => item.Debe)
-                                    }
-                                </td>
-                                <td style="color:red;">
-                                    if para que solamente traiga el signo de pregunta a los campos que tiene valores
-                                    @if (item.Haber != null)
-                                    {
-                                        <label>$</label> @Html.DisplayFor(modelItem => item.Haber)
-                                    }
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Total)
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Fecha)
+                            </td>
+                            <td id="ValorNombre">
+                                @Html.DisplayFor(modelItem => item.NombreEvento)
+                            </td>
+                        </tr>
                         }
-                    </tbody>*@
+                    </tbody>
                 </table>
             </form>
         </article>
     </div>
-
-
 </body>
 </html>
-@*<script>
-        class Caja {
-            constructor() {
-            }
-            filtrarCaja(valor, action) {
-                valor = 'GET';
-                $.post(
-                    action,
-                    { valor },
-                    (response) => {
-
-                        $("#dataFilter").html(response);
-                    });
-            };
-        };
-
-    </script>*@

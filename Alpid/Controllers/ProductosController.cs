@@ -60,6 +60,27 @@ namespace Alpid.Controllers
             return View(await Paginacion<Productos>.CreateAsync(producto.AsNoTracking().OrderByDescending(x => x.FechaAlta).Include(x => x.Proveedores), page ?? 1, pageSize));
         }
 
+        public async Task<IActionResult> Report(int? page)
+        {
+            int pageSize = 15;
+
+            var resultado = (from e in _context.Productos
+                             where e.FechaBaja == null && e.ProductosTipo == "DeAlquiler"
+                             select e) ;
+
+                return View(await Paginacion<Productos>.CreateAsync(resultado.Include(x => x.Proveedores), page ?? 1, pageSize));
+        }
+
+        public async Task<IActionResult> ReportMobiliarios(int? page)
+        {
+            int pageSize = 15;
+
+            var resultado = (from e in _context.Productos
+                             where e.FechaBaja == null && e.ProductosTipo != "DeAlquiler"
+                             select e);
+
+            return View(await Paginacion<Productos>.CreateAsync(resultado, page ?? 1, pageSize));
+        }
         // GET: Productos/Details/5
         public async Task<IActionResult> Details(int? id)
         {
