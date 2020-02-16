@@ -11,14 +11,8 @@
         <div style="padding-bottom:3%; padding-top:1%;">
 
             <a asp-action="Create" class="btn btn-success">Nuevo evento</a>
-
             @*Reporte*@
-            <a onclick="VerReporte()" class="btn btn-dark" style="float:right;color:white;">Reporte Eventos solidarios</a>
-        </div>
-        <br />
-        <!--Busca solamente la info que se muestra en la grilla-->
-        <div style="padding-bottom:3%; padding-top:1%;">
-
+            <a onclick="VerReporte()" class="btn btn-dark" style="color:white;">Reporte Eventos solidarios</a>
             <i class="fa fa-search fa-2x" style="Float: right; padding-left:10px; padding-top:2px;"></i>
             <input id="searchTerm" type="text" onkeyup="doSearch()" class="form-control" placeholder="Buscar" style=" width:200px; Float: right; " />
         </div>

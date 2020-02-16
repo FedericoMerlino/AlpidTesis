@@ -9,9 +9,6 @@
 </head>
 <body style="background-color:ghostwhite;">
     <h1 style="color:blue">Socios Alpid</h1>
-    <div>
-        <a class="btn btn-secondary" onclick="VerReporte()" style="float:right;color:white;">Reporte Socios</a>
-    </div>
     <p>
         <a class="btn btn-link" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
             <i class="fa fa-angle-double-down"> Filtros</i>
@@ -45,7 +42,9 @@
     </div>
     <div style="padding-bottom:5%; padding-top:1%;">
         <!--Boton para crear nuevo socio-->
-        <a asp-action="Create" class='btn btn-success' style="Float: left;">Crear Socio</a>
+        <a asp-action="Create" class='btn btn-success'>Crear Socio</a>
+        <a class="btn btn-secondary" onclick="VerReporte()" style="color:white;">Reporte Socios</a>
+
         <!--Busca solamente la info que se muestra en la grilla-->
         <i class="fa fa-search fa-2x" style="Float: right; padding-left:10px; padding-top:2px;"></i>
         <input id="searchTerm" type="text" onkeyup="doSearch()" class="form-control" placeholder="Buscar" style=" width:200px; Float: right; " />

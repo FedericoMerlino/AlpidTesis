@@ -5,31 +5,41 @@
 <html>
 <body style="background-color:ghostwhite;">
     <h1 style="color:blue">Cuota societaria</h1>
-    <!--maneja los precion de la cuotas-->
-    <div>
-        <a asp-area="" asp-controller="CuotaPrecio" asp-action="Create" class="btn btn-dark" style="float:right;"> Nuevo precio Cuota</a>
-    </div>
-
-    <p>
-        <a class="btn btn-link" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-            <i class="fa fa-angle-double-down"> Filtros</i>
-        </a>
-    </p>
-    <div class="collapse" id="collapseExample">
-        <div class="card card-body">
-            <form asp-action="Index" method="get">
-                <div class="col-lg-2 col-med-4 col-sm-6 col-xs-12" style="padding-top:2%;">
-                    <!--busca en toda la tabla en la base de datos de socios-->
+    <form asp-action="Index" id="Index">
+        <div style="padding-bottom:3%;">
+            <div class="form-group col-md-12" style="padding-top:2%;">
+                <!--busca en toda la tabla en la base de datos de socios-->
+                <div class="col-md-2">
                     <label style="color:darkblue">Cuit/Nombre: </label>
-                    <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                    <p>
+                        <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                    </p>
                 </div>
-                <div style="padding-top:2%;" class="col-lg-4 col-med-4 col-sm-6 col-xs-12">
-                    <button type="submit" class="btn btn-labeled btn-success"><span class="btn-label"><i class="glyphicon glyphicon-search"></i></span> Buscar</button>
-                    <a asp-action="Index" type="button" class="btn btn-labeled btn-info"><span class="btn-label"><i class="glyphicon glyphicon-refresh"></i></span> Actualizar Consulta</a>
+                <div class="col-md-6">
+                    <label style="color:darkblue">Fechas: </label>
+                    <div class="form-group">
+                        <!--Buscar por fechas-->
+                        <div class="form-actions no-color">
+                            <p>
+                                Fecha desde <input type="date" name="fechaDesde" id="ponerFechaDesde" />
+                                Fecha hasta <input type="date" name="fechaHasta" id="ponerFechaHasta" />
+                            </p>
+                        </div>
+                    </div>
                 </div>
-            </form>
+                <div class="form-group col-md-4">
+                    <label style="color:ghostwhite">Texto invisible </label>
+                    <p>
+                        <button type="button" onclick="ValidarFecha()" class="btn btn-labeled btn-dark"><span class="btn-label"><i class="glyphicon glyphicon-search"></i></span> Buscar</button>
+                        <a asp-action="Index" type="button" class="btn btn-labeled btn-info"><span class="btn-label"><i class="glyphicon glyphicon-refresh"></i></span> Actualizar Consulta</a>
+                    </p>
+                </div>
+            </div>
         </div>
-    </div>
+    </form>
+    <br />
+    <br />
+    <hr />
     <div class="input-group-append" style="padding-top:30px">
         <div class="form-group">
             <h2 style="initial-letter:inherit; font-family: Homer Simpson; color:#0932ff;"> Grilla Cuotas </h2> <br />
@@ -41,15 +51,18 @@
         <!--nuevo Cuota societaria-->
         @if (@ViewData["precio"].ToString() == "Debe cargar un valor")
         {
-
+            <a asp-area="" asp-controller="CuotaPrecio" asp-action="Create" class="btn btn-dark" style="float:right;"> Nuevo precio Cuota</a>
         }
         else
         {
             <a asp-action="Create" class="btn btn-success">Nuevo pago</a>
+            <a asp-area="" asp-controller="CuotaPrecio" asp-action="Create" class="btn btn-dark"> Nuevo precio Cuota</a>
         }
         <!--Busca solamente la info que se muestra en la grilla-->
         <i class="fa fa-search fa-2x" style="Float: right; padding-left:10px; padding-top:2px;"></i>
         <input id="searchTerm" type="text" onkeyup="doSearch()" class="form-control" placeholder="Buscar" style=" width:200px; Float: right; " />
+        <a class="btn btn-secondary" onclick="VerReporte()" style="color:white;">Reporte Cuotas</a>
+
     </div>
     <!--tabla con la informacion del socio-->
     <div>

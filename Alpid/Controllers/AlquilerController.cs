@@ -50,7 +50,8 @@ namespace Alpid.Controllers
                 if (!string.IsNullOrEmpty(searchString))
                 {
                     alquiler = alquiler.Where(s => s.Socios.RazonSocial.Contains(searchString) || s.Socios.Cuit.Contains(searchString));
-                    HttpContext.Session.SetString("SocioFilterGloval", (alquiler.Where(s => s.Socios.RazonSocial.Contains(searchString) || s.Socios.Cuit.Contains(searchString))).ToString());
+                    HttpContext.Session.SetString("SocioFilterGloval", (from a in _context.Alquiler where a.Socios.RazonSocial.Contains(searchString)
+                                                  || a.Socios.Cuit.Contains(searchString) select a.SociosID).FirstOrDefault().ToString());
                 }
                 string mesDesde;
                 string mesHasta;
@@ -106,18 +107,28 @@ namespace Alpid.Controllers
             var FechaDesde = HttpContext.Session.GetString("FechaDesdeFilterGloval");
             var FechaHasta = HttpContext.Session.GetString("FechaHastaFilterGloval");
             var SocioID = HttpContext.Session.GetString("SocioFilterGloval");
-            ViewData["SocioFilterGloval"] = null;
+            ViewData["SocioFilter"] = 0;
             ViewData["FechaDesdeFilter"] = null;
             ViewData["FechaHastaFilter"] = null;
 
             int pageSize = 15;
+            if (SocioID != null && SocioID != "vaciarActivos")
+            {
+                var resultado = (from e in _context.Alquiler.Include(x => x.Socios)
+                                 where e.SociosID == Convert.ToInt32(SocioID)
+                                 select e);
+                ViewData["SocioFilter"] = (from e in _context.Socios where e.SociosID == Convert.ToInt32(SocioID) select e.RazonSocial).FirstOrDefault();
 
+                HttpContext.Session.SetString("SocioID", "vaciarActivos");
+
+                return View(await Paginacion<Alquiler>.CreateAsync(resultado, page ?? 1, pageSize));
+            }
             if (FechaDesde != null && FechaDesde != "vaciarEliminados")
             {
-                var resultado = (from e in _context.Alquiler
+                var resultado = (from e in _context.Alquiler.Include(x => x.Socios)
                                  where e.FechaDesde > Convert.ToDateTime(FechaDesde)
                                  select e);
-                resultado = (from e in _context.Alquiler
+                resultado = (from e in _context.Alquiler.Include(x =>x.Socios)
                              where e.FechaDesde < Convert.ToDateTime(FechaHasta)
                              select e);
 
@@ -128,17 +139,7 @@ namespace Alpid.Controllers
 
                 return View(await Paginacion<Alquiler>.CreateAsync(resultado, page ?? 1, pageSize));
             }
-            if (SocioID != null && SocioID != "vaciarActivos")
-            {
-                var resultado = (from e in _context.Socios
-                                 where e.SociosID == Convert.ToInt32(SocioID)
-                                 select e);
-                ViewData["SocioFilterGloval"] = (from e in _context.Socios where e.SociosID == Convert.ToInt32(SocioID) select e.RazonSocial).FirstOrDefault();
-
-                HttpContext.Session.SetString("SocioID", "vaciarActivos");
-
-                return View(await Paginacion<Socios>.CreateAsync(resultado, page ?? 1, pageSize));
-            }
+           
 
             var valor = 3;
             return RedirectToAction("Index", "Socios", new { valor });

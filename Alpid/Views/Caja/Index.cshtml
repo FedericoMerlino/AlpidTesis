@@ -17,12 +17,10 @@
             {
                 <a asp-action="CreateRetire" class="btn btn-danger">Retiro</a>
             }
+            <a onclick="VerReporte()" class="btn btn-dark" style="color:white;">Reporte caja</a>
+
         </p>
     </div>
-    <div>
-        <a onclick="VerReporte()" class="btn btn-dark" style="float:right;color:white;">Reporte caja</a>
-    </div>
-
     <!--Busca solamente la info que se muestra en la grilla-->
     <div style="padding-bottom:5%; padding-top:1%;" class="form-group">
         <!--Buscar por fechas-->
@@ -36,10 +34,11 @@
             </div>
         </form>
         <hr />
-        <h4 style="color: limegreen;">El total que posee la caja es: $@ViewData["TotalCaja"]</h4>
-        <br />
-        <i class="fa fa-search fa-2x" style="Float: right; padding-left:10px; padding-top:2px;"></i>
-        <input id="searchTerm" type="text" onkeyup="doSearch()" class="form-control" placeholder="Buscar" style=" width:200px; Float: right; " />
+        <div class="form-group">
+            <h4 style="color: limegreen; float:left;">El total que posee la caja es: $@ViewData["TotalCaja"]</h4>
+            <i class="fa fa-search fa-2x" style="Float: right; padding-left:10px; padding-top:2px;"></i>
+            <input id="searchTerm" type="text" onkeyup="doSearch()" class="form-control" placeholder="Buscar" style=" width:200px; Float: right; " />
+        </div>
     </div>
 
     <!--tabla con la informacion de la caja-->

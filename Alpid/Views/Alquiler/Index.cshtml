@@ -8,16 +8,15 @@
     <h1 style="color:blue">Alquiler de productos</h1>
     <form asp-action="Index" id="Index">
         <div style="padding-bottom:3%;">
-
             <div class="form-group col-md-12" style="padding-top:2%;">
                 <!--busca en toda la tabla en la base de datos de socios-->
-                <div class="col-md-4">
+                <div class="col-md-2">
                     <label style="color:darkblue">Cuit/Nombre: </label>
                     <p>
                         <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
                     </p>
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-6">
                     <label style="color:darkblue">Fechas: </label>
                     <div class="form-group">
                         <!--Buscar por fechas-->
@@ -29,23 +28,27 @@
                         </div>
                     </div>
                 </div>
+                <div class="form-group col-md-4">
+                    <label style="color:ghostwhite">Texto invisible </label>
+                    <p>
+                        <button type="button" onclick="ValidarFecha()" class="btn btn-labeled btn-dark"><span class="btn-label"><i class="glyphicon glyphicon-search"></i></span> Buscar</button>
+                        <a asp-action="Index" type="button" class="btn btn-labeled btn-info"><span class="btn-label"><i class="glyphicon glyphicon-refresh"></i></span> Actualizar Consulta</a>
+                    </p>
+                </div>
             </div>
         </div>
-        <br />
-
-        <div class="form-group col-md-12">
-            <button type="button" onclick="ValidarFecha()" class="btn btn-labeled btn-dark"><span class="btn-label"><i class="glyphicon glyphicon-search"></i></span> Buscar</button>
-            <a asp-action="Index" type="button" class="btn btn-labeled btn-info"><span class="btn-label"><i class="glyphicon glyphicon-refresh"></i></span> Actualizar Consulta</a>
-            <a class="btn btn-secondary" onclick="VerReporte()" style="float:right;color:white;">Reporte Alquiler</a>
-        </div>
     </form>
-
+    <br />
+    <br />
+    <hr />
     <!--Boton para crear nuevo alquier-->
     <div style="padding-bottom:3%; padding-top:1%;" class="form-group col-md-12">
         <a asp-action="Create" class='btn btn-success'>Nuevo alquiler</a>
         <!--Busca solamente la info que se muestra en la grilla-->
         <i class="fa fa-search fa-2x" style="Float: right; padding-left:10px; padding-top:2px;"></i>
         <input id="searchTerm" type="text" onkeyup="doSearch()" class="form-control" placeholder="Buscar" style=" width:200px; Float: right; " />
+        <a class="btn btn-secondary" onclick="VerReporte()" style="color:white;">Reporte Alquiler</a>
+
     </div>
     <div>
         <form class="form-group">

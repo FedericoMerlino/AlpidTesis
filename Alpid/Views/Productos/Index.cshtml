@@ -7,9 +7,6 @@
 <body style="background-color:ghostwhite;">
     <h1 style="color:blue">Elementos ortopédicos Alpid</h1>
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" style="Float: right;"> Ver elementos mobiliarios/otros</button>
-    <div style="padding-right:21%;">
-        <a class="btn btn-secondary" onclick="VerReporte()" style="float:right;color:white;">Reporte Elementos Ortopédicos</a>
-    </div>
     <!--Busca en la base de datos-->
     <p>
         <a class="btn btn-link" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
@@ -47,7 +44,8 @@
     <!--boton para abrir modal Mobiliariosns-->
     <!--busca solamente en lo datos que se encunetran en la tabla con la funcion js que esta en el layaut-->
     <div style="padding-bottom:5%; padding-top:1%;">
-        <a asp-action="Create" class='btn btn-success' style="Float: left;">Nuevo elemento ortopédico</a>
+        <a asp-action="Create" class='btn btn-success'>Nuevo elemento ortopédico</a>
+        <a class="btn btn-secondary" onclick="VerReporte()" style="color:white;">Reporte Elementos Ortopédicos</a>
 
         <i class="fa fa-search fa-2x" style="Float: right; padding-left:10px; padding-top:2px;"></i>
         <input id="searchTerm" type="text" onkeyup="doSearch()" class="form-control" placeholder="Buscar" style=" width:200px; Float: right; " />
