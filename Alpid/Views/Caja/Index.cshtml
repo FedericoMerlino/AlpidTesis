@@ -20,7 +20,7 @@
         </p>
     </div>
     <div>
-        <a onclick="VerReporte()" class ="btn btn-dark" style="float:right;color:white;">Reporte caja</a>
+        <a onclick="VerReporte()" class="btn btn-dark" style="float:right;color:white;">Reporte caja</a>
     </div>
 
     <!--Busca solamente la info que se muestra en la grilla-->
@@ -29,8 +29,8 @@
         <form asp-action="Index" id="Index">
             <div class="form-actions no-color">
                 <p>
-                    Fecha desde <input type="text" name="fechaDesde" id="ponerFechaDesde" />
-                    Fecha hasta <input type="text" name="fechaHasta" id="ponerFechaHasta" />
+                    Fecha desde <input type="date" name="fechaDesde" id="ponerFechaDesde" />
+                    Fecha hasta <input type="date" name="fechaHasta" id="ponerFechaHasta" />
                     <button type="button" onclick="ValidarFecha()" class="btn btn-labeled btn-dark"><span class="btn-label"><i class="glyphicon glyphicon-search"></i></span> Buscar</button>
                 </p>
             </div>
@@ -107,9 +107,7 @@
 </html>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <link rel="stylesheet" type="text/css" href="dist/sweetalert.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
+
 
 <script>
       function ValidarFecha () {
@@ -117,23 +115,15 @@
         var fechaHasta = document.getElementById("ponerFechaHasta").value;
 
          if (fechaDesde > fechaHasta) {
-             alert("La fecha desde " + fechaDesde + " debe ser mayo a la fecha Hasta " + fechaHasta);
+             alert("La fecha desde " + fechaDesde + " debe ser menor a la fecha Hasta " + fechaHasta);
          }
          else {
             $("#Index").submit();
          };
     };
-
-    $('#ponerFechaDesde').datepicker({
-        format: "dd/mm/yyyy",
-        language: "es",
-    });
-    $('#ponerFechaHasta').datepicker({
-        format: "dd/mm/yyyy",
-        language: "es",
-    });
-    document.getElementById('ponerFechaDesde').value = '@ViewData["FechaDesdeFilter"]';
-    document.getElementById('ponerFechaHasta').value = '@ViewData["FechaHastaFilter"]';
+  
+    document.getElementById('ponerFechaDesde').value = "@ViewData["FechaDesdeFilter"]";
+    document.getElementById('ponerFechaHasta').value = "@ViewData["FechaHastaFilter"]";
 
     var valor = "@ViewData["Message"]";
     //si funciona todo correcto

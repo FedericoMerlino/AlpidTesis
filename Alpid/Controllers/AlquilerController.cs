@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Alpid.Data;
 using Alpid.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+
 
 namespace Alpid.Controllers
 {
@@ -20,29 +22,127 @@ namespace Alpid.Controllers
         {
             _context = context;
         }
+        public string FechaDesdeFilterGloval = null;
+        public string FechaHastaFilterGloval = null;
+        public string SocioFilterGloval = null;
 
         // GET: Alquiler
-        public async Task<IActionResult> Index(int? page)
+        public async Task<IActionResult> Index(DateTime fechaDesde, DateTime fechaHasta, string currentFilter, string searchString,
+                                                int? page, string filtroFecha, string DateFilter, int valor)
         {
-            var applicationDbContext = _context.Alquiler.Include(a => a.Socios);
+            try
+            {
+                var bandera = true;
 
+                if (searchString != null)
+                {
+                    page = 1;
+                    bandera = false;
 
-            var alquiler = (from e in _context.Alquiler
-                            where e.ValorTotal != 0
-                            orderby e.AlquilerID
-                            select new Alquiler
-                            {
-                                AlquilerID = e.AlquilerID,
-                                FechaDesde = e.FechaDesde,
-                                FechaHasta = e.FechaHasta,
-                                Socios = e.Socios,
-                                Observacion = e.Observacion,
-                                ValorTotal = e.ValorTotal
-                            }).Distinct();
+                }
+                else
+                {
+                    searchString = currentFilter;
+                }
+                ViewData["CurrentFilter"] = searchString;
+                var alquiler = from s in _context.Alquiler select s;
 
+                if (!string.IsNullOrEmpty(searchString))
+                {
+                    alquiler = alquiler.Where(s => s.Socios.RazonSocial.Contains(searchString) || s.Socios.Cuit.Contains(searchString));
+                    HttpContext.Session.SetString("SocioFilterGloval", (alquiler.Where(s => s.Socios.RazonSocial.Contains(searchString) || s.Socios.Cuit.Contains(searchString))).ToString());
+                }
+                string mesDesde;
+                string mesHasta;
+
+                if (fechaDesde.Day == 1 && fechaDesde.Month == 1 && fechaDesde.Year == 1)
+                {
+                    fechaDesde = DateTime.Now.AddDays(-30);
+                };
+                if (fechaHasta.Day == 1 && fechaHasta.Month == 1 && fechaHasta.Year == 1)
+                {
+                    fechaHasta = DateTime.Now;
+                };
+
+                if (fechaDesde.Month < 9)
+                {
+                    mesDesde = "-0" + fechaDesde.Month;
+                }
+                else
+                {
+                    mesDesde = "-" + fechaDesde.Month;
+                }
+                if (fechaHasta.Month < 9)
+                {
+                    mesHasta = "-0" + fechaHasta.Month;
+                }
+                else
+                {
+                    mesHasta = "-" + fechaHasta.Month;
+                }
+                ViewData["FechaDesdeFilter"] = fechaDesde.Year + mesDesde + "-" + fechaDesde.Day;
+                ViewData["FechaHastaFilter"] = fechaHasta.Year + mesHasta + "-" + fechaHasta.Day;
+
+                HttpContext.Session.SetString("FechaDesdeFilterGloval", fechaDesde.ToShortDateString());
+                HttpContext.Session.SetString("FechaHastaFilterGloval", fechaHasta.ToShortDateString());
+
+                alquiler = alquiler.Where(s => Convert.ToDateTime(s.FechaDesde.ToShortDateString()) >= Convert.ToDateTime(fechaDesde.ToShortDateString()));
+                alquiler = alquiler.Where(s => Convert.ToDateTime(s.FechaHasta.ToShortDateString()) <= Convert.ToDateTime(fechaHasta.ToShortDateString()));
+
+                ViewData["Message"] = valor;
+
+                int pageSize = 15;
+                return View(await Paginacion<Alquiler>.CreateAsync(alquiler.AsNoTracking().Include(x => x.Socios), page ?? 1, pageSize));
+            }
+            catch (Exception e)
+            {
+                Console.Write(e);
+                valor = 2;
+                return RedirectToAction("Index", "Socios", new { valor });
+            }
+        }
+        public async Task<IActionResult> Report(int? page)
+        {
+            var FechaDesde = HttpContext.Session.GetString("FechaDesdeFilterGloval");
+            var FechaHasta = HttpContext.Session.GetString("FechaHastaFilterGloval");
+            var SocioID = HttpContext.Session.GetString("SocioFilterGloval");
+            ViewData["SocioFilterGloval"] = null;
+            ViewData["FechaDesdeFilter"] = null;
+            ViewData["FechaHastaFilter"] = null;
 
             int pageSize = 15;
-            return View(await Paginacion<Alquiler>.CreateAsync(alquiler.AsNoTracking(), page ?? 1, pageSize));
+
+            if (FechaDesde != null && FechaDesde != "vaciarEliminados")
+            {
+                var resultado = (from e in _context.Alquiler
+                                 where e.FechaDesde > Convert.ToDateTime(FechaDesde)
+                                 select e);
+                resultado = (from e in _context.Alquiler
+                             where e.FechaDesde < Convert.ToDateTime(FechaHasta)
+                             select e);
+
+                ViewData["FechaDesdeFilter"] = FechaDesde;
+                ViewData["FechaHastaFilter"] = FechaHasta;
+
+                HttpContext.Session.SetString("FechaDesde", "vaciarEliminados");
+
+                return View(await Paginacion<Alquiler>.CreateAsync(resultado, page ?? 1, pageSize));
+            }
+            if (SocioID != null && SocioID != "vaciarActivos")
+            {
+                var resultado = (from e in _context.Socios
+                                 where e.SociosID == Convert.ToInt32(SocioID)
+                                 select e);
+                ViewData["SocioFilterGloval"] = (from e in _context.Socios where e.SociosID == Convert.ToInt32(SocioID) select e.RazonSocial).FirstOrDefault();
+
+                HttpContext.Session.SetString("SocioID", "vaciarActivos");
+
+                return View(await Paginacion<Socios>.CreateAsync(resultado, page ?? 1, pageSize));
+            }
+
+            var valor = 3;
+            return RedirectToAction("Index", "Socios", new { valor });
+
         }
 
         // GET: Alquiler/Details/5
@@ -64,8 +164,9 @@ namespace Alpid.Controllers
 
                 ViewData["ProductosID"] = new SelectList(alquiler, "ProductosID", "Nombre");
 
-                var maxvalor = (from s in _context.Alquiler where s.AlquilerID == id && s.ValorTotal != 0
-                                select s.ValorTotal).FirstOrDefaultAsync(); 
+                var maxvalor = (from s in _context.Alquiler
+                                where s.AlquilerID == id && s.ValorTotal != 0
+                                select s.ValorTotal).FirstOrDefaultAsync();
                 ViewData["ResultadoTotal"] = maxvalor.Result;
 
 
@@ -114,7 +215,7 @@ namespace Alpid.Controllers
                 ViewData["errorCantProductos"] = mensaje;
                 ViewData["Message"] = valorMensaje;
                 ViewData["ResultadoTotal"] = ResultadoTotal;
-                
+
                 return View(await _context.Alquiler.Include(a => a.Productos).ToListAsync());
             }
             catch (Exception e)
@@ -164,7 +265,7 @@ namespace Alpid.Controllers
                 Add.cantidad = cantidad;
                 Add.ProductosID = ProductosID;
                 Add.Valor = Valor;
-                
+
                 var DeshabilitarCampos = 1;
 
                 var RestarProducto = _context.Productos.SingleOrDefault(x => x.ProductosID == ProductosID);

@@ -6,8 +6,42 @@
 <html>
 <body style="background-color:ghostwhite;">
     <h1 style="color:blue">Alquiler de productos</h1>
-    <div style="padding-bottom:3%; padding-top:1%;">
-        <!--Boton para crear nuevo alquier-->
+    <form asp-action="Index" id="Index">
+        <div style="padding-bottom:3%;">
+
+            <div class="form-group col-md-12" style="padding-top:2%;">
+                <!--busca en toda la tabla en la base de datos de socios-->
+                <div class="col-md-4">
+                    <label style="color:darkblue">Cuit/Nombre: </label>
+                    <p>
+                        <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                    </p>
+                </div>
+                <div class="col-md-8">
+                    <label style="color:darkblue">Fechas: </label>
+                    <div class="form-group">
+                        <!--Buscar por fechas-->
+                        <div class="form-actions no-color">
+                            <p>
+                                Fecha desde <input type="date" name="fechaDesde" id="ponerFechaDesde" />
+                                Fecha hasta <input type="date" name="fechaHasta" id="ponerFechaHasta" />
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+
+        <div class="form-group col-md-12">
+            <button type="button" onclick="ValidarFecha()" class="btn btn-labeled btn-dark"><span class="btn-label"><i class="glyphicon glyphicon-search"></i></span> Buscar</button>
+            <a asp-action="Index" type="button" class="btn btn-labeled btn-info"><span class="btn-label"><i class="glyphicon glyphicon-refresh"></i></span> Actualizar Consulta</a>
+            <a class="btn btn-secondary" onclick="VerReporte()" style="float:right;color:white;">Reporte Alquiler</a>
+        </div>
+    </form>
+
+    <!--Boton para crear nuevo alquier-->
+    <div style="padding-bottom:3%; padding-top:1%;" class="form-group col-md-12">
         <a asp-action="Create" class='btn btn-success'>Nuevo alquiler</a>
         <!--Busca solamente la info que se muestra en la grilla-->
         <i class="fa fa-search fa-2x" style="Float: right; padding-left:10px; padding-top:2px;"></i>
@@ -39,28 +73,28 @@
                 <tbody>
                     @foreach (var item in Model)
                     {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Socios.RazonSocial)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.FechaDesde)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.FechaHasta)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Observacion)
-                        </td>
-                        <td>
-                          $ @Html.DisplayFor(modelItem => item.ValorTotal)
-                        </td>
-                        <td>
-                            <a asp-action="Details" class="btn btn-info" asp-route-id="@item.AlquilerID">ver</a> |
-                            <a asp-action="Edit" class="btn btn-dark" asp-route-id="@item.AlquilerID">Editar</a>
-                            @*<a asp-action="Delete" asp-route-id="@item.AlquilerID">Borrar</a>*@
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Socios.RazonSocial)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaDesde)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaHasta)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Observacion)
+                            </td>
+                            <td>
+                                $ @Html.DisplayFor(modelItem => item.ValorTotal)
+                            </td>
+                            <td>
+                                <a asp-action="Details" class="btn btn-info" asp-route-id="@item.AlquilerID">ver</a> |
+                                <a asp-action="Edit" class="btn btn-dark" asp-route-id="@item.AlquilerID">Editar</a>
+                                @*<a asp-action="Delete" asp-route-id="@item.AlquilerID">Borrar</a>*@
+                            </td>
+                        </tr>
                     }
                 </tbody>
             </table>
@@ -97,10 +131,27 @@
             </div>
         </form>
     </div>
+    </div>
 </body>
 </html>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<link rel="stylesheet" type="text/css" href="dist/sweetalert.css">
 <script>
+     function ValidarFecha () {
+        var fechaDesde = document.getElementById("ponerFechaDesde").value;
+        var fechaHasta = document.getElementById("ponerFechaHasta").value;
+
+         if (fechaDesde > fechaHasta) {
+             alert("La fecha desde " + fechaDesde + " debe ser menor a la fecha Hasta " + fechaHasta);
+         }
+         else {
+            $("#Index").submit();
+         };
+    };
+
+    document.getElementById('ponerFechaDesde').value = '@ViewData["FechaDesdeFilter"]';
+    document.getElementById('ponerFechaHasta').value = '@ViewData["FechaHastaFilter"]';
+
         var valor = "@ViewData["Message"]";
         //si se produce algún error
         if (valor == 2) {
@@ -110,5 +161,11 @@
                 icon: "error",
                 button: "Aceptar",
             });
-        };
+    };
+
+    function VerReporte(){
+
+             window.open('Alquiler/Report');
+             window.location.href= '@Url.Action("Index", "Alquiler")';
+    };
 </script>

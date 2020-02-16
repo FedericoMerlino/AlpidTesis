@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Alpid.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class CajaController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -31,16 +31,36 @@ namespace Alpid.Controllers
         {
             try
             {
+                string mesDesde;
+                string mesHasta;
+
                 if (fechaDesde.Day == 1 && fechaDesde.Month == 1 && fechaDesde.Year == 1)
                 {
-                    fechaDesde = DateTime.Now;
-                }
+                    fechaDesde = DateTime.Now.AddDays(-30);
+                };
                 if (fechaHasta.Day == 1 && fechaHasta.Month == 1 && fechaHasta.Year == 1)
                 {
                     fechaHasta = DateTime.Now;
+                };
+
+                if (fechaDesde.Month < 9)
+                {
+                    mesDesde = "-0" + fechaDesde.Month;
                 }
-                ViewData["FechaDesdeFilter"] = fechaDesde.ToShortDateString();
-                ViewData["FechaHastaFilter"] = fechaHasta.ToShortDateString();
+                else
+                {
+                    mesDesde = "-" + fechaDesde.Month;
+                }
+                if (fechaHasta.Month < 9)
+                {
+                    mesHasta = "-0" + fechaHasta.Month;
+                }
+                else
+                {
+                    mesHasta = "-" + fechaHasta.Month;
+                }
+                ViewData["FechaDesdeFilter"] = fechaDesde.Year + mesDesde + "-"+fechaDesde.Day;
+                ViewData["FechaHastaFilter"] = fechaHasta.Year + mesHasta + "-" + fechaHasta.Day; 
 
                 HttpContext.Session.SetString("FechaDesdeFilterGloval", fechaDesde.ToShortDateString());
                 HttpContext.Session.SetString("FechaHastaFilterGloval", fechaHasta.ToShortDateString());
