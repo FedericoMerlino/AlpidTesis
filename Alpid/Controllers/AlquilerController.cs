@@ -10,7 +10,6 @@ using Alpid.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 
-
 namespace Alpid.Controllers
 {
     //[Authorize]
@@ -139,11 +138,9 @@ namespace Alpid.Controllers
 
                 return View(await Paginacion<Alquiler>.CreateAsync(resultado, page ?? 1, pageSize));
             }
-           
 
             var valor = 3;
             return RedirectToAction("Index", "Socios", new { valor });
-
         }
 
         // GET: Alquiler/Details/5

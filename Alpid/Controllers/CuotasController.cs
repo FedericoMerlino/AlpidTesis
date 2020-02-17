@@ -8,10 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using Alpid.Data;
 using Alpid.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace Alpid.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class CuotasController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -20,9 +21,12 @@ namespace Alpid.Controllers
         {
             _context = context;
         }
+        public string FechaDesdeFilterGloval = null;
+        public string FechaHastaFilterGloval = null;
+        public string SocioFilterGloval = null;
 
         // GET: Cuotas
-        public async Task<IActionResult> Index(string currentFilter, string searchString, int? page, string filtroFecha,
+        public async Task<IActionResult> Index(DateTime fechaDesde, DateTime fechaHasta, string currentFilter, string searchString, int? page, string filtroFecha,
                                                 string DateFilter, int valor)
         {
             var ValorParaCuota = (from s in _context.CuotaPrecio select s).Count();
@@ -53,16 +57,99 @@ namespace Alpid.Controllers
             if (!string.IsNullOrEmpty(searchString))
             {
                 cuota = cuota.Where(s => s.Socios.RazonSocial.Contains(searchString));
+                HttpContext.Session.SetString("SocioFilterGloval", (from a in _context.Alquiler
+                                                                    where a.Socios.RazonSocial.Contains(searchString)
+                                                                     || a.Socios.Cuit.Contains(searchString)
+                                                                    select a.SociosID).FirstOrDefault().ToString());
             }
-            //else
-            //{
-            //     cuota = (from s in _context.Cuotas group s by s.SociosID into g select g).ToArrayAsync();
-            //}
+
+            string mesDesde;
+            string mesHasta;
+
+            if (fechaDesde.Day == 1 && fechaDesde.Month == 1 && fechaDesde.Year == 1)
+            {
+                fechaDesde = DateTime.Now.AddDays(-30);
+            };
+            if (fechaHasta.Day == 1 && fechaHasta.Month == 1 && fechaHasta.Year == 1)
+            {
+                fechaHasta = DateTime.Now;
+            };
+
+            if (fechaDesde.Month < 9)
+            {
+                mesDesde = "-0" + fechaDesde.Month;
+            }
+            else
+            {
+                mesDesde = "-" + fechaDesde.Month;
+            }
+            if (fechaHasta.Month < 9)
+            {
+                mesHasta = "-0" + fechaHasta.Month;
+            }
+            else
+            {
+                mesHasta = "-" + fechaHasta.Month;
+            }
+            ViewData["FechaDesdeFilter"] = fechaDesde.Year + mesDesde + "-" + fechaDesde.Day;
+            ViewData["FechaHastaFilter"] = fechaHasta.Year + mesHasta + "-" + fechaHasta.Day;
+
+            HttpContext.Session.SetString("FechaDesdeFilterGloval", fechaDesde.ToShortDateString());
+            HttpContext.Session.SetString("FechaHastaFilterGloval", fechaHasta.ToShortDateString());
+
+            cuota = cuota.Where(s => Convert.ToDateTime(Convert.ToDateTime(s.FechaDesde).ToShortDateString()) >= Convert.ToDateTime(fechaDesde.ToShortDateString()));
+            cuota = cuota.Where(s => Convert.ToDateTime(s.FechaHasta.ToShortDateString()) <= Convert.ToDateTime(fechaHasta.ToShortDateString()));
 
             int pageSize = 15;
             ViewData["Message"] = valor;
 
             return View(await Paginacion<Cuotas>.CreateAsync(cuota.AsNoTracking().Include(c => c.Socios).OrderByDescending(x => x.FechaHasta), page ?? 1, pageSize));
+        }
+        public async Task<IActionResult> Report(int? page)
+        {
+            var FechaDesde = HttpContext.Session.GetString("FechaDesdeFilterGloval");
+            var FechaHasta = HttpContext.Session.GetString("FechaHastaFilterGloval");
+            var SocioID = HttpContext.Session.GetString("SocioFilterGloval");
+            ViewData["SocioFilter"] = 0;
+            ViewData["FechaDesdeFilter"] = null;
+            ViewData["FechaHastaFilter"] = null;
+
+            int pageSize = 15;
+            if (SocioID != null && SocioID != "vaciarActivos")
+            {
+                var resultado = (from e in _context.Cuotas.Include(x => x.Socios)
+                                 where e.SociosID == Convert.ToInt32(SocioID)
+                                 orderby e.FechaHasta, e.FechaDesde descending
+                                 select e);
+                ViewData["SocioFilter"] = (from e in _context.Socios where e.SociosID == Convert.ToInt32(SocioID) select e.RazonSocial).FirstOrDefault();
+
+                HttpContext.Session.SetString("SocioID", "vaciarActivos");
+
+                return View(await Paginacion<Cuotas>.CreateAsync(resultado, page ?? 1, pageSize));
+            }
+            if (FechaDesde != null && FechaDesde != "vaciarEliminados")
+            {
+                var resultado = (from e in _context.Cuotas
+                                 where e.FechaDesde > Convert.ToDateTime(FechaDesde)
+                                 select e.SociosID).ToList();
+                resultado = (from e in _context.Cuotas.Include(x => x.Socios)
+                             where e.FechaDesde < Convert.ToDateTime(FechaHasta)
+                             select e.SociosID).ToList();
+
+                //var resultadoFinal = (from e in _context.Socios
+                //                      where resultado.Exists(e.SociosID)
+                //                      select e);
+
+                ViewData["FechaDesdeFilter"] = FechaDesde;
+                ViewData["FechaHastaFilter"] = FechaHasta;
+
+                HttpContext.Session.SetString("FechaDesde", "vaciarEliminados");
+
+                return View(await Paginacion<Cuotas>.CreateAsync(resultado, page ?? 1, pageSize));
+            }
+
+            var valor = 3;
+            return RedirectToAction("Index", "Socios", new { valor });
         }
 
         // GET: Cuotas/Details/5

@@ -74,9 +74,6 @@
                             Socio
                         </th>
                         <th>
-                            Estado
-                        </th>
-                        <th>
                             Observación
                         </th>
                         <th>
@@ -99,9 +96,6 @@
                         <tr>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Socios.RazonSocial)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Estado)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Observacion)
@@ -180,4 +174,25 @@
             });
         };
     };
+
+    function ValidarFecha () {
+        var fechaDesde = document.getElementById("ponerFechaDesde").value;
+        var fechaHasta = document.getElementById("ponerFechaHasta").value;
+
+         if (fechaDesde > fechaHasta) {
+             alert("La fecha desde " + fechaDesde + " debe ser menor a la fecha Hasta " + fechaHasta);
+         }
+         else {
+            $("#Index").submit();
+         };
+    };
+
+    document.getElementById('ponerFechaDesde').value = '@ViewData["FechaDesdeFilter"]';
+    document.getElementById('ponerFechaHasta').value = '@ViewData["FechaHastaFilter"]';
+     function VerReporte(){
+
+             window.open('Cuotas/Report');
+             window.location.href= '@Url.Action("Index", "Cuotas")';
+    };
+
 </script>
