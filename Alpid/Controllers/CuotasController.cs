@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Alpid.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class CuotasController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -179,8 +179,10 @@ namespace Alpid.Controllers
             if (FechaDesde != null && FechaDesde != "vaciarEliminados")
             {
                 var resultado = (from e in _context.Socios
-                                 where  !(from c in _context.Cuotas where c.FechaDesde > Convert.ToDateTime(FechaDesde)
-                                 && c.FechaDesde < Convert.ToDateTime(FechaHasta) select c.SociosID).Contains(e.SociosID)
+                                 where   !(from c in _context.Cuotas
+                                            where c.FechaDesde > Convert.ToDateTime(FechaDesde)
+                                 && c.FechaDesde < Convert.ToDateTime(FechaHasta) select c.SociosID).Contains(e.SociosID) 
+                                 && e.FechaBaja == null
                                  select e);
 
                 ViewData["FechaDesdeFilter"] = FechaDesde;
@@ -223,7 +225,7 @@ namespace Alpid.Controllers
                 ViewData["FechaValidacion"] = FechaValidacion;
                 ViewData["FechaHasta"] = FechaHasta;
 
-                ViewData["SociosID"] = new SelectList(_context.Set<Socios>(), "SociosID", "RazonSocial");
+                ViewData["SociosID"] = new SelectList(_context.Set<Socios>().Where(x => x.FechaBaja == null), "SociosID", "RazonSocial");
                 return View();
             }
             catch (Exception e)

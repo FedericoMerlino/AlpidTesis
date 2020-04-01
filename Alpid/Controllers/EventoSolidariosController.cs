@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Alpid.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class EventoSolidariosController : Controller
     {
         private readonly ApplicationDbContext _context;

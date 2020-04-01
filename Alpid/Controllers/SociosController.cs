@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Alpid.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class SociosController : Controller
     {
         private readonly ApplicationDbContext _context;

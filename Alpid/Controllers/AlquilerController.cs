@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Alpid.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class AlquilerController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -560,7 +560,7 @@ namespace Alpid.Controllers
                 ViewData["ValorPagado"] = ValorPagado.Result;
 
                 ViewData["Total"] = maxvalor.Result - ValorPagado.Result;
-                ViewData["Total"] = Valor;
+                ViewData["Message"] = Valor;
                
 
                int pageSize = 100;
