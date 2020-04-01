@@ -35,6 +35,10 @@ namespace Alpid.Models
 
         public decimal ValorTotal { get; set; }
 
+        public decimal ValorPagado { get; set; }
+
+        public string Estado { get; set; }
+
         [Required(ErrorMessage = "Debe ingresar una cantidad")]
         public int cantidad { get; set; }
 

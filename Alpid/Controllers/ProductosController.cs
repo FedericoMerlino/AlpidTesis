@@ -56,13 +56,13 @@ namespace Alpid.Controllers
             }
             ViewData["Message"] = valor;
 
-            int pageSize = 15;
+           int pageSize = 100;
             return View(await Paginacion<Productos>.CreateAsync(producto.AsNoTracking().OrderByDescending(x => x.FechaAlta).Include(x => x.Proveedores), page ?? 1, pageSize));
         }
 
         public async Task<IActionResult> Report(int? page)
         {
-            int pageSize = 15;
+           int pageSize = 100;
 
             var resultado = (from e in _context.Productos
                              where e.FechaBaja == null && e.ProductosTipo == "DeAlquiler"
@@ -73,7 +73,7 @@ namespace Alpid.Controllers
 
         public async Task<IActionResult> ReportMobiliarios(int? page)
         {
-            int pageSize = 15;
+           int pageSize = 100;
 
             var resultado = (from e in _context.Productos
                              where e.FechaBaja == null && e.ProductosTipo != "DeAlquiler"
@@ -250,6 +250,7 @@ namespace Alpid.Controllers
         }
 
         //// POST: Productos/Active/5
+        [HttpPost]
         public async Task<IActionResult> Active(int id, [Bind("ProductosID,Nombre,Cantidad,ProductosTipo,FechaAlta,PrecioAlquiler,ProveedoresID,FechaBaja,MotivoBaja")] Productos productos)
         {
             try

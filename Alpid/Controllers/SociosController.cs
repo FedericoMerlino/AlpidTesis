@@ -66,7 +66,7 @@ namespace Alpid.Controllers
                 }
                 ViewData["Message"] = valor;
 
-                int pageSize = 15;
+               int pageSize = 100;
                 return View(await Paginacion<Socios>.CreateAsync(socio.AsNoTracking().OrderByDescending(x => x.FechaAlta), page ?? 1, pageSize));
             }
             catch (Exception e)
@@ -80,7 +80,7 @@ namespace Alpid.Controllers
         {
             var Activos = HttpContext.Session.GetString("ActivosGloval");
             var Eliminados = HttpContext.Session.GetString("EliminadosGloval");
-            int pageSize = 15;
+           int pageSize = 100;
 
             if (Eliminados != null && Eliminados != "vaciarEliminados")
             {

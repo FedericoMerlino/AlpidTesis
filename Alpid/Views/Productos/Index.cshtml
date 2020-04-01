@@ -6,45 +6,40 @@
 <html>
 <body style="background-color:ghostwhite;">
     <h1 style="color:blue">Elementos ortopédicos Alpid</h1>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" style="Float: right;"> Ver elementos mobiliarios/otros</button>
     <!--Busca en la base de datos-->
-    <p>
-        <a class="btn btn-link" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-            <i class="fa fa-angle-double-down"> Filtros</i>
-        </a>
-    </p>
-    <div class="collapse" id="collapseExample">
-        <div class="card card-body">
-            <form asp-action="Index" method="get">
-                <div class="col-lg-2 col-med-4 col-sm-6 col-xs-12" style="padding-top:2%;">
-                    <!--busca en toda la tabla en la base de datos de socios-->
-                    <label style="color:darkblue">Cuit/Nombre: </label>
-                    <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
-                </div>
-                <div class="col-lg-3 col-med-4 col-sm-6 col-xs-12" style="padding-top:2%;">
 
-                    <div class="form-actions no-color">
-                        <label class="col-lg-12" style="color:darkblue">Estados: </label>
-                        <div style="padding-left:15px;">
-                            <label><input type="radio" name="Coordinar" id="cbox1" onclick="validarcheck()" checked="checked"> Activos</label>
-                            <label style="padding-left:10px"><input type="radio" name="Coordinar" id="cbox2" onclick="validarcheck()"> Eliminados</label>
-                            <!--Se utiliza para pasar la info al controlador sobre que estado se desea buscar-->
-                            <input type="text" id="FechasGrilla" name="filtroFecha" value="@ViewData["DateFilter"]" style="display:none;" />
-                        </div>
+    <form asp-action="Index" id="Index">
+        <div style="padding-bottom:3%;">
+            <div class="form-group col-md-3" style="padding-top:2%;">
+                <!--busca en toda la tabla en la base de datos de socios-->
+                <label style="color:darkblue">Cuit/Nombre: </label>
+                <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            </div>
+            <div class="col-lg-3 col-med-4 col-sm-6 col-xs-12" style="padding-top:2%;">
+                <div class="form-actions no-color">
+                    <label class="col-lg-12" style="color:darkblue">Estados: </label>
+                    <div style="padding-left:15px;">
+                        <label><input type="radio" name="Coordinar" id="cbox1" onclick="validarcheck()" checked="checked"> Activos</label>
+                        <label style="padding-left:10px"><input type="radio" name="Coordinar" id="cbox2" onclick="validarcheck()"> Eliminados</label>
+                        <!--Se utiliza para pasar la info al controlador sobre que estado se desea buscar-->
+                        <input type="text" id="FechasGrilla" name="filtroFecha" value="@ViewData["DateFilter"]" style="display:none;" />
                     </div>
                 </div>
-                <div style="padding-top:2%;" class="col-lg-4 col-med-4 col-sm-6 col-xs-12">
-                    <button type="submit" class="btn btn-labeled btn-success"><span class="btn-label"><i class="glyphicon glyphicon-search"></i></span> Buscar</button>
-                    <a asp-action="Index" type="button" class="btn btn-labeled btn-info"><span class="btn-label"><i class="glyphicon glyphicon-refresh"></i></span> Actualizar Consulta</a>
-                </div>
-            </form>
+            </div>
+            <div style="padding-top:2%;" class="col-lg-4 col-med-4 col-sm-6 col-xs-12">
+                <button type="submit" class="btn btn-labeled btn-success"><span class="btn-label"><i class="glyphicon glyphicon-search"></i></span> Buscar</button>
+                <a asp-action="Index" type="button" class="btn btn-labeled btn-info"><span class="btn-label"><i class="glyphicon glyphicon-refresh"></i></span> Actualizar Consulta</a>
+            </div>
         </div>
-    </div>
-
+    </form>
+    <br />
+    <br />
+    <hr />
     <!--boton para abrir modal Mobiliariosns-->
     <!--busca solamente en lo datos que se encunetran en la tabla con la funcion js que esta en el layaut-->
-    <div style="padding-bottom:5%; padding-top:1%;">
+    <div class="form-group" style="padding-bottom:5%; padding-top:1%;">
         <a asp-action="Create" class='btn btn-success'>Nuevo elemento ortopédico</a>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal"> Ver elementos mobiliarios/otros</button>
         <a class="btn btn-secondary" onclick="VerReporte()" style="color:white;">Reporte Elementos Ortopédicos</a>
 
         <i class="fa fa-search fa-2x" style="Float: right; padding-left:10px; padding-top:2px;"></i>

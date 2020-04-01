@@ -1,0 +1,62 @@
+﻿@model IEnumerable<Alpid.Models.Socios>
+@{
+    Layout = null;
+}
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Reporte Socios</title>
+</head>
+
+<body style="background-color:ghostwhite;">
+    <header>
+        <input type="button" name="imprimir" value="Imprimir" onclick="window.print();">
+        <br />
+        <address contenteditable style="float:right;">
+            <p>Joaquin V. Gonzales 110 - Sunchales(SF)</p>
+            <p>alpi@soon.com.ar</p>
+            <p>03493-452670</p>
+        </address>
+        <span><img src="~/img/logoReporte.jpg" style="float:right;" /></span>
+    </header><br />
+    <div style="padding-top:10%;">
+            <br /> <h3 style="text-align:center;">ALPID: Reporte de Socios deudores </h3>
+        <article>
+            <br />
+            <form class="form-group">
+                <table class="table table-responsive table-info" id="datos" style="width: 90%;text-align: left;">
+                    <thead>
+                        <tr>
+                            <th>
+                                Razón Social
+                            </th>
+                            <th>
+                                Dirección
+                            </th>
+                            <th>
+                                Teléfono
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.RazonSocial)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Domicilio)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Telefono)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </form>
+        </article>
+    </div>
+</body>
+</html>

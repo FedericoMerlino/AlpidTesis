@@ -49,11 +49,15 @@ namespace Alpid.Controllers
                 if (!string.IsNullOrEmpty(searchString))
                 {
                     alquiler = alquiler.Where(s => s.Socios.RazonSocial.Contains(searchString) || s.Socios.Cuit.Contains(searchString));
-                    HttpContext.Session.SetString("SocioFilterGloval", (from a in _context.Alquiler where a.Socios.RazonSocial.Contains(searchString)
-                                                  || a.Socios.Cuit.Contains(searchString) select a.SociosID).FirstOrDefault().ToString());
+                    HttpContext.Session.SetString("SocioFilterGloval", (from a in _context.Alquiler
+                                                                        where a.Socios.RazonSocial.Contains(searchString)
+                      || a.Socios.Cuit.Contains(searchString)
+                                                                        select a.SociosID).FirstOrDefault().ToString());
                 }
                 string mesDesde;
                 string mesHasta;
+                string DiaDesde;
+                string DiaHasta;
 
                 if (fechaDesde.Day == 1 && fechaDesde.Month == 1 && fechaDesde.Year == 1)
                 {
@@ -63,7 +67,7 @@ namespace Alpid.Controllers
                 {
                     fechaHasta = DateTime.Now;
                 };
-
+                //mes
                 if (fechaDesde.Month < 9)
                 {
                     mesDesde = "-0" + fechaDesde.Month;
@@ -80,18 +84,35 @@ namespace Alpid.Controllers
                 {
                     mesHasta = "-" + fechaHasta.Month;
                 }
-                ViewData["FechaDesdeFilter"] = fechaDesde.Year + mesDesde + "-" + fechaDesde.Day;
-                ViewData["FechaHastaFilter"] = fechaHasta.Year + mesHasta + "-" + fechaHasta.Day;
+                //dia
+                if (fechaDesde.Day < 9)
+                {
+                    DiaDesde = "-0" + fechaDesde.Day;
+                }
+                else
+                {
+                    DiaDesde = "-" + fechaDesde.Day;
+                }
+                if (fechaHasta.Day < 9)
+                {
+                    DiaHasta = "-0" + fechaHasta.Day;
+                }
+                else
+                {
+                    DiaHasta = "-" + fechaHasta.Day;
+                }
+                ViewData["FechaDesdeFilter"] = fechaDesde.Year + mesDesde + DiaDesde;
+                ViewData["FechaHastaFilter"] = fechaHasta.Year + mesHasta + DiaHasta;
 
                 HttpContext.Session.SetString("FechaDesdeFilterGloval", fechaDesde.ToShortDateString());
                 HttpContext.Session.SetString("FechaHastaFilterGloval", fechaHasta.ToShortDateString());
 
                 alquiler = alquiler.Where(s => Convert.ToDateTime(s.FechaDesde.ToShortDateString()) >= Convert.ToDateTime(fechaDesde.ToShortDateString()));
-                alquiler = alquiler.Where(s => Convert.ToDateTime(s.FechaHasta.ToShortDateString()) <= Convert.ToDateTime(fechaHasta.ToShortDateString()));
+                alquiler = alquiler.Where(s => Convert.ToDateTime(s.FechaDesde.ToShortDateString()) <= Convert.ToDateTime(fechaHasta.ToShortDateString()));
 
                 ViewData["Message"] = valor;
 
-                int pageSize = 15;
+               int pageSize = 100;
                 return View(await Paginacion<Alquiler>.CreateAsync(alquiler.AsNoTracking().Include(x => x.Socios), page ?? 1, pageSize));
             }
             catch (Exception e)
@@ -110,7 +131,7 @@ namespace Alpid.Controllers
             ViewData["FechaDesdeFilter"] = null;
             ViewData["FechaHastaFilter"] = null;
 
-            int pageSize = 15;
+           int pageSize = 100;
             if (SocioID != null && SocioID != "vaciarActivos")
             {
                 var resultado = (from e in _context.Alquiler.Include(x => x.Socios)
@@ -124,12 +145,10 @@ namespace Alpid.Controllers
             }
             if (FechaDesde != null && FechaDesde != "vaciarEliminados")
             {
-                var resultado = (from e in _context.Alquiler.Include(x => x.Socios)
-                                 where e.FechaDesde > Convert.ToDateTime(FechaDesde)
+                var resultado = (from e in _context.Alquiler
+                                 where e.FechaDesde >= Convert.ToDateTime(FechaDesde)
+                              && e.FechaHasta <= Convert.ToDateTime(FechaHasta)
                                  select e);
-                resultado = (from e in _context.Alquiler.Include(x =>x.Socios)
-                             where e.FechaDesde < Convert.ToDateTime(FechaHasta)
-                             select e);
 
                 ViewData["FechaDesdeFilter"] = FechaDesde;
                 ViewData["FechaHastaFilter"] = FechaHasta;
@@ -140,7 +159,7 @@ namespace Alpid.Controllers
             }
 
             var valor = 3;
-            return RedirectToAction("Index", "Socios", new { valor });
+            return RedirectToAction("Index", "Alquiler", new { valor });
         }
 
         // GET: Alquiler/Details/5
@@ -168,7 +187,7 @@ namespace Alpid.Controllers
                 ViewData["ResultadoTotal"] = maxvalor.Result;
 
 
-                int pageSize = 15;
+               int pageSize = 100;
                 return View(await Paginacion<Alquiler>.CreateAsync(alquiler.Include(a => a.Productos).AsNoTracking(), page ?? 1, pageSize));
 
             }
@@ -263,6 +282,8 @@ namespace Alpid.Controllers
                 Add.cantidad = cantidad;
                 Add.ProductosID = ProductosID;
                 Add.Valor = Valor;
+                Add.Estado = "A pagar";
+                Add.ValorPagado = 0;
 
                 var DeshabilitarCampos = 1;
 
@@ -342,7 +363,7 @@ namespace Alpid.Controllers
                                 select s.ValorTotal).FirstOrDefaultAsync();
                 ViewData["ResultadoTotal"] = maxvalor.Result;
 
-                int pageSize = 15;
+               int pageSize = 100;
                 return View(await Paginacion<Alquiler>.CreateAsync(alquiler.Include(a => a.Productos).AsNoTracking(), page ?? 1, pageSize));
             }
             catch (Exception e)
@@ -357,7 +378,6 @@ namespace Alpid.Controllers
         public async Task<IActionResult> Edit(DateTime FechaDesde, DateTime FechaHasta, string Observacion, int SociosID, int ProductosID,
                                                 int cantidad, decimal Valor, int AlquilerID)
         {
-
             try
             {
                 var Add = new Alquiler();
@@ -393,6 +413,8 @@ namespace Alpid.Controllers
                 Add.cantidad = cantidad;
                 Add.ProductosID = ProductosID;
                 Add.Valor = Valor;
+                Add.Estado = "A pagar";
+                Add.ValorPagado = 0;
 
                 var DeshabilitarCampos = 1;
 
@@ -466,7 +488,7 @@ namespace Alpid.Controllers
                 _context.Alquiler.Remove(evento);
                 await _context.SaveChangesAsync();
 
-
+                //sumo el producto de nuevo
                 var ObtenerProducto = await _context.Productos.FindAsync(producto);
 
                 ObtenerProducto.Cantidad = ObtenerProducto.Cantidad + Cantidad;
@@ -474,16 +496,132 @@ namespace Alpid.Controllers
                 _context.Productos.Update(ObtenerProducto);
                 await _context.SaveChangesAsync();
 
-                decimal ResultadoTotal = (from x in _context.Alquiler where x.AlquilerID == ID select x.Valor).Sum();
+                decimal ResultadoTotal = 0;
 
+                var verificar = (from x in _context.Alquiler where x.AlquilerID == ID select x.Valor).Count();
+                if (verificar > 0)
+                {
+                    var obtenreid = (from a in _context.Alquiler
+                                     where a.AlquilerID == ID
+                                     select a.ID).FirstOrDefault();
 
+                    var Valoralquiler = await _context.Alquiler.FindAsync(obtenreid);
+
+                     ResultadoTotal = (from x in _context.Alquiler where x.AlquilerID == ID select x.Valor).Sum();
+                    Valoralquiler.ValorTotal = ResultadoTotal;
+
+                    _context.Update(Valoralquiler);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("Create", "Alquiler", new { FechaDesde, FechaHasta, Observacion, SociosID, DeshabilitarCampos, ID, ResultadoTotal });
+
+                }
                 return RedirectToAction("Create", "Alquiler", new { FechaDesde, FechaHasta, Observacion, SociosID, DeshabilitarCampos, ID, ResultadoTotal });
             }
             catch (Exception e)
             {
                 Console.Write(e);
                 var valor = 2;
-                return RedirectToAction("Index", "EventoSolidarios", new { valor });
+                return RedirectToAction("Index", "Alquiler", new { valor });
+            }
+        }
+
+        public async Task<IActionResult> Pay(int? id, int? page, int Valor)
+        {
+            try
+            {
+                var DetalleAlquiler = await _context.Alquiler.FirstOrDefaultAsync(m => m.AlquilerID == id);
+
+                ViewData["FechaDesde"] = DetalleAlquiler.FechaDesde.ToShortDateString();
+                ViewData["FechaHasta"] = DetalleAlquiler.FechaHasta.ToShortDateString();
+                ViewData["Observacion"] = DetalleAlquiler.Observacion;
+                ViewData["IdAlquiler"] = DetalleAlquiler.AlquilerID;
+
+
+                var socio = from s in _context.Socios select s;
+                socio = socio.Where(s => s.SociosID == DetalleAlquiler.SociosID);
+                ViewData["SociosId"] = new SelectList(socio, "SociosID", "RazonSocial");
+                //obtiene valor para mostran en pantalla
+                var alquiler = (from e in _context.Alquiler where e.AlquilerID == id select e);
+
+                //busca los productos que no esten dados de baja y solo sean de alquiler
+                var producto = from s in _context.Productos select s;
+                producto = producto.Where(s => s.FechaBaja == null && s.ProductosTipo == "DeAlquiler");
+                ViewData["ProductosID"] = new SelectList(producto, "ProductosID", "Nombre");
+
+                var maxvalor = (from s in _context.Alquiler
+                                where s.AlquilerID == id && s.ValorTotal != 0
+                                select s.ValorTotal).FirstOrDefaultAsync();
+                ViewData["ResultadoTotal"] = maxvalor.Result;
+
+                var ValorPagado = (from s in _context.Alquiler
+                                   where s.AlquilerID == id
+                                   select s.ValorPagado).FirstOrDefaultAsync();
+                ViewData["ValorPagado"] = ValorPagado.Result;
+
+                ViewData["Total"] = maxvalor.Result - ValorPagado.Result;
+                ViewData["Total"] = Valor;
+               
+
+               int pageSize = 100;
+                return View(await Paginacion<Alquiler>.CreateAsync(alquiler.Include(a => a.Productos).AsNoTracking(), page ?? 1, pageSize));
+            }
+            catch (Exception e)
+            {
+                Console.Write(e);
+                return RedirectToAction("Index", "Alquiler");
+            }
+        }
+
+        // POST: Alquiler/Edit/5
+        [HttpPost]
+        public async Task<IActionResult> Pay(int AlquilerID, Decimal ValorAPagar)
+        {
+            try
+            {
+                int valor; 
+
+                var obtenreid = (from a in _context.Alquiler
+                                 where a.AlquilerID == AlquilerID
+                                 select a.ID).FirstOrDefault();
+
+                var Add = await _context.Alquiler.FindAsync(obtenreid);
+
+                var ID = AlquilerID;
+
+                decimal Pagado = (from x in _context.Alquiler where x.AlquilerID == ID select x.ValorPagado).Sum();
+                decimal Apagar = (from x in _context.Alquiler where x.AlquilerID == ID select x.Valor).Sum();
+
+                decimal ResultadoTotal = Apagar - Pagado;
+
+
+                if (ResultadoTotal == ValorAPagar)
+                {
+                    Add.Estado = "Pagado";
+                }
+
+                if (ResultadoTotal > ValorAPagar)
+                {
+                    Add.Estado = "Pagado - Falta abonar";
+                }
+                if (ResultadoTotal < ValorAPagar)
+                {
+                    valor = 1;
+                    return RedirectToAction("Pay", "Alquiler", new { ID, valor });
+                }
+
+                Add.ValorPagado = ValorAPagar;
+
+                _context.Update(Add);
+                await _context.SaveChangesAsync();
+
+                valor = 1;
+                return RedirectToAction("Index", "Alquiler", new { valor });
+            }
+            catch (Exception e)
+            {
+                Console.Write(e);
+                return RedirectToAction("Index", "Alquiler");
             }
         }
 

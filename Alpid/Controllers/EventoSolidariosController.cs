@@ -29,7 +29,7 @@ namespace Alpid.Controllers
             var evento = (from e in _context.EventoSolidarios orderby e.IdEvento
                           select new EventoSolidarios { IdEvento = e.IdEvento, NombreEvento = e.NombreEvento, Fecha = e.Fecha }).Distinct();
 
-            int pageSize = 15;
+           int pageSize = 100;
             return View(await Paginacion<EventoSolidarios>.CreateAsync(evento, page ?? 1, pageSize));
         }
 
@@ -48,7 +48,7 @@ namespace Alpid.Controllers
                 //obtiene valor para mostran en pantalla
                 var evento = (from e in _context.EventoSolidarios where e.IdEvento == id select e);
 
-                int pageSize = 15;
+               int pageSize = 100;
                 return View(await Paginacion<EventoSolidarios>.CreateAsync(evento.AsNoTracking(), page ?? 1, pageSize));
 
             }
@@ -63,7 +63,7 @@ namespace Alpid.Controllers
         public async Task<IActionResult> Report(int? page)
         {
            
-            int pageSize = 15;
+           int pageSize = 100;
 
             var evento = (from e in _context.EventoSolidarios
                           orderby e.IdEvento

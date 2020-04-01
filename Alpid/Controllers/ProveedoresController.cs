@@ -55,7 +55,7 @@ namespace Alpid.Controllers
             }
             ViewData["Message"] = valor;
 
-            int pageSize = 15;
+           int pageSize = 100;
             return View(await Paginacion<Proveedores>.CreateAsync(proveedor.AsNoTracking().OrderByDescending(x => x.FechaAlta), page ?? 1, pageSize));
         }
 

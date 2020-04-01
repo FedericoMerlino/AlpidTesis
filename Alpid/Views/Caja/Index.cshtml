@@ -6,21 +6,7 @@
 <html>
 <body style="background-color:ghostwhite;">
     <h1 style="color:blue">Caja Alpid</h1>
-    <div class="form-group">
-        <p>
-            <a asp-action="CreateIngreso" class="btn btn-primary">Ingreso</a>
-            @if (@ViewData["ValorParaBoton"].Equals(0))
-            {
-                <a asp-action="CreateRetire" class="btn btn-danger" style="display:none;">Retiro</a>
-            }
-            else
-            {
-                <a asp-action="CreateRetire" class="btn btn-danger">Retiro</a>
-            }
-            <a onclick="VerReporte()" class="btn btn-dark" style="color:white;">Reporte caja</a>
 
-        </p>
-    </div>
     <!--Busca solamente la info que se muestra en la grilla-->
     <div style="padding-bottom:5%; padding-top:1%;" class="form-group">
         <!--Buscar por fechas-->
@@ -33,10 +19,24 @@
                 </p>
             </div>
         </form>
-        <hr />
+        <br />
         <div class="form-group">
             <h4 style="color: limegreen; float:left;">El total que posee la caja es: $@ViewData["TotalCaja"]</h4>
-            <i class="fa fa-search fa-2x" style="Float: right; padding-left:10px; padding-top:2px;"></i>
+        </div>
+        <br />
+        <hr />
+        <div class="form-group">
+            <a asp-action="CreateIngreso" class="btn btn-primary">Ingreso</a>
+            @if (@ViewData["ValorParaBoton"].Equals(0))
+            {
+                <a asp-action="CreateRetire" class="btn btn-danger" style="display:none;">Retiro</a>
+            }
+            else
+            {
+                <a asp-action="CreateRetire" class="btn btn-danger">Retiro</a>
+            }
+            <a onclick="VerReporte()" class="btn btn-dark" style="color:white;">Reporte caja</a>
+            <i class="fa fa-search fa-2x" style="Float: right; padding-left:10px;"></i>
             <input id="searchTerm" type="text" onkeyup="doSearch()" class="form-control" placeholder="Buscar" style=" width:200px; Float: right; " />
         </div>
     </div>
@@ -120,7 +120,7 @@
             $("#Index").submit();
          };
     };
-  
+
     document.getElementById('ponerFechaDesde').value = "@ViewData["FechaDesdeFilter"]";
     document.getElementById('ponerFechaHasta').value = "@ViewData["FechaHastaFilter"]";
 

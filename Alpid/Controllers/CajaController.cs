@@ -33,6 +33,8 @@ namespace Alpid.Controllers
             {
                 string mesDesde;
                 string mesHasta;
+                string DiaDesde;
+                string DiaHasta;
 
                 if (fechaDesde.Day == 1 && fechaDesde.Month == 1 && fechaDesde.Year == 1)
                 {
@@ -59,8 +61,25 @@ namespace Alpid.Controllers
                 {
                     mesHasta = "-" + fechaHasta.Month;
                 }
-                ViewData["FechaDesdeFilter"] = fechaDesde.Year + mesDesde + "-"+fechaDesde.Day;
-                ViewData["FechaHastaFilter"] = fechaHasta.Year + mesHasta + "-" + fechaHasta.Day; 
+
+                if (fechaDesde.Day < 9)
+                {
+                    DiaDesde = "-0" + fechaDesde.Day;
+                }
+                else
+                {
+                    DiaDesde = "-" + fechaDesde.Day;
+                }
+                if (fechaHasta.Day < 9)
+                {
+                    DiaHasta = "-0" + fechaHasta.Day;
+                }
+                else
+                {
+                    DiaHasta = "-" + fechaHasta.Day;
+                }
+                ViewData["FechaDesdeFilter"] = fechaDesde.Year + mesDesde + DiaDesde;
+                ViewData["FechaHastaFilter"] = fechaHasta.Year + mesHasta + DiaHasta; 
 
                 HttpContext.Session.SetString("FechaDesdeFilterGloval", fechaDesde.ToShortDateString());
                 HttpContext.Session.SetString("FechaHastaFilterGloval", fechaHasta.ToShortDateString());
@@ -108,7 +127,7 @@ namespace Alpid.Controllers
                              && e.FechaMovimiento <= Convert.ToDateTime(fechaHasta)  select e);
 
 
-            int pageSize = 15;
+           int pageSize = 100;
              //new ViewAsPdf("Report");
             return View(await Paginacion<Caja>.CreateAsync(resultado, page ?? 1, pageSize));
         }

@@ -65,6 +65,8 @@ namespace Alpid.Controllers
 
             string mesDesde;
             string mesHasta;
+            string DiaDesde;
+            string DiaHasta;
 
             if (fechaDesde.Day == 1 && fechaDesde.Month == 1 && fechaDesde.Year == 1)
             {
@@ -74,7 +76,7 @@ namespace Alpid.Controllers
             {
                 fechaHasta = DateTime.Now;
             };
-
+            //mes
             if (fechaDesde.Month < 9)
             {
                 mesDesde = "-0" + fechaDesde.Month;
@@ -91,8 +93,25 @@ namespace Alpid.Controllers
             {
                 mesHasta = "-" + fechaHasta.Month;
             }
-            ViewData["FechaDesdeFilter"] = fechaDesde.Year + mesDesde + "-" + fechaDesde.Day;
-            ViewData["FechaHastaFilter"] = fechaHasta.Year + mesHasta + "-" + fechaHasta.Day;
+            //dia
+            if (fechaDesde.Day < 9)
+            {
+                DiaDesde = "-0" + fechaDesde.Day;
+            }
+            else
+            {
+                DiaDesde = "-" + fechaDesde.Day;
+            }
+            if (fechaHasta.Day < 9)
+            {
+                DiaHasta = "-0" + fechaHasta.Day;
+            }
+            else
+            {
+                DiaHasta = "-" + fechaHasta.Day;
+            }
+            ViewData["FechaDesdeFilter"] = fechaDesde.Year + mesDesde + DiaDesde;
+            ViewData["FechaHastaFilter"] = fechaHasta.Year + mesHasta + DiaHasta;
 
             HttpContext.Session.SetString("FechaDesdeFilterGloval", fechaDesde.ToShortDateString());
             HttpContext.Session.SetString("FechaHastaFilterGloval", fechaHasta.ToShortDateString());
@@ -100,7 +119,7 @@ namespace Alpid.Controllers
             cuota = cuota.Where(s => Convert.ToDateTime(Convert.ToDateTime(s.FechaDesde).ToShortDateString()) >= Convert.ToDateTime(fechaDesde.ToShortDateString()));
             cuota = cuota.Where(s => Convert.ToDateTime(s.FechaHasta.ToShortDateString()) <= Convert.ToDateTime(fechaHasta.ToShortDateString()));
 
-            int pageSize = 15;
+           int pageSize = 100;
             ViewData["Message"] = valor;
 
             return View(await Paginacion<Cuotas>.CreateAsync(cuota.AsNoTracking().Include(c => c.Socios).OrderByDescending(x => x.FechaHasta), page ?? 1, pageSize));
@@ -114,7 +133,7 @@ namespace Alpid.Controllers
             ViewData["FechaDesdeFilter"] = null;
             ViewData["FechaHastaFilter"] = null;
 
-            int pageSize = 15;
+           int pageSize = 100;
             if (SocioID != null && SocioID != "vaciarActivos")
             {
                 var resultado = (from e in _context.Cuotas.Include(x => x.Socios)
@@ -129,16 +148,10 @@ namespace Alpid.Controllers
             }
             if (FechaDesde != null && FechaDesde != "vaciarEliminados")
             {
-                var resultado = (from e in _context.Cuotas
+                var resultado = (from e in _context.Cuotas.Include(x => x.Socios)
                                  where e.FechaDesde > Convert.ToDateTime(FechaDesde)
-                                 select e.SociosID).ToList();
-                resultado = (from e in _context.Cuotas.Include(x => x.Socios)
-                             where e.FechaDesde < Convert.ToDateTime(FechaHasta)
-                             select e.SociosID).ToList();
-
-                //var resultadoFinal = (from e in _context.Socios
-                //                      where resultado.Exists(e.SociosID)
-                //                      select e);
+                                 && e.FechaDesde < Convert.ToDateTime(FechaHasta)
+                                 select e);
 
                 ViewData["FechaDesdeFilter"] = FechaDesde;
                 ViewData["FechaHastaFilter"] = FechaHasta;
@@ -149,9 +162,38 @@ namespace Alpid.Controllers
             }
 
             var valor = 3;
-            return RedirectToAction("Index", "Socios", new { valor });
+            return RedirectToAction("Index", "Cuotas", new { valor });
         }
 
+
+        public async Task<IActionResult> ReportSociosAPagar(int? page)
+        {
+            var FechaDesde = HttpContext.Session.GetString("FechaDesdeFilterGloval");
+            var FechaHasta = HttpContext.Session.GetString("FechaHastaFilterGloval");
+            var SocioID = HttpContext.Session.GetString("SocioFilterGloval");
+            ViewData["SocioFilter"] = 0;
+            ViewData["FechaDesdeFilter"] = null;
+            ViewData["FechaHastaFilter"] = null;
+           int pageSize = 100;
+
+            if (FechaDesde != null && FechaDesde != "vaciarEliminados")
+            {
+                var resultado = (from e in _context.Socios
+                                 where  !(from c in _context.Cuotas where c.FechaDesde > Convert.ToDateTime(FechaDesde)
+                                 && c.FechaDesde < Convert.ToDateTime(FechaHasta) select c.SociosID).Contains(e.SociosID)
+                                 select e);
+
+                ViewData["FechaDesdeFilter"] = FechaDesde;
+                ViewData["FechaHastaFilter"] = FechaHasta;
+
+                HttpContext.Session.SetString("FechaDesde", "vaciarEliminados");
+
+                return View(await Paginacion<Socios>.CreateAsync(resultado, page ?? 1, pageSize));
+            }
+
+            var valor = 3;
+            return RedirectToAction("Index", "Cuotas", new { valor });
+        }
         // GET: Cuotas/Details/5
         public async Task<IActionResult> Details(int? id)
         {
