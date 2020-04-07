@@ -4,12 +4,8 @@
     ViewData["Title"] = "Nuevo proveedor";
 }
 <html>
-<body>
-    <header>
-        <link href="~/css/cssKanze/style.min.css" rel="stylesheet" />
-    </header>
-    <h1>Nuevo proveedor</h1>
-
+<body style="background-color:ghostwhite;">
+    <h1 style="color:blue">Nuevo proveedor</h1>
     <h5 style="padding-top:20px; color:#d6ba2b;">Es obligatorio completar los campos que poseen *</h5>
     <hr />
     <div class="row">
@@ -17,12 +13,12 @@
             <form asp-action="Create">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
-                    <label asp-for="Cuit" class="control-label">Cuit</label>
+                    <label asp-for="Cuit" class="control-label">Cuit*</label>
                     <input asp-for="Cuit" class="form-control" />
                     <span asp-validation-for="Cuit" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="RazonSocial" class="control-label">Razón Social</label>
+                    <label asp-for="RazonSocial" class="control-label">Razón Social*</label>
                     <input asp-for="RazonSocial" class="form-control" />
                     <span asp-validation-for="RazonSocial" class="text-danger"></span>
                 </div>
@@ -32,7 +28,7 @@
                     <span asp-validation-for="Domicilio" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Telefono" class="control-label">Teléfono</label>
+                    <label asp-for="Telefono" class="control-label">Teléfono*</label>
                     <input asp-for="Telefono" class="form-control" />
                     <span asp-validation-for="Telefono" class="text-danger"></span>
                 </div>
@@ -41,20 +37,45 @@
                     <input asp-for="Mail" class="form-control" />
                     <span asp-validation-for="Mail" class="text-danger"></span>
                 </div>
-                <div class="form-group">
+                <div class="form-group" style="display:none;">
                     <label asp-for="FechaAlta" class="control-label">Fecha ingreso</label>
                     <input asp-for="FechaAlta" type="date" id="fechaActual" class="form-control" readonly="readonly" />
                     <span asp-validation-for="FechaAlta" class="text-danger"></span>
                 </div>
                 <div class="col-md-12">
-                    <input type="submit" value="Crear nuevo" class="btn btn-primary" />
-                    <a asp-action="Index" style="float:right;" class="btn btn-info">Cancelar</a>
+                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                    <a asp-action="Index" style="float:right;" class="btn btn-info">Regresar</a>
                 </div>
             </form>
         </div>
     </div>
 </body>
 </html>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<link rel="stylesheet" type="text/css" href="dist/sweetalert.css">
+<script>
+      var valor = "@ViewData["Message"]";
+    //si funciona todo correcto
+    if (valor == 1) {
+        swal({
+            title: "Felicidades!!",
+            text: "La operación se realizo con éxito",
+            icon: "success",
+            button: "Aceptar",
+        });
+    } else {
+        //si se produce algún error
+        if (valor == 3) {
+            swal({
+                title: "Error!!",
+                text: "Ya existe un Proveedor con el siguiente Cuit: '@ViewData["CuitError"]'",
+                icon: "error",
+                button: "Aceptar",
+            });
+        };
+    };
+</script>
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,7 +10,7 @@ namespace Alpid.Models
     public class Productos
     {
         [Key]
-        public int PoductosID { get; set; }
+        public int ProductosID { get; set; }
 
         [Required(ErrorMessage ="Favor de ingresar un Nombre")]
         public string Nombre { get; set; }
@@ -26,8 +27,6 @@ namespace Alpid.Models
         public DateTime FechaAlta { get; set; }
 
         public string MotivoBaja { get; set; }
-
-        public double PrecioAlquiler { get; set; }
 
         public int? ProveedoresID { get; set; }
 

@@ -1,0 +1,27 @@
+﻿@page
+@model Disable2faModel
+@{
+    ViewData["Title"] = "Desabilitar autenticación doble factor";
+    ViewData["ActivePage"] = ManageNavPages.TwoFactorAuthentication;
+}
+
+<partial name="_StatusMessage" for="StatusMessage" />
+<h1>@ViewData["Title"]</h1>
+
+<div class="alert alert-warning" role="alert">
+    <p>
+        <span class="glyphicon glyphicon-warning-sign"></span>
+        <strong>This action only disables 2FA.</strong>
+    </p>
+    <p>
+        La desactivación de 2FA no cambia las claves utilizadas en las aplicaciones de autenticación. Si deseas cambiar la llave
+        utilizado en una aplicación de autenticación que debe <a asp-page="./ResetAuthenticator">restablecer sus claves de autenticador.
+        </a>
+    </p>
+</div>
+
+<div>
+    <form method="post" class="form-group">
+        <button class="btn btn-danger" type="submit">Desabilitar 2FA</button>
+    </form>
+</div>

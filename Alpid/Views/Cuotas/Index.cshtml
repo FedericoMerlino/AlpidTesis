@@ -1,31 +1,45 @@
-﻿@model IEnumerable<Alpid.Models.Cuotas>
+﻿@model Paginacion<Alpid.Models.Cuotas>
 @{
     ViewData["Title"] = "Cuota";
 }
 <html>
-<body>
-    <header>
-        <link href="~/css/cssKanze/style.min.css" rel="stylesheet" />
-    </header>
-    <h1>Cuotas</h1>
-    <!--maneja los precion de la cuotas-->
-    <div>
-        <a asp-area="" asp-controller="CuotaPrecio" asp-action="Create" class="btn btn-dark" style="float:right;"> Nuevo precio Cuota</a>
-    </div>
-    <!--nuevo alquieler-->
-    <p>
-        <a asp-action="Create" class="btn btn-primary">Nuevo pago</a>
-    </p>
-    <!--busca en toda la tabla en la base de datos-->
-    <form asp-action="Index" method="get">
-        <div class="form-actions no-color">
-            <p>
-                Buscar: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
-                <input type="submit" value="Buscar" class="btn btn-dark" />
-                <a asp-action="Index" class="btn btn-info">Cancelar búsqueda </a>
-            </p>
+<body style="background-color:ghostwhite;">
+    <h1 style="color:blue">Cuota societaria</h1>
+    <form asp-action="Index" id="Index">
+        <div style="padding-bottom:3%;">
+            <div class="form-group col-md-12" style="padding-top:2%;">
+                <!--busca en toda la tabla en la base de datos de socios-->
+                <div class="col-md-2">
+                    <label style="color:darkblue">Cuit/Nombre: </label>
+                    <p>
+                        <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <label style="color:darkblue">Fechas: </label>
+                    <div class="form-group">
+                        <!--Buscar por fechas-->
+                        <div class="form-actions no-color">
+                            <p>
+                                Fecha desde <input type="date" name="fechaDesde" id="ponerFechaDesde" />
+                                Fecha hasta <input type="date" name="fechaHasta" id="ponerFechaHasta" />
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <label style="color:ghostwhite">Texto invisible </label>
+                    <p>
+                        <button type="button" onclick="ValidarFecha()" class="btn btn-labeled btn-dark"><span class="btn-label"><i class="glyphicon glyphicon-search"></i></span> Buscar</button>
+                        <a asp-action="Index" type="button" class="btn btn-labeled btn-info"><span class="btn-label"><i class="glyphicon glyphicon-refresh"></i></span> Actualizar Consulta</a>
+                    </p>
+                </div>
+            </div>
         </div>
     </form>
+    <br />
+    <br />
+    <hr />
     <div class="input-group-append" style="padding-top:30px">
         <div class="form-group">
             <h2 style="initial-letter:inherit; font-family: Homer Simpson; color:#0932ff;"> Grilla Cuotas </h2> <br />
@@ -33,10 +47,24 @@
 
         </div>
     </div>
-    <!--Busca solamente la info que se muestra en la grilla-->
-    <div>
+    <div style="padding-bottom:3%; padding-top:1%;">
+        <!--nuevo Cuota societaria-->
+        @if (@ViewData["precio"].ToString() == "Debe cargar un valor")
+        {
+            <a asp-area="" asp-controller="CuotaPrecio" asp-action="Create" class="btn btn-dark" style="float:right;"> Nuevo precio Cuota</a>
+        }
+        else
+        {
+            <a asp-action="Create" class="btn btn-success">Nuevo pago</a>
+            <a asp-area="" asp-controller="CuotaPrecio" asp-action="Create" class="btn btn-dark"> Nuevo precio Cuota</a>
+        }
+        <!--Busca solamente la info que se muestra en la grilla-->
         <i class="fa fa-search fa-2x" style="Float: right; padding-left:10px; padding-top:2px;"></i>
         <input id="searchTerm" type="text" onkeyup="doSearch()" class="form-control" placeholder="Buscar" style=" width:200px; Float: right; " />
+        <a class="btn btn-secondary" onclick="VerReporte()" style="color:white;">Reporte Cuotas</a>
+        <a class="btn btn-secondary" onclick="VerReporteSociosAPagar()" style="color:white;">Reporte Socios a Pagar</a>
+
+
     </div>
     <!--tabla con la informacion del socio-->
     <div>
@@ -46,9 +74,6 @@
                     <tr>
                         <th>
                             Socio
-                        </th>
-                        <th>
-                            Estado
                         </th>
                         <th>
                             Observación
@@ -70,33 +95,110 @@
                 <tbody>
                     @foreach (var item in Model)
                     {
-                    <tr>
-                        <td>
-                           @Html.DisplayFor(modelItem => item.Socios.RazonSocial)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Estado)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Observacion)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Importe)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.FechaDesde)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.FechaHasta)
-                        </td>
-                        <td>
-                            <a asp-action="Details" class="btn btn-info" asp-route-id="@item.CuotasID">Ver</a> 
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Socios.RazonSocial)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Observacion)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Importe)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaDesde)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaHasta)
+                            </td>
+                            <td>
+                                <a asp-action="Details" class="btn btn-info" asp-route-id="@item.CuotasID">Ver</a>
+                            </td>
+                        </tr>
                     }
                 </tbody>
             </table>
+            <!--paginacion sobre los valores que se muestran-->
+            <div style="float:right; padding-bottom: 30px;">
+                @{
+                    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+                    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+                }
+                <a asp-action="Index"
+                   asp-route-sortOrder="@ViewData["CurrentSort"]"
+                   asp-route-page="@(Model.PageIndex - 1)"
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   class="btn btn-default @prevDisabled">
+                    Anterior
+                </a>
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    <a asp-action="Index"
+                       asp-route-sortOrder="@ViewData["CurrentSort"]"
+                       asp-route-page="@i"
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                       class="btn btn-default">
+                        @i
+                    </a>
+                }
+                <a asp-action="Index"
+                   asp-route-sortOrder="@ViewData["CurrentSort"]"
+                   asp-route-page="@(Model.PageIndex + 1)"
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   class="btn btn-default @nextDisabled">
+                    Siguiente
+                </a>
+            </div>
         </form>
     </div>
 </body>
 </html>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<link rel="stylesheet" type="text/css" href="dist/sweetalert.css">
+<script>
+     var valor = "@ViewData["Message"]";
+    //si funciona todo correcto
+    if (valor == 1) {
+        swal({
+            title: "Felicidades!!",
+            text: "La operación se realizo con éxito",
+            icon: "success",
+            button: "Aceptar",
+        });
+    } else {
+        //si se produce algún error
+        if (valor == 2) {
+            swal({
+                title: "Error!!",
+                text: "No se pudo realizar la operación",
+                icon: "error",
+                button: "Aceptar",
+            });
+        };
+    };
+
+    function ValidarFecha () {
+        var fechaDesde = document.getElementById("ponerFechaDesde").value;
+        var fechaHasta = document.getElementById("ponerFechaHasta").value;
+
+         if (fechaDesde > fechaHasta) {
+             alert("La fecha desde " + fechaDesde + " debe ser menor a la fecha Hasta " + fechaHasta);
+         }
+         else {
+            $("#Index").submit();
+         };
+    };
+
+    document.getElementById('ponerFechaDesde').value = '@ViewData["FechaDesdeFilter"]';
+    document.getElementById('ponerFechaHasta').value = '@ViewData["FechaHastaFilter"]';
+     function VerReporte(){
+
+             window.open('Cuotas/Report');
+             window.location.href= '@Url.Action("Index", "Cuotas")';
+    };
+        function VerReporteSociosAPagar(){
+
+             window.open('Cuotas/ReportSociosAPagar');
+             window.location.href= '@Url.Action("Index", "Cuotas")';
+    };
+</script>

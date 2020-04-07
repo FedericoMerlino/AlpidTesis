@@ -4,12 +4,8 @@
     ViewData["Title"] = "Detalle producto";
 }
 <html>
-<body>
-    <header>
-        <link href="~/css/cssKanze/style.min.css" rel="stylesheet" />
-    </header>
-    <h1>Informacion producto "@Html.DisplayFor(model => model.Nombre)" </h1>
-
+<body style="background-color:ghostwhite;">
+    <h1 style="color:blue;">Informacion producto "@Html.DisplayFor(model => model.Nombre)" </h1>
     <div>
         <hr />
         <dl class="row">
@@ -50,13 +46,6 @@
                 @Html.DisplayFor(model => model.MotivoBaja)
             </dd>
             <dt class="col-sm-2">
-                Precio de Alquiler:
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.PrecioAlquiler)
-            </dd>
-
-            <dt class="col-sm-2">
                 Proveedor:
             </dt>
             <dd class="col-sm-10">
@@ -65,8 +54,8 @@
         </dl>
     </div>
     <div>
-        <a asp-action="Index" class="btn btn-info">Regresar</a>
-        <a asp-action="Active" class='btn btn-primary' asp-route-id="@Model.PoductosID">Reactivar</a> |
+        <a asp-action="Index" class="btn btn-info">Regresar</a> |
+        <a asp-action="Active" class='btn btn-primary' asp-route-id="@Model.ProductosID">Reactivar</a>
     </div>
 </body>
 </html>

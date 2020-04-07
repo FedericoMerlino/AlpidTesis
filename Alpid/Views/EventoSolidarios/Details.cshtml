@@ -1,0 +1,125 @@
+﻿@model Paginacion<Alpid.Models.EventoSolidarios>
+
+@{
+    ViewData["Title"] = "Detalle evento Solidario";
+}
+<html>
+<body style="background-color:ghostwhite;">
+    <h1 style="color:blue">Detalle evento Solidario</h1>
+    <div>
+        <hr />
+        <h2 style="padding-bottom:2%; padding-top:2%; float:left;">Nombre Evento:<span style="color:darkblue;"> "@ViewData["NombreEvento"]"</span> </h2>
+        <h3 style="padding-bottom:2%; padding-top:2%;float:right;">Fecha Evento:<span style="color:darkblue; "> "@ViewData["FechaEvento"]"</span> </h3>
+        <div>
+            <form class="form-group">
+                <table class="table table-responsive-sm" id="datos">
+                    <thead>
+                        <tr>
+                            <th>
+                                Cantidad
+                            </th>
+                            <th>
+                                Concepto
+                            </th>
+                            <th>
+                                Ingreso
+                            </th>
+                            <th>
+                                Salida
+                            </th>
+                            <th>
+                                Total
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Cantidad)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Concepto)
+                                </td>
+                                <td>
+                                    @if (item.Ingreso != null)
+                                    {
+                                        <span>$ </span> @Html.DisplayFor(modelItem => item.Ingreso)
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.Salida != null)
+                                    {
+                                        <span>$ </span> @Html.DisplayFor(modelItem => item.Salida)
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.Total != null)
+                                    {
+                                        @if (item.Total >= 0)
+                                        {
+                                            <div style="color:#108a10;">
+                                                <span>$ </span> @Html.DisplayFor(modelItem => item.Total)
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div style="color:red;">
+                                                <span>$ </span> @Html.DisplayFor(modelItem => item.Total)
+                                            </div>
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div class="col-md-3 col-md-push-9" style="padding-left: 90px;">
+                    Total: <input id="ResultadoTotal" name="ResultadoTotal" value="$ @ViewData["ResultadoTotal"]" class="form-control" readonly="readonly" />
+                </div>
+                <br />
+                <br />
+                <br />
+                <br />
+
+                <!--paginacion sobre los valores que se muestran-->
+                <div style="float:right; padding-bottom: 30px;">
+                    @{
+                        var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+                        var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+                    }
+                    <a asp-action="Index"
+                       asp-route-sortOrder="@ViewData["CurrentSort"]"
+                       asp-route-page="@(Model.PageIndex - 1)"
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                       class="btn btn-default @prevDisabled">
+                        Anterior
+                    </a>
+                    @for (int i = 1; i <= Model.TotalPages; i++)
+                    {
+                        <a asp-action="Index"
+                           asp-route-sortOrder="@ViewData["CurrentSort"]"
+                           asp-route-page="@i"
+                           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                           class="btn btn-default">
+                            @i
+                        </a>
+                    }
+                    <a asp-action="Index"
+                       asp-route-sortOrder="@ViewData["CurrentSort"]"
+                       asp-route-page="@(Model.PageIndex + 1)"
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                       class="btn btn-default @nextDisabled">
+                        Siguiente
+                    </a>
+                </div>
+            </form>
+
+        </div>
+    </div>
+    <div style="padding-bottom:5%;">
+        <a asp-action="Index" class="btn btn-info" style="float:left;">Regresar</a>
+    </div>
+</body>
+</html>

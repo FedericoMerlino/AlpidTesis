@@ -1,0 +1,75 @@
+﻿@model IEnumerable<Alpid.Models.Alquiler>
+@{
+    Layout = null;
+}
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Reporte caja</title>
+</head>
+
+<body style="background-color:ghostwhite;">
+    <header>
+        <input type="button" name="imprimir" value="Imprimir" onclick="window.print();">
+        <a asp-action="Index" style="float:left;" class="btn btn-info">Regresar</a>
+        <br />
+        <address contenteditable style="float:right;">
+            <p>Joaquin V. Gonzales 110 - Sunchales(SF)</p>
+            <p>alpi@soon.com.ar</p>
+            <p>03493-452670</p>
+        </address>
+        <span><img src="~/img/logoReporte.jpg" style="float:right;" /></span>
+    </header><br />
+    <div style="padding-top:10%;">
+        <br /> <h3 style="text-align:center;">ALPID: Reporte de caja perteneceinte desde @ViewData["FechaDesdeFilter"] a @ViewData["FechaHastaFilter"]</h3>
+        <article>
+            <br />
+            <form class="form-group">
+                <table class="table table-responsive table-bordered" id="datos" style="width: 90%;text-align: center;">
+                    <thead>
+                        <tr>
+                            <th>
+                                Socio
+                            </th>
+                            <th>
+                                Fecha Desde
+                            </th>
+                            <th>
+                                Fecha Hasta
+                            </th>
+                            <th>
+                                Observación
+                            </th>
+                            <th>
+                                Estado
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Socios.RazonSocial)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaDesde)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaHasta)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Observacion)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Estado)
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </form>
+        </article>
+    </div>
+</body>
+</html>

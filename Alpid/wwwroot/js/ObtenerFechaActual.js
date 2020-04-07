@@ -12,5 +12,5 @@ window.onload = function () {
         mes = '0' + mes //agrega cero si el menor de 10
     document.getElementById('fechaActual').value = ano + "-" + mes + "-" + dia;
     document.getElementById('fechaActualSegundo').value = ano + "-" + mes + "-" + dia;
+    document.getElementById('fechaActualTercero').value = ano + "-" + mes + "-" + dia;
 }
-

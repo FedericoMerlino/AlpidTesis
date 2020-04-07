@@ -1,48 +1,77 @@
-﻿@model Alpid.Models.Alquiler
+﻿@model Paginacion<Alpid.Models.Alquiler>
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalle alquiler";
 }
-
-<h1>Details</h1>
-
-<div>
-    <h4>Alquiler</h4>
+<html>
+<body style="background-color:ghostwhite;">
+    <h1>Detalle alquiler</h1>
+    <div class="row">
+        <div class="col-md-8">
+            <form asp-action="Create" name="formCrearProducto">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group col-md-4">
+                    <label class="control-label">Fecha desde</label>
+                    <input value="@ViewData["FechaDesde"]" name="FechaDesde" class="form-control" readonly="readonly" />
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="control-label">Fecha hasta</label>
+                    <input value="@ViewData["FechaHasta"]" name="FechaHasta" class="form-control" readonly="readonly" />
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="control-label">Socio</label>
+                    <select name="SociosID" class="form-control" asp-items="ViewBag.SociosID" readonly="readonly"></select>
+                </div>
+                <div class="form-group col-md-12">
+                    <label class="control-label">Observación</label>
+                    <input name="Observacion" value="@ViewData["Observacion"]" class="form-control" readonly="readonly" />
+                </div>
+            </form>
+        </div>
+    </div>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FechaDesde)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FechaDesde)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Observacion)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Observacion)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Valor)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Valor)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Productos)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Productos.Nombre)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Socios)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Socios.Cuit)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.AlquilerID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div>
+        <form class="form-group">
+            <table class="table table-responsive-sm" id="datos">
+                <thead>
+                    <tr>
+                        <th>
+                            Cantidad
+                        </th>
+                        <th>
+                            Producto
+                        </th>
+                        <th>
+                            Precio
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.cantidad)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Productos.Nombre)
+                            </td>
+                            <td>
+                                <span>$ </span> @Html.DisplayFor(modelItem => item.Valor)
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="col-md-2 col-md-push-8">
+                Total: <input id="ResultadoTotal" name="ResultadoTotal" value="$ @ViewData["ResultadoTotal"]" class="form-control" readonly="readonly" />
+            </div>
+            <br />
+        </form>
+    </div>
+    <div style="padding:5%;">
+        <a asp-action="Index" class="btn btn-info" style="float:right;">Regresar</a>
+    </div>
+</body>
+</html>

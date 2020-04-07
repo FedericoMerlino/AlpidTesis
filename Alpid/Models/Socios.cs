@@ -26,7 +26,7 @@ namespace Alpid.Models
         [Phone]
         public string Telefono { get; set; }
 
-        [EmailAddress]
+        [EmailAddress(ErrorMessage = "Debe de ingresar un mail válido")]
         public string Email { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]

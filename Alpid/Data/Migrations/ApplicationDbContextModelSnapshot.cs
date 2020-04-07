@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Alpid.Data.Migrations
+namespace Alpid.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -15,33 +15,44 @@ namespace Alpid.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
+                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Alpid.Models.Alquiler", b =>
                 {
-                    b.Property<int>("AlquilerID")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AlquilerID");
+
+                    b.Property<string>("Estado");
 
                     b.Property<DateTime>("FechaDesde");
 
                     b.Property<DateTime>("FechaHasta");
 
-                    b.Property<string>("Observacion");
+                    b.Property<string>("Observacion")
+                        .IsRequired();
 
                     b.Property<int>("ProductosID");
 
-                    b.Property<int>("SociosId");
+                    b.Property<int>("SociosID");
 
                     b.Property<decimal>("Valor");
 
-                    b.HasKey("AlquilerID");
+                    b.Property<decimal>("ValorPagado");
+
+                    b.Property<decimal>("ValorTotal");
+
+                    b.Property<int>("cantidad");
+
+                    b.HasKey("ID");
 
                     b.HasIndex("ProductosID");
 
-                    b.HasIndex("SociosId");
+                    b.HasIndex("SociosID");
 
                     b.ToTable("Alquiler");
                 });
@@ -58,18 +69,23 @@ namespace Alpid.Data.Migrations
 
                     b.Property<int?>("CuotasID");
 
-                    b.Property<double?>("Debe");
+                    b.Property<decimal?>("Debe")
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<DateTime>("FechaMovimiento");
 
-                    b.Property<double?>("Haber");
+                    b.Property<decimal?>("Haber")
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<string>("Observaciones")
                         .IsRequired();
 
                     b.Property<string>("TipoMovimiento");
 
-                    b.Property<double?>("Total");
+                    b.Property<decimal?>("Total")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<string>("Usuario");
 
                     b.HasKey("CajaId");
 
@@ -88,7 +104,8 @@ namespace Alpid.Data.Migrations
 
                     b.Property<DateTime>("FechaDesde");
 
-                    b.Property<double>("Importe");
+                    b.Property<decimal>("Importe")
+                        .HasColumnType("decimal(18, 2)");
 
                     b.HasKey("CuotaPrecioID");
 
@@ -103,11 +120,13 @@ namespace Alpid.Data.Migrations
 
                     b.Property<string>("Estado");
 
-                    b.Property<DateTime?>("FechaDesde");
+                    b.Property<DateTime?>("FechaDesde")
+                        .IsRequired();
 
                     b.Property<DateTime>("FechaHasta");
 
-                    b.Property<double>("Importe");
+                    b.Property<decimal>("Importe")
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<string>("Observacion");
 
@@ -120,9 +139,52 @@ namespace Alpid.Data.Migrations
                     b.ToTable("Cuotas");
                 });
 
+            modelBuilder.Entity("Alpid.Models.EventoSolidarios", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("Cantidad");
+
+                    b.Property<string>("Concepto")
+                        .IsRequired();
+
+                    b.Property<DateTime>("Fecha");
+
+                    b.Property<int>("IdEvento");
+
+                    b.Property<int>("IdItemEvento");
+
+                    b.Property<decimal?>("Ingreso")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<string>("NombreEvento")
+                        .IsRequired();
+
+                    b.Property<decimal?>("ResultadoFinal")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal?>("Salida")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal?>("Total")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal?>("TotalIngreso")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal?>("TotalSalida")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EventoSolidarios");
+                });
+
             modelBuilder.Entity("Alpid.Models.Productos", b =>
                 {
-                    b.Property<int>("PoductosID")
+                    b.Property<int>("ProductosID")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -137,13 +199,11 @@ namespace Alpid.Data.Migrations
                     b.Property<string>("Nombre")
                         .IsRequired();
 
-                    b.Property<double>("PrecioAlquiler");
-
                     b.Property<string>("ProductosTipo");
 
                     b.Property<int?>("ProveedoresID");
 
-                    b.HasKey("PoductosID");
+                    b.HasKey("ProductosID");
 
                     b.HasIndex("ProveedoresID");
 
@@ -157,7 +217,8 @@ namespace Alpid.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Cuit")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasMaxLength(11);
 
                     b.Property<string>("Domicilio");
 
@@ -211,43 +272,20 @@ namespace Alpid.Data.Migrations
                     b.ToTable("Socios");
                 });
 
-            modelBuilder.Entity("Alpid.Models.Usuario", b =>
-                {
-                    b.Property<int>("UsuarioID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Contraseña");
-
-                    b.Property<string>("NombreUsuario");
-
-                    b.HasKey("UsuarioID");
-
-                    b.ToTable("Usuario");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken();
+                    b.Property<string>("ConcurrencyStamp");
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(256);
+                    b.Property<string>("Name");
 
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256);
+                    b.Property<string>("NormalizedName");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AspNetRoles");
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -260,14 +298,11 @@ namespace Alpid.Data.Migrations
 
                     b.Property<string>("ClaimValue");
 
-                    b.Property<string>("RoleId")
-                        .IsRequired();
+                    b.Property<string>("RoleId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetRoleClaims");
+                    b.ToTable("RoleClaims");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
@@ -277,11 +312,9 @@ namespace Alpid.Data.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken();
+                    b.Property<string>("ConcurrencyStamp");
 
-                    b.Property<string>("Email")
-                        .HasMaxLength(256);
+                    b.Property<string>("Email");
 
                     b.Property<bool>("EmailConfirmed");
 
@@ -289,11 +322,9 @@ namespace Alpid.Data.Migrations
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
 
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256);
+                    b.Property<string>("NormalizedEmail");
 
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256);
+                    b.Property<string>("NormalizedUserName");
 
                     b.Property<string>("PasswordHash");
 
@@ -305,20 +336,11 @@ namespace Alpid.Data.Migrations
 
                     b.Property<bool>("TwoFactorEnabled");
 
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256);
+                    b.Property<string>("UserName");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("NormalizedEmail")
-                        .HasName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -331,64 +353,55 @@ namespace Alpid.Data.Migrations
 
                     b.Property<string>("ClaimValue");
 
-                    b.Property<string>("UserId")
-                        .IsRequired();
+                    b.Property<string>("UserId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserClaims");
+                    b.ToTable("UserClaims");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.Property<string>("LoginProvider")
-                        .HasMaxLength(128);
-
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128);
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("LoginProvider");
 
                     b.Property<string>("ProviderDisplayName");
 
-                    b.Property<string>("UserId")
-                        .IsRequired();
+                    b.Property<string>("UserId");
 
-                    b.HasKey("LoginProvider", "ProviderKey");
+                    b.HasKey("ProviderKey");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserLogins");
+                    b.ToTable("UserLogins");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserId")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("RoleId");
 
-                    b.HasKey("UserId", "RoleId");
+                    b.HasKey("UserId");
 
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetUserRoles");
+                    b.ToTable("UserRoles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserId")
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<string>("LoginProvider")
-                        .HasMaxLength(128);
+                    b.Property<string>("LoginProvider");
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(128);
+                    b.Property<string>("Name");
 
                     b.Property<string>("Value");
 
-                    b.HasKey("UserId", "LoginProvider", "Name");
+                    b.HasKey("UserId");
 
-                    b.ToTable("AspNetUserTokens");
+                    b.ToTable("UserTokens");
                 });
 
             modelBuilder.Entity("Alpid.Models.Alquiler", b =>
@@ -400,7 +413,7 @@ namespace Alpid.Data.Migrations
 
                     b.HasOne("Alpid.Models.Socios", "Socios")
                         .WithMany("Alquiler")
-                        .HasForeignKey("SociosId")
+                        .HasForeignKey("SociosID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -428,51 +441,6 @@ namespace Alpid.Data.Migrations
                     b.HasOne("Alpid.Models.Proveedores", "Proveedores")
                         .WithMany("Productos")
                         .HasForeignKey("ProveedoresID");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

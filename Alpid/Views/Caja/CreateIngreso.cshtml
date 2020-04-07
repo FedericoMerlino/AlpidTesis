@@ -4,22 +4,21 @@
     ViewData["Title"] = "Ingresar Dinero";
 }
 <html>
-<body>
-    <header>
-        <link href="~/css/cssKanze/style.min.css" rel="stylesheet" />
-    </header>
+<body style="background-color:ghostwhite;">
     <h1>Ingresar dinero</h1>
 
-    <h4>Caja</h4>
     <hr />
+    <h4 style="color: limegreen;">El total que posee la caja es: $@ViewData["TotalCaja"]</h4>
+    <br />
     <div class="row">
         <div class="col-md-4">
             <form asp-action="CreateIngreso">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="Debe" class="control-label">Ingreso Dinero</label>
-                    <input asp-for="Debe" class="form-control" required />
-                    <span asp-validation-for="Debe" class="text-danger"></span>
+                    <input asp-for="Debe" id="txtDinero" type="number" step=".01" class="form-control" required />
+                    <span asp-validation-for="Debe.Value" class="text-danger"></span>
+
                 </div>
                 <div class="form-group" style="display:none;">
                     <label asp-for="TipoMovimiento" class="control-label"></label>
@@ -27,7 +26,7 @@
                     <span asp-validation-for="TipoMovimiento" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Observaciones" class="control-label"></label>
+                    <label asp-for="Observaciones" class="control-label">Observación</label>
                     <input asp-for="Observaciones" class="form-control" required />
                     <span asp-validation-for="Observaciones" class="text-danger"></span>
                 </div>
@@ -36,15 +35,63 @@
                     <input asp-for="FechaMovimiento" type="date" id="fechaActual" class="form-control" />
                     <span asp-validation-for="FechaMovimiento" class="text-danger"></span>
                 </div>
+                <div class="form-group" style="display:none;">
+                    <label asp-for="Usuario" class="control-label"></label>
+                    <input asp-for="Usuario" type="text" value="@User.Identity.Name" class="form-control" />
+                </div>
                 <div class="col-md-12">
                     <input type="submit" value="Guardar" class="btn btn-primary" />
-                    <a asp-action="Index" style="float:right;" class="btn btn-info">Cancelar</a>
+                    <a asp-action="Index" style="float:right;" class="btn btn-info">Regresar</a>
                 </div>
             </form>
         </div>
     </div>
 </body>
 </html>
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+<script src="~/js/AcepteNumerosConComaValidacion.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<link rel="stylesheet" type="text/css" href="dist/sweetalert.css">
+<script>
+    var valor = "@ViewData["Message"]";
+    //si se produce algún error
+    if (valor == 2) {
+        swal({
+            title: "Error!!",
+            text: "No se pudo realizar la operación",
+            icon: "error",
+            button: "Aceptar",
+        });
+    };
+    //si pone letras
+    if (valor == 3) {
+        swal({
+            title: "Error!!",
+            text: "Solo se aceptan valores numéricos en 'Ingreso Dinero'",
+            icon: "error",
+            button: "Aceptar",
+        });
+    };
+
+    //Validar que no este vacio el campo
+    function comprobarNombre(valor, campo) {
+
+        //validacion que aparezcafunction comprobarNombre(valor, campo) {
+        var mensaje = "";
+
+        // comprobar los posibles errores
+        if (this.value == "") {
+            mensaje = "Debe ingresar un valor";
+        };
+
+        // mostrar/resetear mensaje (el mensaje se resetea poniendolo a "")
+        this.setCustomValidity(mensaje);
+    };
+
+    var Dinero = document.querySelector("#txtDinero");
+    var Dinero = document.querySelector("#txtObservacion");
+
+    // cuando se cambie el valor del campo o sea incorrecto, mostrar/resetear mensaje
+    Dinero.addEventListener("invalid", comprobarNombre);
+    Dinero.addEventListener("input", comprobarNombre);
+
+</script>

@@ -5,10 +5,7 @@
 }
 
 <html>
-<body>
-    <header>
-        <link href="~/css/cssKanze/style.min.css" rel="stylesheet" />
-    </header>
+<body style="background-color:ghostwhite;">
     <h2 style="color:red; padding-bottom:30px">¿Esta seguro que desea eliminar el Socio "@Html.DisplayFor(model => model.RazonSocial)"?</h2>
     <div>
         <h4>Información del socio a Eliminar:</h4>
@@ -60,7 +57,7 @@
                     </div>
                     <div class="col-md-12">
                         <input type="submit" value="Eliminar" class="btn btn-danger" />
-                        <a asp-action="Index" style="float:right;" class="btn btn-info">Cancelar</a>
+                        <a asp-action="Index" style="float:right;" class="btn btn-info">Regresar</a>
                     </div>
                 </form>
             </div>

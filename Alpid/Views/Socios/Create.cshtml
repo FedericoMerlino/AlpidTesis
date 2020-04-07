@@ -3,12 +3,8 @@
     ViewData["Title"] = "Nuevo socio";
 }
 <html>
-<body>
-    <header>
-        <link href="~/css/cssKanze/style.min.css" rel="stylesheet" />
-    </header>
-    <h1>Nuevo Socio</h1>
-
+<body style="background-color:ghostwhite;">
+    <h1 style="color:blue">Nuevo Socio</h1>
     <h5 style="padding-top:20px; color:#d6ba2b;">Es obligatorio completar los campos que poseen *</h5>
     <div class="row">
         <div class="col-md-4">
@@ -40,20 +36,45 @@
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" style="display:none;">
                     <label asp-for="FechaAlta" class="control-label">FechaAlta</label>
                     <input asp-for="FechaAlta" type="date" id="fechaActual" class="form-control" readonly="readonly" />
                     <span asp-validation-for="FechaAlta" class="text-danger"></span>
                 </div>
                 <div class="col-md-12">
-                    <input type="submit" value="Crear nuevo" class="btn btn-primary" />
-                    <a asp-action="Index" style="float:right;" class="btn btn-info">Cancelar</a>
+                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                    <a asp-action="Index" style="float:right;" class="btn btn-info">Regresar</a>
                 </div>
             </form>
         </div>
     </div>
- </body>
+</body>
 </html>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<link rel="stylesheet" type="text/css" href="dist/sweetalert.css">
+<script>
+      var valor = "@ViewData["Message"]";
+    //si funciona todo correcto
+    if (valor == 1) {
+        swal({
+            title: "Felicidades!!",
+            text: "La operación se realizo con éxito",
+            icon: "success",
+            button: "Aceptar",
+        });
+    } else {
+        //si se produce algún error
+        if (valor == 3) {
+            swal({
+                title: "Error!!",
+                text: "Ya existe un Socio con el siguiente CUIT: @ViewData["CuitError"]",
+                icon: "error",
+                button: "Aceptar",
+            });
+        };
+    };
+</script>
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

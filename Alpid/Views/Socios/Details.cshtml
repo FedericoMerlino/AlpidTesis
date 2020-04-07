@@ -4,11 +4,8 @@
     ViewData["Title"] = "Detalle socio";
 }
 <html>
-<body>
-    <header>
-        <link href="~/css/cssKanze/style.min.css" rel="stylesheet" />
-    </header>
-    <h1>Informacion Socio "@Html.DisplayFor(model => model.RazonSocial)" </h1>
+<body style="background-color:ghostwhite;">
+    <h1 style="color:blue;">Informacion Socio "@Html.DisplayFor(model => model.RazonSocial)" </h1>
 
     <div>
         <hr />
@@ -64,7 +61,7 @@
         </dl>
     </div>
     <div>
-        <a asp-action="Index" class="btn btn-info">Regresar</a>
+        <a asp-action="Index" class="btn btn-info">Regresar</a> |
         <a asp-action="Active"  class='btn btn-primary' asp-route-id="@Model.SociosID">Reactivar</a>
     </div>
 </body>

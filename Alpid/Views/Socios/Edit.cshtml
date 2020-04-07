@@ -4,11 +4,8 @@
     ViewData["Title"] = "Editar socio";
 }
 <html>
-<body>
-    <header>
-        <link href="~/css/cssKanze/style.min.css" rel="stylesheet" />
-    </header>
-    <h4>Editar socio</h4>
+<body style="background-color:ghostwhite;">
+    <h4 style="color:blue">Editar socio</h4>
     <hr />
     <div class="row">
         <div class="col-md-4">
@@ -17,7 +14,7 @@
                 <input type="hidden" asp-for="SociosID" />
                 <div class="form-group">
                     <label asp-for="Cuit" class="control-label">Cuit/Documento</label>
-                    <input asp-for="Cuit" class="form-control" />
+                    <input asp-for="Cuit" class="form-control" readonly="readonly" />
                     <span asp-validation-for="Cuit" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -57,7 +54,7 @@
                 </div>
                 <div class="col-md-12">
                     <input type="submit" value="Editar" class="btn btn-primary" />
-                    <a asp-action="Index" style="float:right;" class="btn btn-info">Cancelar</a>
+                    <a asp-action="Index" style="float:right;" class="btn btn-info">Regresar</a>
                 </div>
             </form>
         </div>

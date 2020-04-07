@@ -1,59 +1,179 @@
-﻿@model IEnumerable<Alpid.Models.Alquiler>
+﻿@model Paginacion<Alpid.Models.Alquiler>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Alquiler";
 }
+<html>
+<body style="background-color:ghostwhite;">
+    <h1 style="color:blue">Alquiler de productos</h1>
+    <form asp-action="Index" id="Index">
+        <div style="padding-bottom:3%;">
+            <div class="form-group col-md-12" style="padding-top:2%;">
+                <!--busca en toda la tabla en la base de datos de socios-->
+                <div class="col-md-2">
+                    <label style="color:darkblue">Cuit/Nombre: </label>
+                    <p>
+                        <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <label style="color:darkblue">Fechas: </label>
+                    <div class="form-group">
+                        <!--Buscar por fechas-->
+                        <div class="form-actions no-color">
+                            <p>
+                                Fecha desde <input type="date" name="fechaDesde" id="ponerFechaDesde" />
+                                Fecha hasta <input type="date" name="fechaHasta" id="ponerFechaHasta" />
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <label style="color:ghostwhite">Texto invisible </label>
+                    <p>
+                        <button type="button" onclick="ValidarFecha()" class="btn btn-labeled btn-dark"><span class="btn-label"><i class="glyphicon glyphicon-search"></i></span> Buscar</button>
+                        <a asp-action="Index" type="button" class="btn btn-labeled btn-info"><span class="btn-label"><i class="glyphicon glyphicon-refresh"></i></span> Actualizar Consulta</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </form>
+    <br />
+    <br />
+    <hr />
+    <!--Boton para crear nuevo alquier-->
+    <div style="padding-bottom:3%; padding-top:1%;" class="form-group col-md-12">
+        <a asp-action="Create" class='btn btn-success'>Nuevo alquiler</a>
+        <!--Busca solamente la info que se muestra en la grilla-->
+        <i class="fa fa-search fa-2x" style="Float: right; padding-left:10px; padding-top:2px;"></i>
+        <input id="searchTerm" type="text" onkeyup="doSearch()" class="form-control" placeholder="Buscar" style=" width:200px; Float: right; " />
+        <a class="btn btn-secondary" onclick="VerReporte()" style="color:white;">Reporte Alquiler</a>
 
-<h1>Index</h1>
+    </div>
+    <div>
+        <form class="form-group">
+            <table class="table table-responsive-sm" id="datos">
+                <thead>
+                    <tr>
+                        <th>
+                            Socio
+                        </th>
+                        <th>
+                            Fecha Desde
+                        </th>
+                        <th>
+                            Fecha Hasta
+                        </th>
+                        <th>
+                            Observación
+                        </th>
+                        <th>
+                            Estado
+                        </th>
+                        <th>
+                            Valor
+                        </th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Socios.RazonSocial)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FechaDesde)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FechaHasta)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Observacion)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Estado)
+                        </td>
+                        <td>
+                            $ @Html.DisplayFor(modelItem => item.ValorTotal)
+                        </td>
+                        <td>
+                            <a asp-action="Details" class="btn btn-info" asp-route-id="@item.AlquilerID">ver</a> |
+                            <a asp-action="Edit" class="btn btn-dark" asp-route-id="@item.AlquilerID">Editar</a> |
+                            <a asp-action="Pay" class="btn btn-dark" asp-route-id="@item.AlquilerID">Pagar</a>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+            <!--paginacion sobre los valores que se muestran-->
+            <div style="float:right; padding-bottom: 30px;">
+                @{
+                    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+                    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+                }
+                <a asp-action="Index"
+                   asp-route-sortOrder="@ViewData["CurrentSort"]"
+                   asp-route-page="@(Model.PageIndex - 1)"
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   class="btn btn-default @prevDisabled">
+                    Anterior
+                </a>
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    <a asp-action="Index"
+                       asp-route-sortOrder="@ViewData["CurrentSort"]"
+                       asp-route-page="@i"
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                       class="btn btn-default">
+                        @i
+                    </a>
+                }
+                <a asp-action="Index"
+                   asp-route-sortOrder="@ViewData["CurrentSort"]"
+                   asp-route-page="@(Model.PageIndex + 1)"
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   class="btn btn-default @nextDisabled">
+                    Siguiente
+                </a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<link rel="stylesheet" type="text/css" href="dist/sweetalert.css">
+<script>
+     function ValidarFecha () {
+        var fechaDesde = document.getElementById("ponerFechaDesde").value;
+        var fechaHasta = document.getElementById("ponerFechaHasta").value;
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.FechaDesde)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Observacion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Valor)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Productos)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Socios)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaDesde)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Observacion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Valor)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Productos.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Socios.Cuit)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.AlquilerID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.AlquilerID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.AlquilerID">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+         if (fechaDesde > fechaHasta) {
+             alert("La fecha desde " + fechaDesde + " debe ser menor a la fecha Hasta " + fechaHasta);
+         }
+         else {
+            $("#Index").submit();
+         };
+    };
+
+    document.getElementById('ponerFechaDesde').value = '@ViewData["FechaDesdeFilter"]';
+    document.getElementById('ponerFechaHasta').value = '@ViewData["FechaHastaFilter"]';
+
+        var valor = "@ViewData["Message"]";
+        //si se produce algún error
+        if (valor == 2) {
+            swal({
+                title: "Error!!",
+                text: "No se pudo realizar la operación",
+                icon: "error",
+                button: "Aceptar",
+            });
+    };
+
+    function VerReporte(){
+
+             window.open('Alquiler/Report');
+             window.location.href= '@Url.Action("Index", "Alquiler")';
+    };
+</script>

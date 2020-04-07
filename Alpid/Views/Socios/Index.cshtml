@@ -4,46 +4,41 @@
 }
 
 <html>
-<body>
-    <header>
-        <link href="~/css/cssKanze/style.min.css" rel="stylesheet" />
-    </header>
-    <h1>Socios Alpid</h1>
-    <!--Boton para crear nuevo socio-->
-    <p>
-        <a asp-action="Create" class='btn btn-info'>Crear Socio</a>
-    </p>
-    <!--busca en toda la tabla en la base de datos de socios-->
-    <form asp-action="Index" method="get">
-        <div class="form-actions no-color">
-            <p>
-                Buscar: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
-                <input type="submit" value="Buscar" class="btn btn-dark" />
-                <a asp-action="Index" class="btn btn-info">Cancelar búsqueda </a>
-            </p>
+<head>
+
+</head>
+<body style="background-color:ghostwhite;">
+    <h1 style="color:blue">Socios Alpid</h1>
+    <form asp-action="Index" id="Index">
+        <div style="padding-bottom:3%;"  class="form-group">
+            <div class="form-group col-md-3">
+                <!--busca en toda la tabla en la base de datos de socios-->
+                <label style="color:darkblue">Cuit/Nombre: </label>
+                <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            </div>
+            <div class="form-group no-color col-md-3">
+                <label class="col-lg-12" style="color:darkblue">Estados: </label>
+                <div style="padding-left:15px;">
+                    <label><input type="radio" name="Coordinar" id="cbox1" onclick="validarcheck()" checked="checked"> Activos</label>
+                    <label style="padding-left:10px"><input type="radio" name="Coordinar" id="cbox2" onclick="validarcheck()"> Eliminados</label>
+                    <!--Se utiliza para pasar la info al controlador sobre que estado se desea buscar-->
+                    <input type="text" id="FechasGrilla" name="filtroFecha" value="@ViewData["DateFilter"]" style="display:none;" />
+                </div>
+            </div>
+            <div  class="col-lg-4 col-med-4 col-sm-6 col-xs-12">
+                <button type="submit" class="btn btn-labeled btn-success"><span class="btn-label"><i class="glyphicon glyphicon-search"></i></span> Buscar</button>
+                <a asp-action="Index" type="button" class="btn btn-labeled btn-info"><span class="btn-label"><i class="glyphicon glyphicon-refresh"></i></span> Actualizar Consulta</a>
+            </div>
         </div>
     </form>
-    <!--diferentes funcionalidades dentro de la grilla-->
-    <div class="input-group-append" style="padding-top:30px">
-        <div class="form-group">
-            <h2 style="initial-letter:inherit; font-family: Homer Simpson; color:#0932ff;"> Grilla socios </h2>
-            <form asp-action="Index" method="get">
-                <div class="form-actions no-color">
-                    <h5 style="initial-letter:inherit; font-family: Homer Simpson, cursive; padding-right:10px">
-                        Estados:
-                        <label style="padding-left:10px"><input type="radio" name="Coordinar" id="cbox1" onclick="validarcheck()" checked="checked"> Activos</label>
-                        <label style="padding-left:10px"><input type="radio" name="Coordinar" id="cbox2" onclick="validarcheck()"> Eliminados</label>
-                        <!--Se utiliza para pasar la info al controlador sobre que estado se desea buscar-->
-                        <input type="text" id="FechasGrilla" name="filtroFecha" value="@ViewData["DateFilter"]" style="display:none;" />
-                        <input type="submit" value="Buscar" class="btn btn-dark" />
-                    </h5>
+    <br />
+    <hr />
+    <div style="padding-bottom:5%; padding-top:1%;">
+        <!--Boton para crear nuevo socio-->
+        <a asp-action="Create" class='btn btn-success'>Crear Socio</a>
+        <a class="btn btn-secondary" onclick="VerReporte()" style="color:white;">Reporte Socios</a>
 
-                </div>
-            </form>
-        </div>
-    </div>
-    <!--Busca solamente la info que se muestra en la grilla-->
-    <div>
+        <!--Busca solamente la info que se muestra en la grilla-->
         <i class="fa fa-search fa-2x" style="Float: right; padding-left:10px; padding-top:2px;"></i>
         <input id="searchTerm" type="text" onkeyup="doSearch()" class="form-control" placeholder="Buscar" style=" width:200px; Float: right; " />
     </div>
@@ -131,19 +126,13 @@
                                 </td>
                                 <td>
                                     <a asp-action="Edit" class='btn btn-info' asp-route-id="@item.SociosID">Editar</a> |
-                                    <a asp-action="Delete" class='btn btn-danger' asp-route-id="@item.SociosID">Borrar</a> |
+                                    <a asp-action="Delete" class='btn btn-danger' asp-route-id="@item.SociosID">Borrar</a>
                                 </td>
                             </tr>
                         }
                     }
                 </tbody>
             </table>
-            <h5>
-                <label style="padding-bottom:5px; font-weight: bold;"> Referencias:</label> <br />
-                <input type="text" style="height:20px;width:20px;" disabled /> Activo
-                <input type="text" style="height:20px;width:20px;background-color:salmon;" disabled /> Eliminado
-
-            </h5>
             <!--realiza la paginacion del lado del servidor-->
             <div style="float:right; padding-bottom: 30px;">
                 @{
@@ -180,6 +169,8 @@
 </body>
 </html>
 
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 <script>
     //cambia el valor de los radiobutton de estados para luego pasarle la info que se requiere al controlador
     function validarcheck() {
@@ -193,5 +184,33 @@
                 document.getElementById('FechasGrilla').value = 'eliminados';
             }
         });
-    }
+    };
+
+      var valor = "@ViewData["Message"]";
+    //si funciona todo correcto
+    if (valor == 1) {
+        swal({
+            title: "Felicidades!!",
+            text: "La operación se realizo con éxito",
+            icon: "success",
+            button: "Aceptar",
+        });
+    } else {
+        //si se produce algún error
+        if (valor == 2) {
+            swal({
+                title: "Error!!",
+                text: "No se pudo realizar la operación",
+                icon: "error",
+                button: "Aceptar",
+            });
+        };
+    };
+
+    function VerReporte(){
+
+             window.open('Socios/Report');
+             window.location.href= '@Url.Action("Index", "Socios")';
+    };
+
 </script>

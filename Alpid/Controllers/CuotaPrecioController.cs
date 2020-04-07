@@ -30,19 +30,17 @@ namespace Alpid.Controllers
         // GET: CuotaPrecio/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            var cuotaPrecio = await _context.CuotaPrecio
-                .FirstOrDefaultAsync(m => m.CuotaPrecioID == id);
-            if (cuotaPrecio == null)
+            try
             {
-                return NotFound();
+                var cuotaPrecio = await _context.CuotaPrecio.FirstOrDefaultAsync(m => m.CuotaPrecioID == id);
+                return View(cuotaPrecio);
             }
-
-            return View(cuotaPrecio);
+            catch (Exception e)
+            {
+                Console.Write(e);
+                return RedirectToAction("Index", "CuotaPrecio", new { });
+            }
         }
 
         // GET: CuotaPrecio/Create
@@ -56,20 +54,38 @@ namespace Alpid.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CuotaPrecioID,Importe,FechaDesde,FechaHasta")] CuotaPrecio cuotaPrecio)
         {
-            if (ModelState.IsValid)
+            try
             {
-                //borra el registro viejo
-                var id = _context.CuotaPrecio.Max(x => x.CuotaPrecioID);
-                var cuotaPrecioViejo = await _context.CuotaPrecio.FindAsync(id);
-                _context.CuotaPrecio.Remove(cuotaPrecioViejo);
-                await _context.SaveChangesAsync();
+                var PrecioVacio = (from c in _context.CuotaPrecio select c).Count();
 
-                //Crear registro nuevo
-                _context.Add(cuotaPrecio);
-                await _context.SaveChangesAsync();
+                if (PrecioVacio == 0)
+                {
+                    //Crear registro nuevo
+                    _context.Add(cuotaPrecio);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    //borra el registro viejo
+                    var id = _context.CuotaPrecio.Max(x => x.CuotaPrecioID);
+                    var cuotaPrecioViejo = await _context.CuotaPrecio.FindAsync(id);
+                    _context.CuotaPrecio.Remove(cuotaPrecioViejo);
+                    await _context.SaveChangesAsync();
+
+                    //Crear registro nuevo
+                    _context.Add(cuotaPrecio);
+                    await _context.SaveChangesAsync();
+                    //vuelve a pantalla de cuotas
+                }
+                var valor = 1;
+                return RedirectToAction("Index", "Cuotas", new { valor });
             }
-            //vuelve a pantalla de cuotas
-            return RedirectToAction("Index", "Cuotas", new { FileUploadMsg = "File   uploaded successfully" });
+            catch (Exception e)
+            {
+                Console.Write(e);
+                var valor = 2;
+                return RedirectToAction("Index", "Cuotas", new { valor });
+            }
         }
     }
 }

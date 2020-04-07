@@ -1,0 +1,11 @@
+﻿body {
+}
+
+#Tabla-Socios {
+    padding-left: inherit;
+    color: blue;
+    line-grid: match-parent;
+}
+table{
+    border-top: 10px,solid,red;
+}

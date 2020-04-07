@@ -20,7 +20,8 @@ namespace Alpid.Controllers
         }
 
         // GET: Proveedores
-        public async Task<IActionResult> Index(string currentFilter, string searchString, int? page, string filtroFecha, string DateFilter)
+        public async Task<IActionResult> Index(string currentFilter, string searchString,
+                                        int? page, string filtroFecha, string DateFilter, int valor)
         {
             var bandera = true;
 
@@ -52,203 +53,182 @@ namespace Alpid.Controllers
             {
                 proveedor = proveedor.Where(s => s.FechaBaja != null);
             }
+            ViewData["Message"] = valor;
 
-            int pageSize = 15;
+           int pageSize = 100;
             return View(await Paginacion<Proveedores>.CreateAsync(proveedor.AsNoTracking().OrderByDescending(x => x.FechaAlta), page ?? 1, pageSize));
         }
 
         // GET: Proveedores/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
-            }
-
-            var proveedores = await _context.Proveedores
+                var proveedores = await _context.Proveedores
                 .FirstOrDefaultAsync(m => m.ProveedoresId == id);
-            if (proveedores == null)
-            {
-                return NotFound();
+                if (proveedores == null)
+                {
+                    return NotFound();
+                }
+                return View(proveedores);
             }
-
-            return View(proveedores);
+            catch (Exception e)
+            {
+                Console.Write(e);
+                var valor = 2;
+                return RedirectToAction("Index", "Proveedores", new { valor });
+            }
         }
 
         // GET: Proveedores/Create
-        public IActionResult Create()
+        public IActionResult Create(int valor, string cuitAlta)
         {
+            ViewData["Message"] = valor;
+            ViewData["CuitError"] = cuitAlta;
+
             return View();
         }
 
         // POST: Proveedores/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProveedoresId,Cuit,RazonSocial,Domicilio,Telefono,Mail,FechaAlta")] Proveedores proveedores)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(proveedores);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                int valor;
+
+                var cuitAlta = proveedores.Cuit;
+
+                var Verificar = (from s in _context.Proveedores where s.Cuit == cuitAlta select s.Cuit).Count();
+
+                if (Verificar == 0)
+                {
+                    _context.Add(proveedores);
+                    await _context.SaveChangesAsync();
+
+                    valor = 1;
+                    return RedirectToAction("Index", "Proveedores", new { valor });
+                }
+                else
+                {
+                    valor = 3;
+                    return RedirectToAction("Create", "Proveedores", new { valor, cuitAlta });
+                }
             }
-            return View(proveedores);
+            catch (Exception e)
+            {
+                Console.Write(e);
+                var valor = 2;
+                return RedirectToAction("Index", "Proveedores", new { valor });
+            }
         }
 
         // GET: Proveedores/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
+                var proveedores = await _context.Proveedores.FindAsync(id);
+                return View(proveedores);
             }
-
-            var proveedores = await _context.Proveedores.FindAsync(id);
-            if (proveedores == null)
+            catch (Exception e)
             {
-                return NotFound();
+                Console.Write(e);
+                var valor = 2;
+                return RedirectToAction("Index", "Proveedores", new { valor });
             }
-            return View(proveedores);
         }
 
         // POST: Proveedores/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ProveedoresId,Cuit,RazonSocial,Domicilio,Telefono,Mail,FechaBaja,FechaAlta,MotivoBaja")] Proveedores proveedores)
         {
-            if (id != proveedores.ProveedoresId)
+            try
             {
-                return NotFound();
-            }
+                _context.Update(proveedores);
+                await _context.SaveChangesAsync();
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(proveedores);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProveedoresExists(proveedores.ProveedoresId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                var valor = 1;
+                return RedirectToAction("Index", "Proveedores", new { valor });
             }
-            return View(proveedores);
+            catch (Exception e)
+            {
+                Console.Write(e);
+                var valor = 2;
+                return RedirectToAction("Index", "Proveedores", new { valor });
+            }
         }
 
         // GET: Proveedores/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
+                var proveedores = await _context.Proveedores.FindAsync(id);
+                return View(proveedores);
             }
-
-            var proveedores = await _context.Proveedores.FindAsync(id);
-            if (proveedores == null)
+            catch (Exception e)
             {
-                return NotFound();
+                Console.Write(e);
+                var valor = 2;
+                return RedirectToAction("Index", "Proveedores", new { valor });
             }
-            return View(proveedores);
         }
 
         // POST: Proveedores/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id, [Bind("ProveedoresId,Cuit,RazonSocial,Domicilio,Telefono,Mail,FechaBaja,FechaAlta,MotivoBaja")] Proveedores proveedores)
         {
-            if (id != proveedores.ProveedoresId)
+            try
             {
-                return NotFound();
-            }
+                _context.Update(proveedores);
+                await _context.SaveChangesAsync();
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(proveedores);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProveedoresExists(proveedores.ProveedoresId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                var valor = 1;
+                return RedirectToAction("Index", "Proveedores", new { valor });
             }
-            return View(proveedores);
+            catch (Exception e)
+            {
+                Console.Write(e);
+                var valor = 2;
+                return RedirectToAction("Index", "Proveedores", new { valor });
+            }
         }
 
         // GET: Proveedores/Active/5
         public async Task<IActionResult> Active(int? id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
+                var proveedores = await _context.Proveedores.FindAsync(id);
+                return View(proveedores);
             }
-
-            var proveedores = await _context.Proveedores.FindAsync(id);
-            if (proveedores == null)
+            catch (Exception e)
             {
-                return NotFound();
+                Console.Write(e);
+                var valor = 2;
+                return RedirectToAction("Index", "Proveedores", new { valor });
             }
-            return View(proveedores);
         }
 
         // POST: Proveedores/Active/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Active(int id, [Bind("ProveedoresId,Cuit,RazonSocial,Domicilio,Telefono,Mail,FechaBaja,FechaAlta,MotivoBaja")] Proveedores proveedores)
         {
-            if (id != proveedores.ProveedoresId)
+            try
             {
-                return NotFound();
-            }
+                _context.Update(proveedores);
+                await _context.SaveChangesAsync();
 
-            if (ModelState.IsValid)
+                var valor = 1;
+                return RedirectToAction("Index", "Proveedores", new { valor });
+            }
+            catch (Exception e)
             {
-                try
-                {
-                    _context.Update(proveedores);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProveedoresExists(proveedores.ProveedoresId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                Console.Write(e);
+                var valor = 2;
+                return RedirectToAction("Index", "Proveedores", new { valor });
             }
-            return View(proveedores);
-        }
-
-        private bool ProveedoresExists(int id)
-        {
-            return _context.Proveedores.Any(e => e.ProveedoresId == id);
         }
     }
 }

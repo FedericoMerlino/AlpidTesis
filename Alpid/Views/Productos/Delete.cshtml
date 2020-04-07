@@ -3,12 +3,8 @@
 @{
     ViewData["Title"] = "Eliminar producto";
 }
-
 <html>
-<body>
-    <header>
-        <link href="~/css/cssKanze/style.min.css" rel="stylesheet" />
-    </header>
+<body style="background-color:ghostwhite;">
     <h2 style="color:red; padding-bottom:30px">¿Esta seguro que desea eliminar el producto "@Html.DisplayFor(model => model.Nombre)"?</h2>
     <div>
         <h4>Información del producto a Eliminar:</h4>
@@ -17,7 +13,7 @@
             <div class="col-md-4">
                 <form asp-action="Delete">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input type="hidden" asp-for="PoductosID" />
+                    <input type="hidden" asp-for="ProductosID" />
                     <div class="form-group">
                         <label asp-for="Nombre" class="control-label">Nombre</label>
                         <input asp-for="Nombre" class="form-control" readonly="readonly" />
@@ -30,7 +26,7 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="ProductosTipo" class="control-label">Tipo de producto</label>
-                        <input asp-for="ProductosTipo" value="Inmobiliario" class="form-control" readonly="readonly" />
+                        <input asp-for="ProductosTipo" class="form-control" readonly="readonly" />
                         <span asp-validation-for="ProductosTipo" class="text-danger"></span>
                     </div>
                     <div class="form-group">
@@ -43,16 +39,18 @@
                         <input asp-for="FechaBaja" type="date" class="form-control" readonly="readonly" />
                         <span asp-validation-for="FechaBaja" class="text-danger"></span>
                     </div>
-
-
+                    <div class="form-group">
+                        <label asp-for="MotivoBaja" class="control-label">Motivo eliminación</label>
+                        <textarea asp-for="MotivoBaja" rows="10" cols="30" placeholder="Favor de ingresar un motivo de eliminación" class="form-control" required> </textarea>
+                        <span asp-validation-for="MotivoBaja" class="text-danger"></span>
+                    </div>
                     <div class="form-group">
                         <label asp-for="ProveedoresID" class="control-label">Proveedor</label>
-                        <input asp-for="ProveedoresID" class="form-control" readonly="readonly" />
-                        <span asp-validation-for="ProveedoresID" class="text-danger"></span>
+                        <select asp-for="ProveedoresID" class="form-control" asp-items="ViewBag.ProveedoresID" readonly="readonly"></select>
                     </div>
                     <div class="col-md-12">
                         <input type="submit" value="Eliminar" class="btn btn-danger" />
-                        <a asp-action="Index" style="float:right;" class="btn btn-info">Cancelar</a>
+                        <a asp-action="Index" style="float:right;" class="btn btn-info">Regresar</a>
                     </div>
                 </form>
             </div>

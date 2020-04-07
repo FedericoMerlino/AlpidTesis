@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Alpid.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Rotativa.AspNetCore;
 
 namespace Alpid
 {
@@ -42,6 +43,14 @@ namespace Alpid
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(options =>
+            {
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
@@ -63,7 +72,7 @@ namespace Alpid
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
+            app.UseSession();
             app.UseAuthentication();
 
             app.UseMvc(routes =>
@@ -72,6 +81,7 @@ namespace Alpid
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+            RotativaConfiguration.Setup(env);
         }
     }
 }

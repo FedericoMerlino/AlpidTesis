@@ -4,12 +4,8 @@
     ViewData["Title"] = "Detalle proveedor";
 }
 <html>
-<body>
-    <header>
-        <link href="~/css/cssKanze/style.min.css" rel="stylesheet" />
-    </header>
-    <h1>Información Proveedor "@Html.DisplayFor(model => model.RazonSocial)"</h1>
-
+<body style="background-color:ghostwhite;">
+    <h1 style="color:blue;">Información Proveedor "@Html.DisplayFor(model => model.RazonSocial)"</h1>
     <div>
         <h4>Proveedores</h4>
         <hr />
@@ -65,8 +61,8 @@
         </dl>
     </div>
     <div>
-        <a asp-action="Index" class="btn btn-info">Regresar</a>
-        <a asp-action="Active" class='btn btn-primary' asp-route-id="@Model.ProveedoresId">Reactivar</a> |
+        <a asp-action="Index" class="btn btn-info">Regresar</a> |
+        <a asp-action="Active" class='btn btn-primary' asp-route-id="@Model.ProveedoresId">Reactivar</a>
 
     </div>
 </body>

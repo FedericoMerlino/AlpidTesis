@@ -3,12 +3,8 @@
 @{
     ViewData["Title"] = "Eliminar Producto";
 }
-
 <html>
-<body>
-    <header>
-        <link href="~/css/cssKanze/style.min.css" rel="stylesheet" />
-    </header>
+<body style="background-color:ghostwhite;">
     <h2 style="color:red; ">¿Esta seguro que desea eliminar el producto:"@Html.DisplayFor(model => model.Nombre)"?</h2>
     <h3 style="color:red; padding-bottom:20px">Si se elimina el producto no se podrá recuperar la información</h3>
     <div>
@@ -43,9 +39,9 @@
             </div>
 </div>
     <form asp-action="DeletePhysical">
-        <input type="hidden" asp-for="PoductosID" />
+        <input type="hidden" asp-for="ProductosID" />
         <input type="submit"  value="Eliminar" class="btn btn-danger" /> 
-        <a asp-action="Index" class="btn btn-info">Cancelar</a>
+        <a asp-action="Index" class="btn btn-info">Regresar</a>
     </form>
 </body>
 </html>

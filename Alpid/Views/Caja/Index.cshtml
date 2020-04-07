@@ -4,34 +4,51 @@
     ViewData["Title"] = "Caja";
 }
 <html>
-<body>
-    <header>
-        <link href="~/css/cssKanze/style.min.css" rel="stylesheet" />
-    </header>
-    <h1>Caja Alpid</h1>
-    <div class="form-group">
-        <p>
-            <a asp-action="CreateRetire" class="btn btn-danger">Reterirar Dinero</a>
+<body style="background-color:ghostwhite;">
+    <h1 style="color:blue">Caja Alpid</h1>
 
-            <a asp-action="CreateIngreso" class="btn btn-primary">Ingresar Dinero</a>
-        </p>
-    </div>
     <!--Busca solamente la info que se muestra en la grilla-->
-    <div>
-        <i class="fa fa-search fa-2x" style="Float: right; padding-left:10px; padding-top:2px;"></i>
-        <input id="searchTerm" type="text" onkeyup="doSearch()" class="form-control" placeholder="Buscar" style=" width:200px; Float: right; " />
+    <div style="padding-bottom:5%; padding-top:1%;" class="form-group">
+        <!--Buscar por fechas-->
+        <form asp-action="Index" id="Index">
+            <div class="form-actions no-color">
+                <p>
+                    Fecha desde <input type="date" name="fechaDesde" id="ponerFechaDesde" />
+                    Fecha hasta <input type="date" name="fechaHasta" id="ponerFechaHasta" />
+                    <button type="button" onclick="ValidarFecha()" class="btn btn-labeled btn-dark"><span class="btn-label"><i class="glyphicon glyphicon-search"></i></span> Buscar</button>
+                </p>
+            </div>
+        </form>
+        <br />
+        <div class="form-group">
+            <h4 style="color: limegreen; float:left;">El total que posee la caja es: $@ViewData["TotalCaja"]</h4>
+        </div>
+        <br />
+        <hr />
+        <div class="form-group">
+            <a asp-action="CreateIngreso" class="btn btn-primary">Ingreso</a>
+            @if (@ViewData["ValorParaBoton"].Equals(0))
+            {
+                <a asp-action="CreateRetire" class="btn btn-danger" style="display:none;">Retiro</a>
+            }
+            else
+            {
+                <a asp-action="CreateRetire" class="btn btn-danger">Retiro</a>
+            }
+            <a onclick="VerReporte()" class="btn btn-dark" style="color:white;">Reporte caja</a>
+            <i class="fa fa-search fa-2x" style="Float: right; padding-left:10px;"></i>
+            <input id="searchTerm" type="text" onkeyup="doSearch()" class="form-control" placeholder="Buscar" style=" width:200px; Float: right; " />
+        </div>
     </div>
+
     <!--tabla con la informacion de la caja-->
     <div>
         <form class="form-group">
             <table class="table table-responsive-sm" id="datos">
                 <thead>
                     <tr>
-                                                <th>
-                            Fecha Movimiento
-                        </th>
                         <th>
-                            Tipo Movimiento
+                            Fecha Movimiento
                         </th>
                         <th>
                             Observaciones
@@ -45,12 +62,9 @@
                         <th>
                             Total
                         </th>
-                        @*<th>
-                                CuotaID)
-                            </th>
-                            <th>
-                                Alquiler)
-                            </th>*@
+                        <th>
+                            Acción
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -59,9 +73,6 @@
                         <tr>
                             <td>
                                 @Html.DisplayFor(modelItem => item.FechaMovimiento)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.TipoMovimiento)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Observaciones)
@@ -84,19 +95,7 @@
                             </td>
                             <td>
                                 <a asp-action="Details" asp-route-id="@item.CajaId">Ver</a>
-
                             </td>
-                            @*<td>
-                                    @Html.DisplayFor(modelItem => item.CuotaID)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Alquiler.AlquilerID)
-                                </td>*@
-                            @*<td>
-                                    <a asp-action="Edit" asp-route-id="@item.CajaId">Edit</a> |
-                                    <a asp-action="Details" asp-route-id="@item.CajaId">Details</a> |
-                                    <a asp-action="Delete" asp-route-id="@item.CajaId">Delete</a>
-                                </td>*@
                         </tr>
                     }
                 </tbody>
@@ -105,8 +104,50 @@
     </div>
 </body>
 </html>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<link rel="stylesheet" type="text/css" href="dist/sweetalert.css">
+
+
 <script>
+      function ValidarFecha () {
+        var fechaDesde = document.getElementById("ponerFechaDesde").value;
+        var fechaHasta = document.getElementById("ponerFechaHasta").value;
 
+         if (fechaDesde > fechaHasta) {
+             alert("La fecha desde " + fechaDesde + " debe ser menor a la fecha Hasta " + fechaHasta);
+         }
+         else {
+            $("#Index").submit();
+         };
+    };
 
+    document.getElementById('ponerFechaDesde').value = "@ViewData["FechaDesdeFilter"]";
+    document.getElementById('ponerFechaHasta').value = "@ViewData["FechaHastaFilter"]";
 
+    var valor = "@ViewData["Message"]";
+    //si funciona todo correcto
+    if (valor == 1) {
+        swal({
+            title: "Felicidades!!",
+            text: "La operación se realizo con éxito",
+            icon: "success",
+            button: "Aceptar",
+        });
+    } else {
+        //si se produce algún error
+        if (valor == 2) {
+            swal({
+                title: "Error!!",
+                text: "No se pudo realizar la operación",
+                icon: "error",
+                button: "Aceptar",
+            });
+        };
+    };
+
+     function VerReporte(){
+
+             window.open('Caja/Report');
+             window.location.href= '@Url.Action("Index", "Caja")';
+    };
 </script>

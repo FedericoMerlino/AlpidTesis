@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,8 +13,8 @@ namespace Alpid.Models
         public int CuotaPrecioID { get; set; }
 
         [Required(ErrorMessage ="Favor de ingresar un valor")]
-        [Range(0, 99999999999, ErrorMessage = "El valor debe ser numérico")]
-        public double Importe { get; set; }
+        [Column(TypeName = "decimal(18, 2)")]
+        public decimal Importe { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
         [Required(ErrorMessage ="Favor de ingresar una fecha")]
