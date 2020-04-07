@@ -131,7 +131,7 @@ namespace Alpid.Controllers
             ViewData["FechaDesdeFilter"] = null;
             ViewData["FechaHastaFilter"] = null;
 
-           int pageSize = 100;
+           int pageSize = 10000;
             if (SocioID != null && SocioID != "vaciarActivos")
             {
                 var resultado = (from e in _context.Alquiler.Include(x => x.Socios)
@@ -147,7 +147,7 @@ namespace Alpid.Controllers
             {
                 var resultado = (from e in _context.Alquiler
                                  where e.FechaDesde >= Convert.ToDateTime(FechaDesde)
-                              && e.FechaHasta <= Convert.ToDateTime(FechaHasta)
+                              && e.FechaDesde <= Convert.ToDateTime(FechaHasta)
                                  select e);
 
                 ViewData["FechaDesdeFilter"] = FechaDesde;
@@ -610,7 +610,12 @@ namespace Alpid.Controllers
                     return RedirectToAction("Pay", "Alquiler", new { ID, valor });
                 }
 
-                Add.ValorPagado = ValorAPagar;
+                var ValorPagado = (from s in _context.Alquiler
+                                   where s.AlquilerID == AlquilerID
+                                   select s.ValorPagado).FirstOrDefaultAsync();
+
+                var total = ValorPagado.Result + ValorAPagar;
+                Add.ValorPagado = total;
 
                 _context.Update(Add);
                 await _context.SaveChangesAsync();

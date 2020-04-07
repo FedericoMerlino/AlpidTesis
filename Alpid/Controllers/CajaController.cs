@@ -127,7 +127,7 @@ namespace Alpid.Controllers
                              && e.FechaMovimiento <= Convert.ToDateTime(fechaHasta)  select e);
 
 
-           int pageSize = 100;
+           int pageSize = 10000;
              //new ViewAsPdf("Report");
             return View(await Paginacion<Caja>.CreateAsync(resultado, page ?? 1, pageSize));
         }

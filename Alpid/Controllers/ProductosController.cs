@@ -62,7 +62,7 @@ namespace Alpid.Controllers
 
         public async Task<IActionResult> Report(int? page)
         {
-           int pageSize = 100;
+           int pageSize = 10000;
 
             var resultado = (from e in _context.Productos
                              where e.FechaBaja == null && e.ProductosTipo == "DeAlquiler"
@@ -73,7 +73,7 @@ namespace Alpid.Controllers
 
         public async Task<IActionResult> ReportMobiliarios(int? page)
         {
-           int pageSize = 100;
+           int pageSize = 100000;
 
             var resultado = (from e in _context.Productos
                              where e.FechaBaja == null && e.ProductosTipo != "DeAlquiler"

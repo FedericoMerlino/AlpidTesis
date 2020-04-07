@@ -80,7 +80,7 @@ namespace Alpid.Controllers
         {
             var Activos = HttpContext.Session.GetString("ActivosGloval");
             var Eliminados = HttpContext.Session.GetString("EliminadosGloval");
-           int pageSize = 100;
+           int pageSize = 10000;
 
             if (Eliminados != null && Eliminados != "vaciarEliminados")
             {

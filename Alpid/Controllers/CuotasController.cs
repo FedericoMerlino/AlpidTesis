@@ -133,7 +133,7 @@ namespace Alpid.Controllers
             ViewData["FechaDesdeFilter"] = null;
             ViewData["FechaHastaFilter"] = null;
 
-           int pageSize = 100;
+           int pageSize = 10000;
             if (SocioID != null && SocioID != "vaciarActivos")
             {
                 var resultado = (from e in _context.Cuotas.Include(x => x.Socios)
@@ -174,7 +174,7 @@ namespace Alpid.Controllers
             ViewData["SocioFilter"] = 0;
             ViewData["FechaDesdeFilter"] = null;
             ViewData["FechaHastaFilter"] = null;
-           int pageSize = 100;
+           int pageSize = 10000;
 
             if (FechaDesde != null && FechaDesde != "vaciarEliminados")
             {

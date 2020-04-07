@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Alpid.Models.Caja>
+﻿@model IEnumerable<Alpid.Models.Alquiler>
 @{
     Layout = null;
 }
@@ -29,56 +29,47 @@
                     <thead>
                         <tr>
                             <th>
-                                Fecha Movimiento
+                                Socio
                             </th>
                             <th>
-                                Observaciones
+                                Fecha Desde
                             </th>
                             <th>
-                                Ingreso
+                                Fecha Hasta
                             </th>
                             <th>
-                                Salida
+                                Observación
                             </th>
                             <th>
-                                Total
+                                Estado
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model)
-                        {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.FechaMovimiento)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Observaciones)
-                                </td>
-                                <td style="color:#49d292;">
-                                    @if (item.Debe != null)
-                                    {
-                                        <label>$</label> @Html.DisplayFor(modelItem => item.Debe)
-                                    }
-                                </td>
-                                <td style="color:red;">
-                                    <!--if para que solamente traiga el signo de pregunta a los campos que tiene valores-->
-                                    @if (item.Haber != null)
-                                    {
-                                        <label>$</label> @Html.DisplayFor(modelItem => item.Haber)
-                                    }
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Total)
-                                </td>
-                            </tr>
-                        }
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Socios.RazonSocial)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaDesde)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaHasta)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Observacion)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Estado)
+                            </td>
+                        </tr>
+                    }
                     </tbody>
                 </table>
             </form>
         </article>
     </div>
-
-
 </body>
 </html>

@@ -63,7 +63,7 @@ namespace Alpid.Controllers
         public async Task<IActionResult> Report(int? page)
         {
            
-           int pageSize = 100;
+           int pageSize = 10000;
 
             var evento = (from e in _context.EventoSolidarios
                           orderby e.IdEvento
