@@ -79,7 +79,7 @@ namespace Alpid.Controllers
                     DiaHasta = "-" + fechaHasta.Day;
                 }
                 ViewData["FechaDesdeFilter"] = fechaDesde.Year + mesDesde + DiaDesde;
-                ViewData["FechaHastaFilter"] = fechaHasta.Year + mesHasta + DiaHasta; 
+                ViewData["FechaHastaFilter"] = fechaHasta.Year + mesHasta + DiaHasta;
 
                 HttpContext.Session.SetString("FechaDesdeFilterGloval", fechaDesde.ToShortDateString());
                 HttpContext.Session.SetString("FechaHastaFilterGloval", fechaHasta.ToShortDateString());
@@ -115,20 +115,22 @@ namespace Alpid.Controllers
                 return RedirectToAction("Index", "Caja", new { valor });
             }
         }
-                     
+
         public async Task<IActionResult> Report(int? page)
         {
-            var fechaDesde =  HttpContext.Session.GetString("FechaDesdeFilterGloval");
+            var fechaDesde = HttpContext.Session.GetString("FechaDesdeFilterGloval");
             var fechaHasta = HttpContext.Session.GetString("FechaHastaFilterGloval");
             ViewData["FechaDesdeFilter"] = fechaDesde;
             ViewData["FechaHastaFilter"] = fechaHasta;
 
-            var resultado = (from e in _context.Caja where e.FechaMovimiento >= Convert.ToDateTime(fechaDesde) 
-                             && e.FechaMovimiento <= Convert.ToDateTime(fechaHasta)  select e);
+            var resultado = (from e in _context.Caja
+                             where Convert.ToDateTime(e.FechaMovimiento.ToShortDateString()) >= Convert.ToDateTime(fechaDesde)
+     && Convert.ToDateTime(e.FechaMovimiento.ToShortDateString()) <= Convert.ToDateTime(fechaHasta)
+                             select e);
 
 
-           int pageSize = 10000;
-             //new ViewAsPdf("Report");
+            int pageSize = 10000;
+            //new ViewAsPdf("Report");
             return View(await Paginacion<Caja>.CreateAsync(resultado, page ?? 1, pageSize));
         }
 
@@ -276,5 +278,34 @@ namespace Alpid.Controllers
                 return RedirectToAction("Index", "Caja", new { valor });
             }
         }
+
+        public async Task<IActionResult> CreateIngresoAlquiler(decimal ValorAPagar)
+        {
+            try
+            {
+                var caja = new Caja();
+
+                var ultimoValor = (from a in _context.Caja orderby a.CajaId descending select a.Total).First();
+
+                caja.Total = ultimoValor + ValorAPagar;
+                caja.Debe = ValorAPagar;
+                caja.FechaMovimiento = DateTime.Now;
+                caja.Observaciones = "Pago alquiler Socio";
+
+                _context.Add(caja);
+                await _context.SaveChangesAsync();
+
+                var valor = 1;
+               return RedirectToAction("Index", "Alquiler", new { valor });
+
+            }
+            catch (Exception e)
+            {
+                Console.Write(e);
+                var valor = 2;
+                return RedirectToAction("Index", "Alquiler", new { valor });
+            }
+        }
+
     }
 }

@@ -586,7 +586,7 @@ namespace Alpid.Controllers
                                  select a.ID).FirstOrDefault();
 
                 var Add = await _context.Alquiler.FindAsync(obtenreid);
-
+              
                 var ID = AlquilerID;
 
                 decimal Pagado = (from x in _context.Alquiler where x.AlquilerID == ID select x.ValorPagado).Sum();
@@ -618,10 +618,11 @@ namespace Alpid.Controllers
                 Add.ValorPagado = total;
 
                 _context.Update(Add);
+
                 await _context.SaveChangesAsync();
 
-                valor = 1;
-                return RedirectToAction("Index", "Alquiler", new { valor });
+                //actualizo caja 
+                return RedirectToAction("CreateIngresoAlquiler", "Caja", new { ValorAPagar });
             }
             catch (Exception e)
             {

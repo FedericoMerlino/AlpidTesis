@@ -45,6 +45,8 @@ namespace Alpid.Models
         [Required(ErrorMessage = "Debe ingresar un Producto")]
         public int ProductosID { get; set; }
 
+        public int? Devuelto { get; set; }
+
         public Productos Productos { get; set; }
 
         public ICollection<Caja> Caja { get; set; }

@@ -165,7 +165,6 @@ namespace Alpid.Controllers
             return RedirectToAction("Index", "Cuotas", new { valor });
         }
 
-
         public async Task<IActionResult> ReportSociosAPagar(int? page)
         {
             var FechaDesde = HttpContext.Session.GetString("FechaDesdeFilterGloval");

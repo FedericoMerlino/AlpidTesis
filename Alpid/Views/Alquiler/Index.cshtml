@@ -79,31 +79,39 @@
                 <tbody>
                     @foreach (var item in Model)
                     {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Socios.RazonSocial)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.FechaDesde)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.FechaHasta)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Observacion)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Estado)
-                        </td>
-                        <td>
-                            $ @Html.DisplayFor(modelItem => item.ValorTotal)
-                        </td>
-                        <td>
-                            <a asp-action="Details" class="btn btn-info" asp-route-id="@item.AlquilerID">ver</a> |
-                            <a asp-action="Edit" class="btn btn-dark" asp-route-id="@item.AlquilerID">Editar</a> |
-                            <a asp-action="Pay" class="btn btn-dark" asp-route-id="@item.AlquilerID">Pagar</a>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Socios.RazonSocial)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaDesde)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaHasta)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Observacion)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Estado)
+                            </td>
+                            <td>
+                                $ @Html.DisplayFor(modelItem => item.ValorTotal)
+                            </td>
+                            <td>
+                                <a asp-action="Details" class="btn btn-info" asp-route-id="@item.AlquilerID">ver</a> |
+                                <a asp-action="Edit" class="btn btn-dark" asp-route-id="@item.AlquilerID">Editar</a> |
+                                @if (item.Devuelto != 1)
+                                {
+                                    <a asp-action="Restore" class="btn btn-dark" asp-route-id="@item.AlquilerID">Devolver</a>
+                                    <label>|</label>
+                                }
+                                @if (item.Estado != "Pagado")
+                                {
+                                    <a asp-action="Pay" class="btn btn-dark" asp-route-id="@item.AlquilerID">Pagar</a>
+                                }
+                                </td>
+                        </tr>
                     }
                 </tbody>
             </table>

@@ -15,8 +15,8 @@ body {
     /*right: -40px;
     bottom: -40px;*/
     color: #9370db;
-    width: 1110px;
-    height: 393px;
+    width: 82%;
+    height: 60%;
     background-image: url('../img/fondologin.jpg');
     background-size: auto;
     -webkit-filter: blur(5px);
