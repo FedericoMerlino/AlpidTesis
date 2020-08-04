@@ -290,6 +290,8 @@ namespace Alpid.Controllers
                 caja.Total = ultimoValor + ValorAPagar;
                 caja.Debe = ValorAPagar;
                 caja.FechaMovimiento = DateTime.Now;
+                caja.TipoMovimiento = "Alquiler";
+                caja.Usuario = User.Identity.Name;
                 caja.Observaciones = "Pago alquiler Socio";
 
                 _context.Add(caja);
